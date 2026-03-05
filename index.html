@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Ha perdido mi Madris?</title>
+    
+    <link rel="icon" id="favicon" type="image/jpeg" href="https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/493927140_1270748487941648_5187398022783808678_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=DIR1QNTtki0Q7kNvwG02KRS&_nc_oc=Adl4umK4hoN4zrw-eTEFAuQ9grdDgcoOBq6YQr-RSD_83whDRxRNhPsLq271agVmMRQ&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=3kbaqvMSYuhe3tGxbYLokQ&_nc_ss=8&oh=00_AfyqHt3To-cp48oefEOUfanmogle8v2h6owbuYN5L-S9fg&oe=69AF68A3" onerror="this.href='https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg'">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh;
+            background-color: #0d1117;
+            font-family: 'Inter', sans-serif;
+            color: #e6edf3;
+            overflow-x: hidden;
+            transition: box-shadow 0.5s ease;
+        }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .content-wrapper {
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 40px 20px; width: 100%;
+        }
+        .title {
+            font-size: clamp(100px, 18vw, 180px); 
+            font-weight: 800; margin: 0 0 20px 0;
+            line-height: 1; letter-spacing: -6px;
+            text-transform: uppercase; text-align: center;
+        }
+        .info-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 460px; }
+        .info-box {
+            background-color: #161b22; border: 1px solid #30363d;
+            border-radius: 12px; padding: 24px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+        .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .box-title { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1.5px; }
+        .countdown { font-size: 11px; font-weight: 600; color: #58a6ff; }
+        .match-container { display: flex; justify-content: space-between; align-items: center; }
+        .teams-column { flex-grow: 1; }
+        .match-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .team-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px; }
+        .team-logo { width: 20px; height: 20px; object-fit: contain; }
+        .score { font-weight: 800; font-size: 16px; padding-right: 20px; }
+        .status-column {
+            font-size: 12px; color: #8b949e; text-align: right;
+            border-left: 1px solid #30363d; padding-left: 20px; min-width: 90px;
+        }
+        .live-dot {
+            display: inline-block; width: 8px; height: 8px;
+            background-color: #ff4d4d; border-radius: 50%; margin-right: 5px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        .standings-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .standings-table th { color: #8b949e; font-weight: 400; text-align: left; padding-bottom: 12px; border-bottom: 1px solid #30363d; }
+        .standings-table td { padding: 12px 8px; border-bottom: 1px solid #21262d; }
+        .highlight-row { background-color: rgba(255, 255, 255, 0.05); }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="content-wrapper">
+        <h1 id="main-title" class="title">...</h1>
+        <div class="info-container">
+            <div class="info-box" id="last-match-box">Cargando último partido...</div>
+            <div class="info-box" id="next-match-box">Cargando...</div>
+            <div class="info-box" id="standings-box">Cargando clasificación...</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        let countdownInterval;
+        // Fondo corregido (puntos pequeños y líneas finas)
+        try {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40 }, "color": { "value": "#ffffff" },
+                    "opacity": { "value": 0.1 }, "size": { "value": 2 },
+                    "line_linked": { "enable": true, "distance": 150, "opacity": 0.05 },
+                    "move": { "enable": true, "speed": 0.5 }
+                }
+            });
+        } catch(e) {}
+
+        async function obtenerDatosReales() {
+            try {
+                const id = "86"; const ts = Date.now();
+                const [resTeam, resSched, resStand] = await Promise.all([
+                    fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
+                    fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
+                    fetch(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
+                ]);
+
+                const dTeam = await resTeam.json();
+                const dSched = await resSched.json();
+                const dStand = await resStand.json();
+
+                const eventos = dSched.events || [];
+                const jugados = eventos.filter(e => e.competitions[0].status.type.state === 'post').sort((a,b) => new Date(b.date) - new Date(a.date));
+                const enJuego = eventos.filter(e => e.competitions[0].status.type.state === 'in');
+                
+                const principal = enJuego[0] || jugados[0];
+                const proximo = dTeam.team.nextEvent?.[0] || eventos.find(e => e.competitions[0].status.type.state === 'pre');
+
+                const parseScore = (v) => {
+                    let n = parseInt(v?.value ?? v ?? 0);
+                    return isNaN(n) ? 0 : n;
+                };
+
+                const procesar = (ev) => {
+                    if (!ev) return null;
+                    const c = ev.competitions[0];
+                    const h = c.competitors.find(x => x.homeAway === 'home');
+                    const a = c.competitors.find(x => x.homeAway === 'away');
+                    let est = c.status.type.shortDetail === "FT" ? "Finalizado" : c.status.type.shortDetail;
+                    return {
+                        local: h.team.shortDisplayName, logoL: h.team.logos?.[0]?.href, golesL: parseScore(h.score),
+                        visitante: a.team.shortDisplayName, logoV: a.team.logos?.[0]?.href, golesV: parseScore(a.score),
+                        estado: est, esDirecto: c.status.type.state === 'in', fechaIso: ev.date, reloj: c.status.displayClock
+                    };
+                };
+
+                pintarUI({ actual: procesar(principal), proximo: procesar(proximo), tabla: dStand.children[0].standings.entries || [] });
+            } catch (e) { console.error(e); }
+        }
+
+        function pintarUI(data) {
+            const p = data.actual;
+            const t = document.getElementById("main-title");
+            let res = "NO", col = "#00e599", sh = "rgba(0, 229, 153, 0.4)";
+
+            if (p) {
+                const esM = (n) => n.toLowerCase().includes("mad");
+                const mG = esM(p.local) ? p.golesL : p.golesV;
+                const rG = esM(p.local) ? p.golesV : p.golesL;
+
+                if (mG < rG) { res = "SÍ"; col = "#ff4d4d"; sh = "rgba(255, 77, 77, 0.4)"; }
+                else if (mG === rG) { res = "CASI"; col = "#ff9f43"; sh = "rgba(255, 159, 67, 0.4)"; }
+            }
+            t.textContent = res; t.style.color = col; t.style.textShadow = `0 0 50px ${sh}`;
+            document.body.style.boxShadow = `inset 0 0 150px ${sh.replace('0.4', '0.15')}`;
+
+            document.getElementById("last-match-box").innerHTML = `
+                <div class="box-title" style="margin-bottom:20px">${p.esDirecto ? '<span class="live-dot"></span> EN JUEGO' : 'Último resultado'}</div>
+                <div class="match-container">
+                    <div class="teams-column">
+                        <div class="match-row"><div class="team-info"><img src="${p.logoL}" class="team-logo"> ${p.local}</div><div class="score">${p.golesL}</div></div>
+                        <div class="match-row"><div class="team-info"><img src="${p.logoV}" class="team-logo"> ${p.visitante}</div><div class="score">${p.golesV}</div></div>
+                    </div>
+                    <div class="status-column"><div>${p.esDirecto ? p.reloj : p.estado}</div><div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric'})}</div></div>
+                </div>`;
+
+            if (data.proximo) {
+                const prox = data.proximo;
+                document.getElementById("next-match-box").innerHTML = `
+                    <div class="box-header"><div class="box-title">¿Perderá el siguiente?</div><div id="timer" class="countdown"></div></div>
+                    <div class="match-container">
+                        <div class="teams-column">
+                            <div class="match-row"><div class="team-info"><img src="${prox.logoL}" class="team-logo"> ${prox.local}</div></div>
+                            <div class="match-row"><div class="team-info"><img src="${prox.logoV}" class="team-logo"> ${prox.visitante}</div></div>
+                        </div>
+                        <div class="status-column"><div>${new Date(prox.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div><div style="font-weight:bold">${new Date(prox.fechaIso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</div></div>
+                    </div>`;
+                iniciarCuenta(prox.fechaIso);
+            }
+
+            let tHTML = data.tabla.slice(0, 5).map(e => `
+                <tr class="${e.team.shortDisplayName.includes('MAD') ? 'highlight-row' : ''}">
+                    <td style="padding-left:15px">${e.stats.find(s=>s.name==='rank').value}</td>
+                    <td><div style="display:flex;align-items:center;gap:8px"><img src="${e.team.logos[0].href}" style="width:16px">${e.team.shortDisplayName}</div></td>
+                    <td>${e.stats.find(s=>s.name==='gamesPlayed').value}</td>
+                    <td style="font-weight:800">${e.stats.find(s=>s.name==='points').value}</td>
+                </tr>`).join('');
+            document.getElementById("standings-box").innerHTML = `<div class="box-title" style="margin-bottom:20px">Clasificación - LaLiga</div><table class="standings-table"><thead><tr><th style="padding-left:15px">Pos</th><th>Club</th><th>PJ</th><th>Pts</th></tr></thead><tbody>${tHTML}</tbody></table>`;
+        }
+
+        function iniciarCuenta(f) {
+            clearInterval(countdownInterval);
+            const target = new Date(f).getTime();
+            const up = () => {
+                const diff = target - Date.now();
+                if (diff <= 0) { document.getElementById("timer").textContent = "EN JUEGO"; return; }
+                const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+                document.getElementById("timer").textContent = `${d}d ${h}h ${m}m ${s}s`;
+            };
+            up(); countdownInterval = setInterval(up, 1000);
+        }
+        obtenerDatosReales(); setInterval(obtenerDatosReales, 60000);
+    </script>
+</body>
+</html>
