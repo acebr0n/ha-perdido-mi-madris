@@ -423,6 +423,19 @@
         #referee-figure { width: 280px; } 
         .referee-container { top: -40px; } 
     }
+	
+		/* Corrección definitiva para Vini/Arbeloa en móvil */
+    @media (max-width: 480px) {
+      .vini-peekaboo {
+        /* Obligamos a que se escondan más en el móvil sin tocar el JS */
+        transform: translateY(85%) !important;
+      }
+      .vini-peekaboo:active, .vini-peekaboo:hover {
+        /* Al tocarlos, que asomen lo justo */
+        transform: translateY(20%) !important;
+      }
+    }	
+	
   </style>
 </head>
 
