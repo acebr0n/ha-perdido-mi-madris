@@ -1,197 +1,967 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Ha perdido mi Madris?</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¿Ha perdido mi Madris?</title>
+
+  <link rel="icon" id="favicon" type="image/jpeg"
+    href="https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/493927140_1270748487941648_5187398022783808678_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=DIR1QNTtki0Q7kNvwG02KRS&_nc_oc=Adl4umK4hoN4zrw-eTEFAuQ9grdDgcoOBq6YQr-RSD_83whDRxRNhPsLq271agVmMRQ&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=3kbaqvMSYuhe3tGxbYLokQ&_nc_ss=8&oh=00_AfyqHt3To-cp48oefEOUfanmogle8v2h6owbuYN5L-S9fg&oe=69AF68A3"
+    onerror="this.href='https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg'">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { 
+      box-sizing: border-box; 
+    }
+    body, html {
+      margin: 0; 
+      padding: 0; 
+      min-height: 100vh;
+      background-color: #0d1117;
+      font-family: 'Inter', sans-serif;
+      color: #e6edf3;
+      overflow-x: hidden;
+      transition: box-shadow 0.5s ease;
+    }
+    #particles-js { 
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      z-index: 1; 
+      pointer-events: none; 
+    }
+
+    .content-wrapper {
+      position: relative; 
+      z-index: 4;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center;
+      margin-left: auto; 
+      margin-right: auto;
+      padding: 40px 20px; 
+      width: 100%;
+      margin-top: 120px;
+    }
+
+    .referee-container {
+      position: fixed; 
+      z-index: 3; 
+      top: -75px; 
+      left: 0; 
+      width: 100%;
+      display: flex; 
+      justify-content: center; 
+      pointer-events: none;
+    }
+    #referee-figure {
+      width: 420px; 
+      height: auto; 
+      margin-top: 10px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+    }
+
+    .title {
+      font-size: clamp(100px, 18vw, 180px);
+      font-weight: 800; 
+      margin: 0 0 20px 0;
+      line-height: 1; 
+      letter-spacing: -6px;
+      text-transform: uppercase; 
+      text-align: center;
+      position: relative; 
+      display: inline-block; 
+      cursor: default;
+      transform: translateZ(0);
+      transition: transform .22s ease, filter .22s ease;
+      will-change: transform, filter;
+      animation: softPulse 2.6s ease-in-out infinite;
+      user-select: none;
+      --holo1: rgba(88,166,255,.25);
+      --holo2: rgba(255,77,77,.22);
+      --holo3: rgba(255,159,67,.22);
+      --holo4: rgba(0,229,153,.22);
+      --hologlow: rgba(255,255,255,.18);
+    }
+
+    @keyframes softPulse { 
+      0%,100% { transform: translateY(0); } 
+      50% { transform: translateY(-1px); } 
+    }
+    .title.fx-holo { isolation: isolate; }
+    .title.fx-holo::before {
+      content:""; 
+      position:absolute; 
+      inset:-24px -28px; 
+      border-radius:32px;
+      background: conic-gradient(from 0deg, var(--holo1), var(--holo2), var(--holo3), var(--holo4), var(--holo1));
+      filter: blur(16px); 
+      opacity:0; 
+      transform:scale(.96); 
+      transition: opacity .3s ease, transform .3s ease; 
+      pointer-events:none; 
+      mix-blend-mode: screen;
+    }
+    .title.fx-holo:hover { 
+      transform: translateY(-3px) scale(1.03); 
+      filter: drop-shadow(0 0 18px color-mix(in srgb, var(--hologlow) 60%, transparent)); 
+      animation: none; 
+    }
+    .title.fx-holo:hover::before { 
+      opacity:1; 
+      transform:scale(1.03); 
+      animation:holoShift 3s linear infinite; 
+    }
+    @keyframes holoShift { 
+      0% { transform:scale(1.03) rotate(0deg); } 
+      100% { transform:scale(1.03) rotate(360deg); } 
+    }
+
+    .info-container { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+      width: 100%; 
+      max-width: 460px; 
+    }
+    .info-box { 
+      background-color: #161b22; 
+      border: 1px solid #30363d; 
+      border-radius: 12px; 
+      padding: 24px; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4); 
+    }
+    .box-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 20px; 
+    }
+    .box-title { 
+      font-size: 12px; 
+      color: #8b949e; 
+      text-transform: uppercase; 
+      letter-spacing: 1.5px; 
+    }
+    .countdown { 
+      font-size: 11px; 
+      font-weight: 600; 
+      color: #58a6ff; 
+    }
+    .match-container { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+    .teams-column { 
+      flex-grow: 1; 
+    }
+    .match-row { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      margin-bottom: 12px; 
+      border-radius: 10px; 
+      padding: 6px 10px; 
+      margin-left: -10px; 
+      margin-right: -10px; 
+      transition: transform .25s ease, background-color .25s ease; 
+    }
+    .match-row:hover { 
+      background-color: rgba(255,255,255,.04); 
+      transform: translateY(-2px); 
+    }
+    .team-info { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      font-weight: 600; 
+      font-size: 15px; 
+    }
+    .team-logo { 
+      width: 20px; 
+      height: 20px; 
+      object-fit: contain; 
+      border-radius: 6px; 
+      transition: transform .25s ease, filter .25s ease, box-shadow .25s ease; 
+    }
+    .team-logo--small { 
+      width: 16px; 
+      height: 16px; 
+    }
+    .match-row:hover .team-logo, .team-logo:hover { 
+      transform: scale(1.35) rotate(-4deg); 
+      filter: saturate(1.35) contrast(1.1) brightness(1.1); 
+      box-shadow: 0 0 22px rgba(88,166,255,.35); 
+    }
+    .score { 
+      font-weight: 800; 
+      font-size: 16px; 
+      padding-right: 20px; 
+    }
+    .status-column { 
+      font-size: 12px; 
+      color: #8b949e; 
+      text-align: right; 
+      border-left: 1px solid #30363d; 
+      padding-left: 20px; 
+      min-width: 90px; 
+    }
+    .live-dot { 
+      display: inline-block; 
+      width: 8px; 
+      height: 8px; 
+      background-color: #ff4d4d; 
+      border-radius: 50%; 
+      margin-right: 5px; 
+      animation: blink 1.5s infinite; 
+    }
+    @keyframes blink { 
+      50% { opacity: 0.3; } 
+    }
+    .standings-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 14px; 
+    }
+    .standings-table th { 
+      color: #8b949e; 
+      font-weight: 400; 
+      text-align: left; 
+      padding-bottom: 12px; 
+      border-bottom: 1px solid #30363d; 
+    }
+    .standings-table td { 
+      padding: 12px 8px; 
+      border-bottom: 1px solid #21262d; 
+    }
+    .highlight-row { 
+      background-color: rgba(255, 255, 255, 0.05); 
+    }
+    .standings-table tbody tr:hover { 
+      background-color: rgba(255,255,255,.04); 
+      transform: translateY(-1px); 
+    }
+    .standings-table tbody tr:hover .team-logo { 
+      transform: scale(1.35) rotate(-4deg); 
+    }
+
+    .vini-peekaboo {
+      position: fixed; 
+      z-index: 5; 
+      width: 280px; 
+      height: 280px; 
+      cursor: pointer;
+      transition: transform 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .vini-peekaboo img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: contain; 
+      pointer-events: none; 
+    }
+    body.modo-humo { 
+      background-color: #1a0505 !important; 
+      transition: background-color 10s ease; 
+    }
+    body.modo-humo #particles-js { 
+      filter: drop-shadow(0 0 8px rgba(255, 0, 0, 1)) contrast(2); 
+      opacity: 1 !important; 
+    }
+    .humo-overlay {
+      display: none; 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      pointer-events: none; 
+      z-index: 1;
+      background: radial-gradient(circle, rgba(255,0,0,0.05) 0%, rgba(0,0,0,0.8) 100%);
+      animation: pulsoHumo 4s infinite alternate;
+    }
+    body.modo-humo .humo-overlay { display: block; }
+    body.modo-victoria { 
+      background-color: #051a05 !important; 
+      transition: background-color 10s ease-in-out; 
+    }
+    body.modo-victoria #particles-js { 
+      filter: drop-shadow(0 0 8px rgba(0, 255, 153, 1)) contrast(2); 
+      opacity: 1 !important; 
+    }
+    body.modo-victoria .humo-overlay { 
+      display: block; 
+      background: radial-gradient(circle, rgba(0,255,153,0.05) 0%, rgba(0,0,0,0.8) 100%); 
+    }
+    body.modo-empate { 
+      background-color: #1a1105 !important; 
+      transition: background-color 10s ease-in-out; 
+    }
+    body.modo-empate #particles-js { 
+      filter: drop-shadow(0 0 8px rgba(255, 159, 67, 1)) contrast(2); 
+      opacity: 1 !important; 
+    }
+    body.modo-empate .humo-overlay { 
+      display: block; 
+      background: radial-gradient(circle, rgba(255,159,67,0.05) 0%, rgba(0,0,0,0.8) 100%); 
+    }
     
-    <link rel="icon" id="favicon" type="image/jpeg" href="https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/493927140_1270748487941648_5187398022783808678_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=DIR1QNTtki0Q7kNvwG02KRS&_nc_oc=Adl4umK4hoN4zrw-eTEFAuQ9grdDgcoOBq6YQr-RSD_83whDRxRNhPsLq271agVmMRQ&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=3kbaqvMSYuhe3tGxbYLokQ&_nc_ss=8&oh=00_AfyqHt3To-cp48oefEOUfanmogle8v2h6owbuYN5L-S9fg&oe=69AF68A3" onerror="this.href='https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg'">
+    @keyframes livePulseRef { 
+      0%, 100% { transform: scale(1); filter: brightness(1); } 
+      50% { transform: scale(1.03); filter: brightness(1.2); } 
+    }
+    @keyframes livePulseBox { 
+      0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(0,0,0,0.4); } 
+      50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(88,166,255,0.4); } 
+    }
+    .live-ref-anim { animation: livePulseRef 3s ease-in-out infinite; }
+    .live-box-anim { animation: livePulseBox 2s ease-in-out infinite; }
+    
+    .gol-flash { 
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      background: white; 
+      z-index: 999; 
+      pointer-events: none; 
+      opacity: 0; 
+    }
+    @keyframes flashAnim { 
+      0% { opacity: 0; } 
+      20% { opacity: 0.8; } 
+      100% { opacity: 0; } 
+    }
+    .ejecutar-flash { animation: flashAnim 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; }
-        body, html {
-            margin: 0; padding: 0; min-height: 100vh;
-            background-color: #0d1117;
-            font-family: 'Inter', sans-serif;
-            color: #e6edf3;
-            overflow-x: hidden;
-            transition: box-shadow 0.5s ease;
-        }
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
-        .content-wrapper {
-            position: relative; z-index: 2;
-            display: flex; flex-direction: column; align-items: center;
-            padding: 40px 20px; width: 100%;
-        }
-        .title {
-            font-size: clamp(100px, 18vw, 180px); 
-            font-weight: 800; margin: 0 0 20px 0;
-            line-height: 1; letter-spacing: -6px;
-            text-transform: uppercase; text-align: center;
-        }
-        .info-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 460px; }
-        .info-box {
-            background-color: #161b22; border: 1px solid #30363d;
-            border-radius: 12px; padding: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        }
-        .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .box-title { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1.5px; }
-        .countdown { font-size: 11px; font-weight: 600; color: #58a6ff; }
-        .match-container { display: flex; justify-content: space-between; align-items: center; }
-        .teams-column { flex-grow: 1; }
-        .match-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-        .team-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px; }
-        .team-logo { width: 20px; height: 20px; object-fit: contain; }
-        .score { font-weight: 800; font-size: 16px; padding-right: 20px; }
-        .status-column {
-            font-size: 12px; color: #8b949e; text-align: right;
-            border-left: 1px solid #30363d; padding-left: 20px; min-width: 90px;
-        }
-        .live-dot {
-            display: inline-block; width: 8px; height: 8px;
-            background-color: #ff4d4d; border-radius: 50%; margin-right: 5px;
-            animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 50% { opacity: 0.3; } }
-        .standings-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        .standings-table th { color: #8b949e; font-weight: 400; text-align: left; padding-bottom: 12px; border-bottom: 1px solid #30363d; }
-        .standings-table td { padding: 12px 8px; border-bottom: 1px solid #21262d; }
-        .highlight-row { background-color: rgba(255, 255, 255, 0.05); }
-    </style>
+    .racha-interna { 
+      margin-top: 15px; 
+      padding-top: 12px; 
+      border-top: 1px solid #30363d; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 12px; 
+    }
+    .racha-title-min { 
+      font-size: 10px; 
+      color: #8b949e; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      font-weight: 600; 
+    }
+    .racha-stats-min { 
+      display: flex; 
+      gap: 15px; 
+      font-family: 'Courier New', Courier, monospace; 
+      font-size: 14px; 
+      font-weight: 800; 
+    }
+    .racha-v { color: #00ff99; } 
+    .racha-d { color: #ff4d4d; } 
+    .racha-e { color: #ff9f43; }    
+    
+    /* MÓDULO M: Estilos Visuales */
+    .mini-live-box {
+      background-color: #161b22; 
+      border: 1px solid #30363d; 
+      border-radius: 8px;
+      padding: 6px 12px; 
+      display: inline-flex; 
+      align-items: center;
+      justify-content: center; 
+      margin-bottom: 20px; 
+      min-width: 140px;
+      animation: blink 1.5s infinite;
+    }
+    .de-momento-text { 
+      font-size: 10px; 
+      font-weight: 800; 
+      color: #8b949e; 
+      text-transform: uppercase; 
+      letter-spacing: 2px; 
+    }
+
+    .score-highlight { 
+      font-size: 125% !important; 
+      color: #fff; 
+      text-shadow: 0 0 15px rgba(255,255,255,0.6); 
+      animation: pulseScore 1s infinite; 
+    }
+    @keyframes pulseScore { 
+      0%, 100% { transform: scale(1); } 
+      50% { transform: scale(1.1); color: #ffca28; } 
+    }
+
+    .event-row { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      padding: 8px 0; 
+      border-bottom: 1px solid #30363d; 
+      font-size: 13px; 
+      animation: slideIn 0.5s ease; 
+    }
+    @keyframes slideIn { 
+      from { opacity: 0; transform: translateX(-10px); } 
+      to { opacity: 1; transform: translateX(0); } 
+    }
+    .event-min { 
+      font-weight: 800; 
+      color: #58a6ff; 
+      min-width: 35px; 
+    }
+
+    @media (max-width: 480px) { 
+        .vini-peekaboo { width: 180px; height: 180px; } 
+        .content-wrapper { margin-top: 50px; } 
+        #referee-figure { width: 280px; } 
+        .referee-container { top: -40px; } 
+    }
+  </style>
 </head>
+
 <body>
-    <div id="particles-js"></div>
-    <div class="content-wrapper">
-        <h1 id="main-title" class="title">...</h1>
-        <div class="info-container">
-            <div class="info-box" id="last-match-box">Cargando último partido...</div>
-            <div class="info-box" id="next-match-box">Cargando...</div>
-            <div class="info-box" id="standings-box">Cargando clasificación...</div>
-        </div>
+  <div class="humo-overlay"></div>
+  <div id="flash-overlay" class="gol-flash"></div>
+  <div id="particles-js"></div>
+
+  <div class="vini-peekaboo" id="vini-element-1">
+    <img src="img/vini.png" alt="Vini">
+  </div>
+  <div class="vini-peekaboo" id="vini-element-2">
+    <img src="img/arbeloa.png" alt="Arbeloa">
+  </div>
+
+  <div class="referee-container">
+    <img src="img/arbitro.png" id="referee-figure" alt="Árbitro">
+  </div>
+
+  <div class="content-wrapper">
+    <h1 id="main-title" class="title fx-holo">...</h1>
+    
+    <div id="dm-box-container" style="display: flex; justify-content: center; width: 100%; max-width: 460px;"></div>
+
+    <div class="info-container">
+      <div id="error-failsafe" class="info-box" style="display:none; border-color: #ff4d4d; text-align: center;">
+        <div class="box-title" style="color: #ff4d4d;">¡PROBLEMAS EN EL TERRENO DE JUEGO!</div>
+        <p style="font-size: 14px; margin: 15px 0;">Oye, que no puedo conectar con los datos... ¡mira tú por la tele o algo!</p>
+        <div style="font-size: 11px; color: #8b949e;">(Error de conexión con API ESPN)</div>
+      </div>
+      
+      <div class="info-box" id="last-match-box"></div>
+      
+      <div class="info-box" id="events-box" style="display:none; margin-bottom: 20px;"></div>
+
+      <div class="info-box" id="next-match-box"></div>
+      
+      <div class="info-box" id="standings-box"></div>
     </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        let countdownInterval;
-        // Fondo corregido (puntos pequeños y líneas finas)
-        try {
-            particlesJS("particles-js", {
-                "particles": {
-                    "number": { "value": 40 }, "color": { "value": "#ffffff" },
-                    "opacity": { "value": 0.1 }, "size": { "value": 2 },
-                    "line_linked": { "enable": true, "distance": 150, "opacity": 0.05 },
-                    "move": { "enable": true, "speed": 0.5 }
-                }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    let countdownInterval;
+    if (!window.sucesosPartido) {
+      window.sucesosPartido = [];
+    }
+
+    try {
+      particlesJS("particles-js", {
+        "particles": {
+          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#ffffff" }, 
+          "shape": { "type": "circle" },
+          "opacity": { "value": 0.3, "random": false }, 
+          "size": { "value": 2, "random": true },
+          "line_linked": { 
+            "enable": true, 
+            "distance": 150, 
+            "color": "#ffffff", 
+            "opacity": 0.2, 
+            "width": 1 
+          },
+          "move": { 
+            "enable": true, 
+            "speed": 1.5, 
+            "direction": "none", 
+            "random": false, 
+            "straight": false, 
+            "out_mode": "out", 
+            "bounce": false 
+          }
+        },
+        "interactivity": { 
+          "detect_on": "window", 
+          "events": { 
+            "onhover": { "enable": true, "mode": "grab" }, 
+            "onclick": { "enable": true, "mode": "push" }, 
+            "resize": true 
+          },
+          "modes": { 
+            "grab": { "distance": 200, "line_linked": { "opacity": 0.5 } }, 
+            "push": { "particles_nb": 4 } 
+          }
+        },
+        "retina_detect": true
+      });
+    } catch(e) {
+      console.warn("Particles.js no pudo cargar.");
+    }
+
+    async function obtenerDatosReales() {
+      try {
+        const id = "86"; 
+        const ts = Date.now();
+        const [resTeam, resSched, resStand] = await Promise.all([
+          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
+          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
+          fetch(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
+        ]);
+        
+        const dTeam = await resTeam.json(); 
+        const dSched = await resSched.json(); 
+        const dStand = await resStand.json();
+        
+        const eventos = dSched.events || [];
+        const jugados = eventos.filter(e => e.competitions?.[0]?.status?.type?.state === 'post').sort((a,b) => new Date(b.date) - new Date(a.date));
+        const enJuego = eventos.filter(e => e.competitions?.[0]?.status?.type?.state === 'in');
+        
+        const principal = enJuego[0] || jugados[0];
+        const proximo = dTeam?.team?.nextEvent?.[0] || eventos.find(e => e.competitions?.[0]?.status?.type?.state === 'pre') || null;
+        
+        const parseScore = (v) => { 
+          let n = parseInt(v?.value ?? v ?? 0); 
+          return isNaN(n) ? 0 : n; 
+        };
+
+        const rachaReal = jugados.slice(0, 5).reverse().map(ev => {
+          const c = ev.competitions[0];
+          const m = c.competitors.find(x => x.team.id === id); 
+          const r = c.competitors.find(x => x.team.id !== id);
+          let resChar = 'E'; 
+          if (m.winner) resChar = 'V'; 
+          else if (r.winner) resChar = 'D';
+          return { res: resChar, id: r.team.id };
+        });
+
+        const procesar = (ev) => {
+          if (!ev) return null;
+          const c = ev.competitions[0]; 
+          const h = c.competitors.find(x => x.homeAway === 'home'); 
+          const a = c.competitors.find(x => x.homeAway === 'away');
+          
+          let estDetalle = c.status.type.shortDetail === "FT" ? "Finalizado" : c.status.type.shortDetail;
+
+          return { 
+            local: h.team.shortDisplayName, 
+            logoL: h.team.logos?.[0]?.href, 
+            logoL_id: h.team.id,
+            golesL: parseScore(h.score), 
+            visitante: a.team.shortDisplayName, 
+            logoV: a.team.logos?.[0]?.href, 
+            logoV_id: a.team.id,
+            golesV: parseScore(a.score), 
+            estado: estDetalle, 
+            esDirecto: c.status.type.state === 'in', 
+            fechaIso: ev.date, 
+            reloj: c.status.displayClock 
+          };
+        };
+
+        pintarUI({ 
+          actual: procesar(principal), 
+          proximo: procesar(proximo), 
+          tabla: dStand?.children?.[0]?.standings?.entries || [], 
+          racha: rachaReal 
+        });
+
+      } catch (e) { 
+        console.error("Fallo crítico en obtenerDatosReales:", e);
+        if (!localStorage.getItem('madrid_data')) {
+          document.getElementById("error-failsafe").style.display = "block";
+        }
+      }
+    }
+
+    function aplicarHologramaPorResultado(el, res) {
+      let holo = { 
+        holo1: "rgba(88,166,255,.25)", 
+        holo2: "rgba(255,77,77,.22)", 
+        holo3: "rgba(255,159,67,.22)", 
+        holo4: "rgba(0,229,153,.22)", 
+        hologlow: "rgba(255,255,255,.18)" 
+      };
+      
+      if (res === "NO") {
+        holo = { 
+          holo1: "rgba(0,229,153,.30)", 
+          holo2: "rgba(88,166,255,.24)", 
+          holo3: "rgba(0,229,153,.18)", 
+          holo4: "rgba(88,166,255,.18)", 
+          hologlow: "rgba(0,229,153,.22)" 
+        };
+      } else if (res === "SÍ") {
+        holo = { 
+          holo1: "rgba(255,77,77,.30)", 
+          holo2: "rgba(255,120,180,.20)", 
+          holo3: "rgba(255,77,77,.18)", 
+          holo4: "rgba(255,159,67,.16)", 
+          hologlow: "rgba(255,77,77,.22)" 
+        };
+      } else if (res === "CASI") {
+        holo = { 
+          holo1: "rgba(255,159,67,.30)", 
+          holo2: "rgba(255,210,120,.20)", 
+          holo3: "rgba(255,159,67,.18)", 
+          holo4: "rgba(88,166,255,.14)", 
+          hologlow: "rgba(255,159,67,.22)" 
+        };
+      }
+      
+      el.style.setProperty("--holo1", holo.holo1); 
+      el.style.setProperty("--holo2", holo.holo2); 
+      el.style.setProperty("--holo3", holo.holo3); 
+      el.style.setProperty("--holo4", holo.holo4); 
+      el.style.setProperty("--hologlow", holo.hologlow);
+    }
+
+    function pintarUI(data) {
+      const p = data.actual; 
+      const t = document.getElementById("main-title");
+      const flash = document.getElementById("flash-overlay");
+      let marcadorClase = "";
+
+      // LÓGICA DE EVENTOS EN DIRECTO
+      if (p && p.esDirecto) {
+        const golesTotal = parseInt(p.golesL) + parseInt(p.golesV);
+        
+        if (window.ultimoTotalGoles !== undefined && golesTotal > window.ultimoTotalGoles) {
+          // Lanzar Flash de Gol
+          flash.classList.add("ejecutar-flash"); 
+          setTimeout(() => flash.classList.remove("ejecutar-flash"), 1200);
+          
+          // Activar Marcador Gigante
+          window.marcadorCreciendo = true; 
+          setTimeout(() => { window.marcadorCreciendo = false; }, 60000);
+          
+          // Registrar en tabla de sucesos
+          const escudoGol = (parseInt(p.golesL) > (window.golesL_prev || 0)) ? p.logoL_id : p.logoV_id;
+          window.sucesosPartido.unshift({ 
+            min: p.reloj || "Live", 
+            txt: "¡GOL!", 
+            img: escudoGol 
+          });
+        }
+        
+        if (!window.partidoIniciado) { 
+          window.sucesosPartido.unshift({ min: "1'", txt: "Inicio del partido", img: p.logoL_id }); 
+          window.partidoIniciado = true; 
+        }
+        
+        window.ultimoTotalGoles = golesTotal; 
+        window.golesL_prev = p.golesL;
+        
+        if (window.marcadorCreciendo) {
+          marcadorClase = "score-highlight";
+        }
+      }
+
+      // DETERMINAR TÍTULO PRINCIPAL (SI, NO, CASI)
+      let res = "...", col = "#e6edf3", sh = "rgba(230, 237, 243, 0.25)";
+      if (p) {
+        res = "NO"; col = "#00e599"; sh = "rgba(0, 229, 153, 0.4)";
+        const esM = (n) => n.toLowerCase().includes("mad");
+        const mG = esM(p.local) ? p.golesL : p.golesV; 
+        const rG = esM(p.local) ? p.golesV : p.golesL;
+        
+        if (mG < rG) { 
+          res = "SÍ"; col = "#ff4d4d"; sh = "rgba(255, 77, 77, 0.4)"; 
+        } else if (mG === rG) { 
+          res = "CASI"; col = "#ff9f43"; sh = "rgba(255, 159, 67, 0.4)"; 
+        }
+      }
+      
+      t.textContent = res; 
+      t.style.color = col; 
+      t.style.textShadow = `0 0 50px ${sh}`;
+      
+      // INYECTAR CAJA "DE MOMENTO"
+      const dmCont = document.getElementById("dm-box-container");
+      if (p && p.esDirecto && res !== "CASI") {
+        dmCont.innerHTML = `
+          <div class="mini-live-box">
+            <span class="live-dot"></span>
+            <span class="de-momento-text">DE MOMENTO...</span>
+          </div>`;
+      } else {
+        dmCont.innerHTML = "";
+      }
+
+      aplicarHologramaPorResultado(t, res);
+      document.body.style.boxShadow = `inset 0 0 150px ${sh.replace('0.4', '0.15')}`;
+
+      // PINTAR CAJA DE ÚLTIMO RESULTADO
+      if (p) {
+        const rachaDatos = data.racha || []; 
+        let rachaHTML = `
+          <div class="racha-interna" style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+            <div class="racha-title-min">Ultimos 5 partidos de mi Madris</div>
+            <div class="racha-stats-min">`;
+        
+        rachaDatos.forEach(item => {
+          let c = item.res === 'V' ? 'racha-v' : (item.res === 'D' ? 'racha-d' : 'racha-e');
+          rachaHTML += `
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <span class="${c}">${item.res}</span>
+              <img src="img/escudos/${item.id}.png" onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${item.id}.png'; this.onerror=null;" style="width:14px; height:14px; object-fit:contain;">
+            </div>`;
+        });
+        rachaHTML += `</div></div>`;
+
+        // GESTIÓN DE TABLA DE EVENTOS (PERSISTENCIA 3 HORAS)
+        const evBox = document.getElementById("events-box");
+        const ahora = new Date();
+        const finP = p.estado === "Finalizado" ? new Date(p.fechaIso) : null;
+        
+        if (p.esDirecto || (finP && (ahora - finP) < 10800000)) {
+            evBox.style.display = "block";
+            let tit = p.esDirecto ? `<span class="live-dot"></span> Eventos en vivo destacados` : `Eventos último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small"> <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small">`;
+            let hEv = `<div class="box-title" style="margin-bottom:15px">${tit}</div>`;
+            window.sucesosPartido.forEach(ev => { 
+              hEv += `<div class="event-row"><span class="event-min">${ev.min}</span> <img src="img/escudos/${ev.img}.png" class="team-logo--small"> <span>${ev.txt}</span></div>`; 
             });
-        } catch(e) {}
-
-        async function obtenerDatosReales() {
-            try {
-                const id = "86"; const ts = Date.now();
-                const [resTeam, resSched, resStand] = await Promise.all([
-                    fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
-                    fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
-                    fetch(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
-                ]);
-
-                const dTeam = await resTeam.json();
-                const dSched = await resSched.json();
-                const dStand = await resStand.json();
-
-                const eventos = dSched.events || [];
-                const jugados = eventos.filter(e => e.competitions[0].status.type.state === 'post').sort((a,b) => new Date(b.date) - new Date(a.date));
-                const enJuego = eventos.filter(e => e.competitions[0].status.type.state === 'in');
-                
-                const principal = enJuego[0] || jugados[0];
-                const proximo = dTeam.team.nextEvent?.[0] || eventos.find(e => e.competitions[0].status.type.state === 'pre');
-
-                const parseScore = (v) => {
-                    let n = parseInt(v?.value ?? v ?? 0);
-                    return isNaN(n) ? 0 : n;
-                };
-
-                const procesar = (ev) => {
-                    if (!ev) return null;
-                    const c = ev.competitions[0];
-                    const h = c.competitors.find(x => x.homeAway === 'home');
-                    const a = c.competitors.find(x => x.homeAway === 'away');
-                    let est = c.status.type.shortDetail === "FT" ? "Finalizado" : c.status.type.shortDetail;
-                    return {
-                        local: h.team.shortDisplayName, logoL: h.team.logos?.[0]?.href, golesL: parseScore(h.score),
-                        visitante: a.team.shortDisplayName, logoV: a.team.logos?.[0]?.href, golesV: parseScore(a.score),
-                        estado: est, esDirecto: c.status.type.state === 'in', fechaIso: ev.date, reloj: c.status.displayClock
-                    };
-                };
-
-                pintarUI({ actual: procesar(principal), proximo: procesar(proximo), tabla: dStand.children[0].standings.entries || [] });
-            } catch (e) { console.error(e); }
+            evBox.innerHTML = hEv;
+        } else { 
+          evBox.style.display = "none"; 
         }
 
-        function pintarUI(data) {
-            const p = data.actual;
-            const t = document.getElementById("main-title");
-            let res = "NO", col = "#00e599", sh = "rgba(0, 229, 153, 0.4)";
+        document.getElementById("last-match-box").innerHTML = `
+          <div class="box-title" style="margin-bottom:20px">${p.esDirecto ? '<span class="live-dot"></span> EN JUEGO' : 'Último resultado'}</div>
+          <div class="match-container">
+            <div class="teams-column">
+              <div class="match-row">
+                <div class="team-info">
+                  <img src="img/escudos/${p.logoL_id}.png" class="team-logo"> 
+                  ${p.local}
+                </div>
+                <div class="score ${marcadorClase}">${p.golesL}</div>
+              </div>
+              <div class="match-row">
+                <div class="team-info">
+                  <img src="img/escudos/${p.logoV_id}.png" class="team-logo"> 
+                  ${p.visitante}
+                </div>
+                <div class="score ${marcadorClase}">${p.golesV}</div>
+              </div>
+            </div>
+            <div class="status-column">
+              <div>${p.esDirecto ? p.reloj : p.estado}</div>
+              <div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric'})}</div>
+            </div>
+          </div>
+          ${rachaHTML}`;
+      }
 
-            if (p) {
-                const esM = (n) => n.toLowerCase().includes("mad");
-                const mG = esM(p.local) ? p.golesL : p.golesV;
-                const rG = esM(p.local) ? p.golesV : p.golesL;
+      // CAJA DE PRÓXIMO PARTIDO
+      if (data.proximo) {
+        const prox = data.proximo;
+        document.getElementById("next-match-box").innerHTML = `
+          <div class="box-header">
+            <div class="box-title">¿Perderá el siguiente?</div>
+            <div id="timer" class="countdown"></div>
+          </div>
+          <div class="match-container">
+            <div class="teams-column">
+              <div class="match-row">
+                <div class="team-info">
+                  <img src="img/escudos/${prox.logoL_id}.png" onerror="this.src='${prox.logoL}'; this.onerror=null;" class="team-logo"> 
+                  ${prox.local}
+                </div>
+              </div>
+              <div class="match-row" style="margin-bottom:0">
+                <div class="team-info">
+                  <img src="img/escudos/${prox.logoV_id}.png" onerror="this.src='${prox.logoV}'; this.onerror=null;" class="team-logo"> 
+                  ${prox.visitante}
+                </div>
+              </div>
+            </div>
+            <div class="status-column">
+              <div>${new Date(prox.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div>
+              <div style="font-weight:bold">${new Date(prox.fechaIso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</div>
+            </div>
+          </div>`;
+        iniciarCuenta(prox.fechaIso);
+      }
 
-                if (mG < rG) { res = "SÍ"; col = "#ff4d4d"; sh = "rgba(255, 77, 77, 0.4)"; }
-                else if (mG === rG) { res = "CASI"; col = "#ff9f43"; sh = "rgba(255, 159, 67, 0.4)"; }
+      // CLASIFICACIÓN
+      const tHTML = (data.tabla || []).slice(0, 5).map(e => `
+        <tr class="${(e.team.shortDisplayName || "").toUpperCase().includes("MAD") ? 'highlight-row' : ''}">
+          <td style="padding-left:15px">${e.stats.find(s=>s.name==='rank')?.value ?? ""}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:8px">
+              <img src="img/escudos/${e.team.id}.png" onerror="this.src='${e.team.logos?.[0]?.href ?? ""}'; this.onerror=null;" class="team-logo team-logo--small"> 
+              ${e.team.shortDisplayName}
+            </div>
+          </td>
+          <td>${e.stats.find(s=>s.name==='gamesPlayed')?.value ?? ""}</td>
+          <td style="font-weight:800">${e.stats.find(s=>s.name==='points')?.value ?? ""}</td>
+        </tr>`).join('');
+        
+      document.getElementById("standings-box").innerHTML = `
+        <div class="box-title" style="margin-bottom:20px">Clasificación - LaLiga</div>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th style="padding-left:15px">Pos</th>
+              <th>Club</th>
+              <th>PJ</th>
+              <th>Pts</th>
+            </tr>
+          </thead>
+          <tbody>${tHTML}</tbody>
+        </table>`;
+      
+      gestionarCache(data);
+
+      // RESET Y APLICACIÓN DE MODOS VISUALES
+      document.body.classList.remove("modo-humo", "modo-victoria", "modo-empate");
+      t.style.animation = "softPulse 2.6s ease-in-out infinite";
+
+      if (res === "SÍ") {
+        document.body.classList.add("modo-humo");
+        t.style.animation = "softPulse 0.5s ease-in-out infinite alternate";
+      } else if (res === "CASI") {
+        document.body.classList.add("modo-empate");
+      } else if (res === "NO") {
+        document.body.classList.add("modo-victoria");
+      }
+
+      const ref = document.getElementById("referee-figure");
+      const boxA = document.getElementById("last-match-box");
+      const boxP = document.getElementById("next-match-box");
+      
+      [ref, boxA, boxP].forEach(el => el?.classList.remove("live-ref-anim", "live-box-anim"));
+
+      if (p && p.esDirecto) {
+        if (ref) ref.classList.add("live-ref-anim");
+        if (boxA) boxA.classList.add("live-box-anim");
+      } else if (boxP) {
+        boxP.classList.add("live-box-anim");
+      }
+    }
+
+    function iniciarCuenta(f) {
+      clearInterval(countdownInterval); 
+      const el = document.getElementById("timer"); 
+      if (!el) return;
+      const target = new Date(f).getTime();
+      const up = () => {
+        const diff = target - Date.now(); 
+        if (diff <= 0) { el.textContent = "EN JUEGO"; return; }
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+      };
+      up(); 
+      countdownInterval = setInterval(up, 1000);
+    }
+
+    function posicionarViniPerimetro() {
+        const v1 = document.getElementById('vini-element-1'); 
+        const v2 = document.getElementById('vini-element-2');
+        const viniW = 280;
+        const winW = window.innerWidth;
+        const winH = window.innerHeight;
+        const totalW = viniW * 2 - 120; 
+        const exclW = winW > 480 ? 460 + totalW : winW;
+        
+        let fX, fY, hT, sT, rot = 0, found = false;
+        
+        while (!found) {
+            const side = Math.floor(Math.random() * 2); 
+            fX = Math.random() * (winW - totalW);
+            if (fX > (winW/2) - (exclW/2) && fX < (winW/2) + (exclW/2)) continue;
+            if (side === 0) { 
+              fY = winH - viniW; hT = 'translateY(67%)'; sT = 'translateY(0%)'; rot = 0; 
+            } else { 
+              fY = 0; hT = 'translateY(-67%)'; sT = 'translateY(0%)'; rot = 180; 
             }
-            t.textContent = res; t.style.color = col; t.style.textShadow = `0 0 50px ${sh}`;
-            document.body.style.boxShadow = `inset 0 0 150px ${sh.replace('0.4', '0.15')}`;
+            found = true;
+        }
+        
+        const setup = (el, off) => {
+            el.style.left = (fX + off) + 'px'; 
+            el.style.top = fY + 'px';
+            el.style.bottom = el.style.right = 'auto';
+            const h = `${hT} rotate(${rot}deg)`;
+            const s = `${sT} rotate(${rot}deg)`;
+            el.style.transform = h; 
+            el.onmouseenter = el.ontouchstart = () => el.style.transform = s;
+            el.onmouseleave = () => el.style.transform = h;
+        };
+        setup(v1, 0); 
+        setup(v2, viniW - 120);
+    }
 
-            document.getElementById("last-match-box").innerHTML = `
-                <div class="box-title" style="margin-bottom:20px">${p.esDirecto ? '<span class="live-dot"></span> EN JUEGO' : 'Último resultado'}</div>
-                <div class="match-container">
-                    <div class="teams-column">
-                        <div class="match-row"><div class="team-info"><img src="${p.logoL}" class="team-logo"> ${p.local}</div><div class="score">${p.golesL}</div></div>
-                        <div class="match-row"><div class="team-info"><img src="${p.logoV}" class="team-logo"> ${p.visitante}</div><div class="score">${p.golesV}</div></div>
-                    </div>
-                    <div class="status-column"><div>${p.esDirecto ? p.reloj : p.estado}</div><div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric'})}</div></div>
-                </div>`;
+    posicionarViniPerimetro(); 
+    window.onresize = posicionarViniPerimetro;
 
-            if (data.proximo) {
-                const prox = data.proximo;
-                document.getElementById("next-match-box").innerHTML = `
-                    <div class="box-header"><div class="box-title">¿Perderá el siguiente?</div><div id="timer" class="countdown"></div></div>
-                    <div class="match-container">
-                        <div class="teams-column">
-                            <div class="match-row"><div class="team-info"><img src="${prox.logoL}" class="team-logo"> ${prox.local}</div></div>
-                            <div class="match-row"><div class="team-info"><img src="${prox.logoV}" class="team-logo"> ${prox.visitante}</div></div>
-                        </div>
-                        <div class="status-column"><div>${new Date(prox.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div><div style="font-weight:bold">${new Date(prox.fechaIso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</div></div>
-                    </div>`;
-                iniciarCuenta(prox.fechaIso);
-            }
+    function gestionarCache(data = null) {
+      if (data) {
+        localStorage.setItem('madrid_data', JSON.stringify({timestamp: Date.now(), content: data}));
+      } else {
+        const c = localStorage.getItem('madrid_data'); 
+        if (c) {
+          pintarUI(JSON.parse(c).content);
+        }
+      }
+    }
 
-            let tHTML = data.tabla.slice(0, 5).map(e => `
-                <tr class="${e.team.shortDisplayName.includes('MAD') ? 'highlight-row' : ''}">
-                    <td style="padding-left:15px">${e.stats.find(s=>s.name==='rank').value}</td>
-                    <td><div style="display:flex;align-items:center;gap:8px"><img src="${e.team.logos[0].href}" style="width:16px">${e.team.shortDisplayName}</div></td>
-                    <td>${e.stats.find(s=>s.name==='gamesPlayed').value}</td>
-                    <td style="font-weight:800">${e.stats.find(s=>s.name==='points').value}</td>
-                </tr>`).join('');
-            document.getElementById("standings-box").innerHTML = `<div class="box-title" style="margin-bottom:20px">Clasificación - LaLiga</div><table class="standings-table"><thead><tr><th style="padding-left:15px">Pos</th><th>Club</th><th>PJ</th><th>Pts</th></tr></thead><tbody>${tHTML}</tbody></table>`;
+    let intervaloActual = 60000; 
+    let timerRefresco;
+
+    async function motorDeActualizacion() {
+      await obtenerDatosReales(); 
+      const c = localStorage.getItem('madrid_data');
+      if (c) {
+        const parsed = JSON.parse(c).content; 
+        const p = parsed.actual; 
+        const prox = parsed.proximo;
+        let nuevoIntervalo = 900000; // 15 min (Reposo)
+
+        if (p && p.esDirecto) {
+          nuevoIntervalo = 10000; // 10 seg (Vivo)
+        } else if (prox && (new Date(prox.fechaIso) - Date.now() < 7200000)) {
+          nuevoIntervalo = 60000; // 1 min (Pre)
         }
 
-        function iniciarCuenta(f) {
-            clearInterval(countdownInterval);
-            const target = new Date(f).getTime();
-            const up = () => {
-                const diff = target - Date.now();
-                if (diff <= 0) { document.getElementById("timer").textContent = "EN JUEGO"; return; }
-                const d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
-                document.getElementById("timer").textContent = `${d}d ${h}h ${m}m ${s}s`;
-            };
-            up(); countdownInterval = setInterval(up, 1000);
+        if (nuevoIntervalo !== intervaloActual) { 
+          intervaloActual = nuevoIntervalo; 
+          clearInterval(timerRefresco); 
+          timerRefresco = setInterval(motorDeActualizacion, intervaloActual); 
         }
-        obtenerDatosReales(); setInterval(obtenerDatosReales, 60000);
-    </script>
+      }
+    }
+
+    gestionarCache(); 
+    motorDeActualizacion(); 
+    timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
+/* ELIMINAR ESTE COMENTARIO PARA PRUEBAS LOCALES (MANDO A DISTANCIA)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '1') pintarUI({ actual: { local: "R. Madrid", logoL_id: "86", golesL: 3, visitante: "Rival", logoV_id: "0", golesV: 0, estado: "FT", esDirecto: false, fechaIso: new Date() }, proximo: null, tabla: [], racha: [] });
+      if (e.key === '2') pintarUI({ actual: { local: "R. Madrid", logoL_id: "86", golesL: 1, visitante: "Rival", logoV_id: "0", golesV: 1, estado: "FT", esDirecto: false, fechaIso: new Date() }, proximo: null, tabla: [], racha: [] });
+      if (e.key === '3') pintarUI({ actual: { local: "R. Madrid", logoL_id: "86", golesL: 0, visitante: "Rival", logoV_id: "0", golesV: 4, estado: "FT", esDirecto: false, fechaIso: new Date() }, proximo: null, tabla: [], racha: [] });
+      if (e.key === '4') pintarUI({ actual: { local: "R. Madrid", logoL_id: "86", golesL: 2, visitante: "Celta", logoV_id: "176", golesV: 2, estado: "35'", esDirecto: true, fechaIso: new Date(), reloj: "35'" }, proximo: null, tabla: [], racha: [{res:'V',id:'85'},{res:'E',id:'192'}] });
+      if (e.key === '5') pintarUI({ actual: { local: "R. Madrid", logoL_id: "86", golesL: 3, visitante: "Celta", logoV_id: "176", golesV: 2, estado: "80'", esDirecto: true, fechaIso: new Date(), reloj: "80'" }, proximo: null, tabla: [], racha: [{res:'V',id:'85'},{res:'E',id:'192'}] });
+    }); */
+  </script>
 </body>
-
 </html>
