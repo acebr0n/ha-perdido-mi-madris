@@ -1,4 +1,4 @@
-# 🏟️ ¿Ha perdido mi Madris? (El Llantómetro™)
+# 🏟️ ¿Ha perdido Mi Madris? (El Llantómetro™)
 
 ¿Estás cansado de que te vendan la moto en el Chiringuito? ¿Vives con el miedo constante a que el equipo se pegue un batacazo contra un recién ascendido?
 **Bienvenido a la herramienta definitiva de salud mental para el madridismo.**
