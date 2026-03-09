@@ -1303,7 +1303,7 @@
   </main>
 
   <footer class="site-footer">
-    Datos de resultados y clasificación proporcionados por ESPN. Este sitio no es oficial.
+    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.2.0.1
   </footer>
 
   <!-- Particles.js desde CDN (efecto visual de fondo) -->
@@ -1365,177 +1365,99 @@
     }
 
     // ===========================
-    // OBTENCIÓN DE DATOS DESDE ESPN
+    // COMPROBACIÓN DE CONECTIVIDAD CON API
     // ===========================
-    async function obtenerDatosReales() {
+    async function comprobarAPI() {
       try {
-        const id = "86"; // ID Real Madrid en ESPN
-        const ts = Date.now();
-        const timeout = 8000; // 8 segundos timeout
-        
-        // Fetch con timeout
-        const fetchWithTimeout = (url, options = {}) => {
-          return Promise.race([
-            fetch(url, options),
-            new Promise((_, reject) =>
-              setTimeout(() => reject(new Error('Timeout')), timeout)
-            )
-          ]);
-        };
-        
-        const [resTeam, resSched, resStand] = await Promise.all([
-          fetchWithTimeout(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
-          fetchWithTimeout(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
-          fetchWithTimeout(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
+        const timeout = 5000; // 5 segundos timeout
+        const response = await Promise.race([
+          fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86'),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), timeout)
+          )
         ]);
-
-        // Verificar respuestas
-        if (!resTeam.ok || !resSched.ok || !resStand.ok) {
-          throw new Error(`Error en API: ${resTeam.status}/${resSched.status}/${resStand.status}`);
-        }
-
-        const dTeam = await resTeam.json();
-        const dSched = await resSched.json();
-        const dStand = await resStand.json();
-
-        const eventos = dSched.events || [];
-        const jugados = eventos
-          .filter(e => e.competitions?.[0]?.status?.type?.state === 'post')
-          .sort((a, b) => new Date(b.date) - new Date(a.date));
-        const enJuego = eventos.filter(e => e.competitions?.[0]?.status?.type?.state === 'in');
-
-        const principal = enJuego[0] || jugados[0];
-        const proximo =
-          dTeam?.team?.nextEvent?.[0] ||
-          eventos.find(e => e.competitions?.[0]?.status?.type?.state === 'pre') ||
-          null;
-
-        const parseScore = (v) => {
-          let n = parseInt(v?.value ?? v ?? 0);
-          return isNaN(n) ? 0 : n;
-        };
-
-        const rachaReal = jugados
-          .slice(0, 5)
-          .reverse()
-          .map(ev => {
-            const c = ev.competitions[0];
-            const m = c.competitors.find(x => x.team.id === id);
-            const r = c.competitors.find(x => x.team.id !== id);
-            let resChar = 'E';
-            if (m.winner) resChar = 'V';
-            else if (r.winner) resChar = 'D';
-            return { res: resChar, id: r.team.id };
-          });
-
-        // Último enfrentamiento directo Madrid vs próximo rival
-        let headToHead = null;
-        if (proximo) {
-          const idMadrid = "86";
-          // Buscar próximo rival en base a eventos jugados de la temporada
-          const rivalId = (() => {
-            const comp = proximo.competitions?.[0];
-            if (!comp || !Array.isArray(comp.competitors)) return null;
-            const otro = comp.competitors.find(x => String(x.team.id) !== idMadrid);
-            return otro ? String(otro.team.id) : null;
-          })();
-          if (rivalId) {
-            const entreEllos = jugados
-              .filter(ev => {
-                const comp = ev.competitions?.[0];
-                if (!comp) return false;
-                const ids = (comp.competitors || []).map(x => String(x.team.id));
-                return ids.includes(idMadrid) && ids.includes(String(rivalId));
-              })
-              .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            if (entreEllos.length) {
-              const ev = entreEllos[0];
-              const c = ev.competitions[0];
-              const m = c.competitors.find(x => x.team.id === idMadrid);
-              const r = c.competitors.find(x => x.team.id === String(rivalId));
-              const mG = parseScore(m.score);
-              const rG = parseScore(r.score);
-              let resultado = "Empató";
-              if (m.winner) resultado = "Ganó";
-              else if (r.winner) resultado = "Perdió";
-
-              headToHead = {
-                existe: true,
-                resultado,
-                fechaIso: ev.date,
-                madridG: mG,
-                rivalG: rG,
-                rivalId: String(rivalId)
-              };
-            }
-          }
-        }
-
-        const procesar = (ev) => {
-          if (!ev) return null;
-          const c = ev.competitions[0];
-          const h = c.competitors.find(x => x.homeAway === 'home');
-          const a = c.competitors.find(x => x.homeAway === 'away');
-
-          let estDetalle = c.status.type.shortDetail === "FT"
-            ? "Finalizado"
-            : c.status.type.shortDetail;
-
-          return {
-            local: h.team.shortDisplayName,
-            logoL: h.team.logos?.[0]?.href,
-            logoL_id: h.team.id,
-            golesL: parseScore(h.score),
-            visitante: a.team.shortDisplayName,
-            logoV: a.team.logos?.[0]?.href,
-            logoV_id: a.team.id,
-            golesV: parseScore(a.score),
-            estado: estDetalle,
-            esDirecto: c.status.type.state === 'in',
-            fechaIso: ev.date,
-            reloj: c.status.displayClock,
-            liga: c.league?.name || c.league?.description || ""
-          };
-        };
-
-        // Pintamos toda la UI con un único objeto "data"
-        pintarUI({
-          actual: procesar(principal),
-          proximo: procesar(proximo),
-          tabla: dStand?.children?.[0]?.standings?.entries || [],
-          racha: rachaReal,
-          headToHead
-        });
-
-      } catch (e) {
-        console.error("Fallo crítico en obtenerDatosReales:", e);
-        // Siempre mostrar el error con información detallada
-        const errorBox = document.getElementById("error-failsafe");
-        if (errorBox) {
-          errorBox.style.display = "block";
-          errorBox.innerHTML = `
-            <div class="box-title" style="color: #ff4d4d;">
-              ¡PROBLEMAS EN EL TERRENO DE JUEGO!
-            </div>
-            <p style="font-size: 14px; margin: 15px 0;">
-              No puedo conectar con los datos de ESPN. El servicio puede estar temporalmente caído
-              o tu conexión podría tener problemas.
-            </p>
-            <div style="font-size: 11px; color: #8b949e; margin-top: 10px;">
-              Error: ${e.message || 'Error desconocido'}<br>
-              Intentando reconectar automáticamente...
-            </div>
-          `;
-        }
         
-        // Intentar reconexión automática cada 30 segundos
+        return response.ok;
+      } catch (e) {
+        console.warn("API no responde:", e.message);
+        return false;
+      }
+    }
+
+    // ===========================
+    // MODO ERROR: MOSTRAR ÁRBITRO Y PERSONAJES LLORANDO
+    // ===========================
+    function activarModoError() {
+      const errorBox = document.getElementById("error-failsafe");
+      const referee = document.getElementById("referee-figure");
+      const v1 = document.getElementById('vini-element-1');
+      const v2 = document.getElementById('vini-element-2');
+      
+      // Mostrar árbitro
+      if (referee) {
+        referee.style.display = "block";
+        referee.classList.add("live-ref-anim");
+      }
+      
+      // Mostrar personajes llorando
+      if (v1 && v2) {
+        v1.style.display = "block";
+        v2.style.display = "block";
+        
+        // Forzar imágenes llorando
+        v1.querySelector('img').src = 'img/vini_llorando.png';
+        v1.querySelector('img').alt = 'Vinícius Jr. llorando';
+        v2.querySelector('img').src = 'img/arbeloa_llorando.png';
+        v2.querySelector('img').alt = 'Álvaro Arbeloa llorando';
+        
+        // Posicionar a los lados del mensaje de error
         setTimeout(() => {
-          if (errorBox) {
-            errorBox.style.display = "none";
-          }
-          motorDeActualizacion();
-        }, 30000);
+          const errorRect = errorBox.getBoundingClientRect();
+          
+          // Vini a la izquierda
+          v1.style.left = (errorRect.left - 150) + 'px';
+          v1.style.top = errorRect.top + 'px';
+          v1.style.transform = 'translateY(0%) rotate(0deg)';
+          
+          // Arbeloa a la derecha
+          v2.style.left = (errorRect.right + 30) + 'px';
+          v2.style.top = errorRect.top + 'px';
+          v2.style.transform = 'translateY(0%) rotate(0deg)';
+        }, 100);
+      }
+      
+      // Mostrar mensaje de error detallado
+      if (errorBox) {
+        errorBox.style.display = "block";
+        errorBox.innerHTML = `
+          <div class="box-title" style="color: #ff4d4d; font-size: 18px;">
+            ¡PROBLEMAS EN EL TERRENO DE JUEGO!
+          </div>
+          <div style="display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+            <div style="text-align: center; font-size: 14px; line-height: 1.6;">
+              <p style="margin: 0 0 10px 0;">
+                <strong>No puedo conectar con ESPN</strong><br>
+                El servicio de datos está temporalmente caído
+              </p>
+              <p style="margin: 0; font-size: 12px; color: #8b949e;">
+                Reintentando conexión automáticamente...
+              </p>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 15px;">
+            <button onclick="location.reload()" style="
+              background: #ff4d4d;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 6px;
+              cursor: pointer;
+              font-weight: 600;
+            ">
+              Recargar ahora
+            </button>
+          </div>
+        `;
       }
     }
 
@@ -2222,6 +2144,16 @@
     let timerRefresco;
 
     async function motorDeActualizacion() {
+      // Primero comprobar si la API responde
+      const apiDisponible = await comprobarAPI();
+      
+      if (!apiDisponible) {
+        // Si API no responde, activar modo error
+        activarModoError();
+        return;
+      }
+      
+      // Si API responde, continuar normalmente
       await obtenerDatosReales();
       const c = localStorage.getItem('madrid_data');
       if (c) {
