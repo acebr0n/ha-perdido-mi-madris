@@ -22,7 +22,7 @@ Nuestra tecnología de punta (basada en el pánico y APIs gratuitas) responde a 
 
 ## 📸 Capturas de pantalla (o pruebas del delito)
 
-<img src="./screenshots/gana.jpg" width="400" alt="Mi Madris ganando">
+<img src="./Screenshots/gana.jpg" width="400" alt="Mi Madris ganando">
 
 ## 🏃‍♂️ Cómo usarlo
 
