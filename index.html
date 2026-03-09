@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>¿Ha perdido mi Madris? | Resultados y clasificación del Real Madrid</title>
 
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="¿Ha perdido mi Madris?">
   <meta property="og:description" content="Estado en directo del Real Madrid: último partido, próximo encuentro y clasificación.">
-  <meta property="og:url" content="https://tusitio.com">
-  <meta property="og:image" content="img/share.jpg">
+  <meta property="og:url" content="https://ha-perdido-mi-madris.pages.dev/">
+  <meta property="og:image" content="img/icono.jpg">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,7 @@
     rel="icon"
     id="favicon"
     type="image/jpeg"
-    href="https://scontent-mad1-1.xx.fbcdn.net/v/t39.30808-6/493927140_1270748487941648_5187398022783808678_n.jpg?stp=dst-jpg_p526x296_tt6&_nc_cat=107&ccb=1-7&_nc_sid=13d280&_nc_ohc=DIR1QNTtki0Q7kNvwG02KRS&_nc_oc=Adl4umK4hoN4zrw-eTEFAuQ9grdDgcoOBq6YQr-RSD_83whDRxRNhPsLq271agVmMRQ&_nc_zt=23&_nc_ht=scontent-mad1-1.xx&_nc_gid=3kbaqvMSYuhe3tGxbYLokQ&_nc_ss=8&oh=00_AfyqHt3To-cp48oefEOUfanmogle8v2h6owbuYN5L-S9fg&oe=69AF68A3"
+    href="img/share.jpg"
     onerror="this.href='https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg'"
   >
 
@@ -120,7 +120,7 @@
     }
 
     .title {
-      font-size: clamp(100px, 18vw, 180px);
+      font-size: clamp(60px, 15vw, 180px);
       font-weight: 800;
       margin: 0 0 20px 0;
       line-height: 1;
@@ -160,6 +160,29 @@
       position: absolute;
       width: 1px;
       white-space: nowrap;
+    }
+
+    /* Skip link para accesibilidad */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      z-index: 1000;
+      font-weight: 600;
+      font-size: 14px;
+      transition: top 0.3s ease;
+    }
+
+    .skip-link:focus {
+      top: 6px;
+      outline: 2px solid #58a6ff;
+      outline-offset: 2px;
     }
 
     @keyframes softPulse {
@@ -306,6 +329,34 @@
     .prob-percent {
       font-weight: 700;
       color: #e6edf3;
+      transition: color 0.3s ease, font-size 0.3s ease;
+    }
+    
+    /* Colores dinámicos para porcentaje */
+    .prob-percent.low {
+      color: #69f0ae; /* verde */
+    }
+    
+    .prob-percent.medium {
+      color: #ffca28; /* amarillo */
+    }
+    
+    .prob-percent.high {
+      color: #ff5252; /* rojo */
+    }
+    
+    /* Latido para porcentajes altos */
+    @keyframes pulsePercent {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+    
+    .prob-percent.pulse {
+      animation: pulsePercent 1s ease-in-out infinite;
     }
 
     .prob-bar-outer {
@@ -552,6 +603,44 @@
       transform: scale(1.35) rotate(-4deg);
     }
 
+    /* Responsive para tabla */
+    @media (max-width: 768px) {
+      .standings-table {
+        font-size: 13px;
+      }
+      
+      .standings-table th,
+      .standings-table td {
+        padding: 8px 6px;
+      }
+      
+      .standings-table th:nth-child(3),
+      .standings-table td:nth-child(3) {
+        display: none; /* Ocultar columna PJ en tablets */
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .standings-table {
+        font-size: 12px;
+      }
+      
+      .standings-table th,
+      .standings-table td {
+        padding: 6px 4px;
+      }
+      
+      .standings-table th:nth-child(3),
+      .standings-table td:nth-child(3) {
+        display: none; /* Ocultar PJ */
+      }
+      
+      .standings-table th:first-child,
+      .standings-table td:first-child {
+        padding-left: 8px;
+      }
+    }
+
     /* ===========================
        VINI / ARBELOA (PERÍMETRO)
        =========================== */
@@ -570,6 +659,28 @@
       height: 100%;
       object-fit: contain;
       pointer-events: none;
+    }
+
+    /* Responsive para Vini/Arbeloa */
+    @media (max-width: 768px) {
+      .vini-peekaboo {
+        width: 220px;
+        height: 220px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .vini-peekaboo {
+        width: 180px;
+        height: 180px;
+      }
+    }
+    
+    @media (max-width: 360px) {
+      .vini-peekaboo {
+        width: 140px;
+        height: 140px;
+      }
     }
 
     /* ===========================
@@ -863,6 +974,176 @@
     /* ===========================
        RESPONSIVE (MOBILE FIRST)
        =========================== */
+       
+    /* Tablets grandes */
+    @media (max-width: 1024px) {
+      .hero {
+        max-width: 600px;
+      }
+      
+      .info-container {
+        max-width: 420px;
+      }
+      
+      .dm-box-container {
+        max-width: 420px;
+      }
+    }
+    
+    /* Tablets y móviles grandes */
+    @media (max-width: 768px) {
+      .content-wrapper {
+        padding: 30px 18px;
+        margin-top: 100px;
+      }
+      
+      .hero {
+        max-width: 500px;
+        margin-bottom: 20px;
+      }
+      
+      .hero-subtitle {
+        font-size: 13px;
+        max-width: 400px;
+      }
+      
+      .info-container {
+        max-width: 400px;
+        gap: 16px;
+      }
+      
+      .dm-box-container {
+        max-width: 400px;
+      }
+      
+      .info-box {
+        padding: 20px;
+      }
+      
+      .team-info {
+        font-size: 14px;
+        gap: 10px;
+      }
+      
+      .match-row {
+        margin-bottom: 10px;
+        padding: 5px 8px;
+        margin-left: -8px;
+        margin-right: -8px;
+      }
+      
+      .score {
+        font-size: 15px;
+        padding-right: 15px;
+      }
+      
+      .status-column {
+        padding-left: 15px;
+        min-width: 80px;
+        font-size: 11px;
+      }
+    }
+    
+    /* Móviles pequeños */
+    @media (max-width: 360px) {
+      .content-wrapper {
+        padding: 20px 15px;
+        margin-top: 80px;
+      }
+      
+      .hero {
+        max-width: 100%;
+        margin-bottom: 16px;
+      }
+      
+      .title {
+        font-size: clamp(50px, 14vw, 120px);
+        letter-spacing: -4px;
+      }
+      
+      .hero-subtitle {
+        font-size: 12px;
+        max-width: 320px;
+      }
+      
+      .info-container {
+        max-width: 320px;
+        gap: 12px;
+      }
+      
+      .dm-box-container {
+        max-width: 320px;
+      }
+      
+      .info-box {
+        padding: 16px;
+      }
+      
+      .box-header {
+        margin-bottom: 16px;
+      }
+      
+      .team-info {
+        font-size: 13px;
+        gap: 8px;
+      }
+      
+      .team-logo {
+        width: 18px;
+        height: 18px;
+      }
+      
+      .team-logo--small {
+        width: 14px;
+        height: 14px;
+      }
+      
+      .match-row {
+        margin-bottom: 8px;
+        padding: 4px 6px;
+        margin-left: -6px;
+        margin-right: -6px;
+      }
+      
+      .score {
+        font-size: 14px;
+        padding-right: 12px;
+      }
+      
+      .status-column {
+        padding-left: 12px;
+        min-width: 70px;
+        font-size: 10px;
+      }
+      
+      .prob-container {
+        gap: 8px;
+        margin-top: 10px;
+        padding-top: 10px;
+      }
+      
+      .season-summary {
+        gap: 4px;
+      }
+      
+      .season-card {
+        padding: 4px 6px;
+        font-size: 10px;
+      }
+      
+      .racha-interna {
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 10px;
+      }
+      
+      .racha-stats-min {
+        gap: 12px;
+        font-size: 12px;
+      }
+    }
+    
+    /* Móviles (original) */
     @media (max-width: 480px) {
       .content-wrapper {
         margin-top: 50px;
@@ -893,6 +1174,9 @@
 </head>
 
 <body>
+  <!-- Skip to main content for accessibility -->
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+  
   <!-- Overlay visual global (modos humo/victoria/empate) -->
   <div class="humo-overlay" aria-hidden="true"></div>
 
@@ -904,19 +1188,19 @@
 
   <!-- Personajes del perímetro (decorativos) -->
   <div class="vini-peekaboo" id="vini-element-1" aria-hidden="true">
-    <img src="img/vini.png" alt="Vini">
+    <img src="img/vini.png" alt="Vinícius Jr. celebrando">
   </div>
   <div class="vini-peekaboo" id="vini-element-2" aria-hidden="true">
-    <img src="img/arbeloa.png" alt="Arbeloa">
+    <img src="img/arbeloa.png" alt="Álvaro Arbeloa">
   </div>
 
-  <header class="site-header" aria-label="Decoración del campo">
+  <header class="site-header" aria-label="Decoración temática del estadio">
     <div class="referee-container" aria-hidden="true">
-      <img src="img/arbitro.png" id="referee-figure" alt="Árbitro">
+      <img src="img/arbitro.png" id="referee-figure" alt="Árbitro de fútbol">
     </div>
   </header>
 
-  <main class="content-wrapper" role="main">
+  <main class="content-wrapper" id="main-content" role="main">
     <!-- Sección principal con el título dinámico SÍ / NO / CASI -->
     <section class="hero" aria-labelledby="main-title">
       <!-- aria-live para que lectores de pantalla anuncien cambios -->
@@ -1069,11 +1353,28 @@
       try {
         const id = "86"; // ID Real Madrid en ESPN
         const ts = Date.now();
+        const timeout = 8000; // 8 segundos timeout
+        
+        // Fetch con timeout
+        const fetchWithTimeout = (url, options = {}) => {
+          return Promise.race([
+            fetch(url, options),
+            new Promise((_, reject) =>
+              setTimeout(() => reject(new Error('Timeout')), timeout)
+            )
+          ]);
+        };
+        
         const [resTeam, resSched, resStand] = await Promise.all([
-          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
-          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
-          fetch(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
+          fetchWithTimeout(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`),
+          fetchWithTimeout(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
+          fetchWithTimeout(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`)
         ]);
+
+        // Verificar respuestas
+        if (!resTeam.ok || !resSched.ok || !resStand.ok) {
+          throw new Error(`Error en API: ${resTeam.status}/${resSched.status}/${resStand.status}`);
+        }
 
         const dTeam = await resTeam.json();
         const dSched = await resSched.json();
@@ -1616,7 +1917,7 @@
           <div class="prob-container">
             <div class="prob-label-row">
               <span>Probabilidad de palmar</span>
-              <span class="prob-percent">${probData.porcentaje}%</span>
+              <span class="prob-percent" id="prob-percent-number">${probData.porcentaje}%</span>
             </div>
             <div class="prob-bar-outer">
               <div class="prob-bar-inner ${probData.claseColor} ${probData.clasePulse}" style="width:${probData.porcentaje}%;"></div>
@@ -1646,6 +1947,37 @@
               </div>
             </div>
           </div>`;
+        
+        // Aplicar estilos dinámicos al porcentaje
+        const probPercentElement = document.getElementById('prob-percent-number');
+        if (probPercentElement) {
+          const porcentaje = probData.porcentaje;
+          
+          // Limpiar clases existentes
+          probPercentElement.classList.remove('low', 'medium', 'high', 'pulse');
+          
+          // Determinar color según porcentaje
+          if (porcentaje < 40) {
+            probPercentElement.classList.add('low');
+          } else if (porcentaje < 70) {
+            probPercentElement.classList.add('medium');
+          } else {
+            probPercentElement.classList.add('high');
+          }
+          
+          // Tamaño progresivo a partir de 60%
+          let fontSize = 10; // base
+          if (porcentaje >= 60) {
+            fontSize = 10 + Math.floor((porcentaje - 60) / 10) * 2;
+          }
+          probPercentElement.style.fontSize = fontSize + 'px';
+          
+          // Latido a partir de 70%
+          if (porcentaje >= 70) {
+            probPercentElement.classList.add('pulse');
+          }
+        }
+        
         iniciarCuenta(prox.fechaIso);
       }
 
@@ -1686,6 +2018,9 @@
 
       // Guardar en caché local para recarga rápida
       gestionarCache(data);
+
+      // Actualizar imágenes de personajes según resultado del partido
+      actualizarImagenesPersonajes(data.actual);
 
       // ===========================
       // MODOS VISUALES SEGÚN RESULTADO
@@ -1746,9 +2081,21 @@
     function posicionarViniPerimetro() {
       const v1 = document.getElementById('vini-element-1');
       const v2 = document.getElementById('vini-element-2');
-      const viniW = 280;
+      if (!v1 || !v2) return;
+      
       const winW = window.innerWidth;
       const winH = window.innerHeight;
+      
+      // Responsive sizing
+      let viniW = 280;
+      if (winW <= 360) {
+        viniW = 140;
+      } else if (winW <= 480) {
+        viniW = 180;
+      } else if (winW <= 768) {
+        viniW = 220;
+      }
+      
       const totalW = viniW * 2 - 120;
       const exclW = winW > 480 ? 460 + totalW : winW;
 
@@ -1778,6 +2125,36 @@
       };
       setup(v1, 0);
       setup(v2, viniW - 120);
+    }
+
+    // ===========================
+    // ACTUALIZAR IMÁGENES DE VINI/ARBELOA SEGÚN RESULTADO
+    // ===========================
+    function actualizarImagenesPersonajes(ultimoPartido) {
+      const v1 = document.getElementById('vini-element-1');
+      const v2 = document.getElementById('vini-element-2');
+      if (!v1 || !v2 || !ultimoPartido) return;
+
+      const esM = (n) => n.toLowerCase().includes("mad");
+      const mG = esM(ultimoPartido.local) ? ultimoPartido.golesL : ultimoPartido.golesV;
+      const rG = esM(ultimoPartido.local) ? ultimoPartido.golesV : ultimoPartido.golesL;
+      
+      // Determinar si Madrid está perdiendo o empatando
+      const estaPerdiendoOEmpatando = mG <= rG;
+      
+      if (estaPerdiendoOEmpatando) {
+        // Mostrar imágenes llorando
+        v1.querySelector('img').src = 'img/vini_llorando.png';
+        v1.querySelector('img').alt = 'Vinícius Jr. llorando';
+        v2.querySelector('img').src = 'img/arbeloa_llorando.png';
+        v2.querySelector('img').alt = 'Álvaro Arbeloa llorando';
+      } else {
+        // Mostrar imágenes normales
+        v1.querySelector('img').src = 'img/vini.png';
+        v1.querySelector('img').alt = 'Vinícius Jr. celebrando';
+        v2.querySelector('img').src = 'img/arbeloa.png';
+        v2.querySelector('img').alt = 'Álvaro Arbeloa';
+      }
     }
 
     posicionarViniPerimetro();
@@ -1826,7 +2203,7 @@
       }
     }
 
-    // Primera carga real (PROD)
+    //Primera carga real (PROD)
     gestionarCache();
     motorDeActualizacion();
     timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
@@ -1848,7 +2225,8 @@
        - 6  : mismo partido ya FINALIZADO con la línea de tiempo de eventos mantenida.
        - 9  : solo próximo partido y clasificación, sin partido actual.
     =========================== */
-/*
+    
+    /*
     function crearTablaDemo() {
       // Tabla de ejemplo con varios equipos
       return [
