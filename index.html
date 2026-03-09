@@ -36,14 +36,10 @@
   <meta name="twitter:description" content="Comprueba en segundos si el Real Madrid ha perdido ya.">
   <meta name="twitter:image" content="img/share.jpg">
 
-  <!-- Favicon (idealmente usa un recurso local) -->
-  <link
-    rel="icon"
-    id="favicon"
-    type="image/jpeg"
-    href="img/share.jpg"
-    onerror="this.href='https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg'"
-  >
+  <!-- Favicon con múltiples formatos para compatibilidad -->
+  <link rel="icon" type="image/x-icon" href="img/icono.jpg">
+  <link rel="icon" type="image/jpeg" href="img/icono.jpg">
+  <link rel="shortcut icon" href="img/icono.jpg">
 
   <!-- Tipografía -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -1502,9 +1498,32 @@
 
       } catch (e) {
         console.error("Fallo crítico en obtenerDatosReales:", e);
-        if (!localStorage.getItem('madrid_data')) {
-          document.getElementById("error-failsafe").style.display = "block";
+        // Siempre mostrar el error con información detallada
+        const errorBox = document.getElementById("error-failsafe");
+        if (errorBox) {
+          errorBox.style.display = "block";
+          errorBox.innerHTML = `
+            <div class="box-title" style="color: #ff4d4d;">
+              ¡PROBLEMAS EN EL TERRENO DE JUEGO!
+            </div>
+            <p style="font-size: 14px; margin: 15px 0;">
+              No puedo conectar con los datos de ESPN. El servicio puede estar temporalmente caído
+              o tu conexión podría tener problemas.
+            </p>
+            <div style="font-size: 11px; color: #8b949e; margin-top: 10px;">
+              Error: ${e.message || 'Error desconocido'}<br>
+              Intentando reconectar automáticamente...
+            </div>
+          `;
         }
+        
+        // Intentar reconexión automática cada 30 segundos
+        setTimeout(() => {
+          if (errorBox) {
+            errorBox.style.display = "none";
+          }
+          motorDeActualizacion();
+        }, 30000);
       }
     }
 
