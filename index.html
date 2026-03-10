@@ -553,8 +553,8 @@
     }
 
     .team-logo--small {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
     }
 
     .match-row:hover .team-logo,
@@ -1075,8 +1075,8 @@
     }
     
     .escudo-mini {
-      width: 16px;
-      height: 16px;
+      width: 22px;
+      height: 22px;
       object-fit: contain;
     }
     
@@ -1414,30 +1414,24 @@
           <div class="box-title" style= "color: #c09711; text-align:center;">🏆 TITULÓMETRO 🏆</div>
           <div class="titulometro-contador" id="titulometro-contenedor">
             <div class="titulometro-texto">
-              Mi Madris ganó su último título hace <span class="titulometro-destacado" id="tiempo-transcurrido">calculando...</span>
+              Mi Madris ganó su último título hace <span class="titulometro-destacado" id="tiempo-transcurrido">cargando...</span>
             </div>
           </div>
           <div class="titulometro-ficha" id="titulometro-ficha">
             <div class="ficha-item">
               <span class="ficha-label">Título:</span>
-              <span class="ficha-valor" id="torneo-nombre">Champions League</span>
+              <span class="ficha-valor" id="torneo-nombre">cargando...</span>
             </div>
             <div class="ficha-item">
               <span class="ficha-label">Lugar y Fecha:</span>
-              <span class="ficha-valor" id="lugar-fecha">Wembley | 01/06/2024</span>
+              <span class="ficha-valor" id="lugar-fecha">cargando...</span>
             </div>
             <div class="ficha-item">
               <span class="ficha-label">Marcador:</span>
-              <span class="ficha-valor marcador">
-                <img src="https://a.espncdn.com/i/teamlogos/soccer/500/124.png" 
-                     onerror="this.src='img/escudos/124.png'; this.onerror=null;" 
-                     class="escudo-mini" alt="Dortmund">
-                <span class="marcador-numero">0</span>
+              <span class="ficha-valor marcador" id="marcador-titulo">
+                <span class="marcador-numero">-</span>
                 <span class="separador">-</span>
-                <img src="https://a.espncdn.com/i/teamlogos/soccer/500/86.png" 
-                     onerror="this.src='img/escudos/86.png'; this.onerror=null;" 
-                     class="escudo-mini" alt="Real Madrid">
-                <span class="marcador-numero">2</span>
+                <span class="marcador-numero">-</span>
               </span>
             </div>
           </div>
@@ -1666,7 +1660,8 @@
       const tiempoElement = document.getElementById('tiempo-transcurrido');
       const torneoElement = document.getElementById('torneo-nombre');
       const lugarFechaElement = document.getElementById('lugar-fecha');
-      
+      const marcadorElement = document.getElementById('marcador-titulo');
+       
       if (tiempoElement) {
         tiempoElement.innerHTML = calcularTiempoTranscurrido();
       }
@@ -1683,6 +1678,20 @@
           year: 'numeric' 
         }).replace(/\//g, '/');
         lugarFechaElement.innerHTML = `${ultimoTitulo.lugar} | ${fechaFormateada}`;
+      }
+      
+      if (marcadorElement) {
+        marcadorElement.innerHTML = `
+          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${ultimoTitulo.marcador.escudoLocal}.png" 
+               onerror="this.src='img/escudos/${ultimoTitulo.marcador.escudoLocal}.png'; this.onerror=null;" 
+               class="escudo-mini" alt="${ultimoTitulo.marcador.local}">
+          <span class="marcador-numero">${ultimoTitulo.marcador.golesLocal}</span>
+          <span class="separador">-</span>
+          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${ultimoTitulo.marcador.escudoVisitante}.png" 
+               onerror="this.src='img/escudos/${ultimoTitulo.marcador.escudoVisitante}.png'; this.onerror=null;" 
+               class="escudo-mini" alt="${ultimoTitulo.marcador.visitante}">
+          <span class="marcador-numero">${ultimoTitulo.marcador.golesVisitante}</span>
+        `;
       }
     }
 
@@ -1736,6 +1745,32 @@
                 
                 guardarUltimoTitulo();
                 console.log('¡NUEVO TÍTULO DETECTADO!', ultimoTitulo);
+                
+                // Notificación visual de nuevo título
+                const notificacion = document.createElement('div');
+                notificacion.style.cssText = `
+                  position: fixed;
+                  top: 20px;
+                  right: 20px;
+                  background: linear-gradient(135deg, #ffca28, #ff9f43);
+                  color: #000;
+                  padding: 15px 20px;
+                  border-radius: 12px;
+                  font-weight: bold;
+                  font-size: 14px;
+                  z-index: 10000;
+                  box-shadow: 0 4px 20px rgba(255, 202, 40, 0.4);
+                  animation: slideInRight 0.5s ease;
+                `;
+                notificacion.innerHTML = `🏆 ¡NUEVO TÍTULO! ${ultimoTitulo.torneo}`;
+                document.body.appendChild(notificacion);
+                
+                // Auto-eliminar después de 5 segundos
+                setTimeout(() => {
+                  notificacion.style.animation = 'slideOutRight 0.5s ease';
+                  setTimeout(() => notificacion.remove(), 500);
+                }, 5000);
+                
                 return true; // Se encontró nuevo título
               }
             }
@@ -2255,7 +2290,7 @@
               </div>
               <div class="prob-h2h-right">
                 <span class="prob-h2h-result prob-h2h-${resLower}">${h2h.resultado}</span>
-                <span class="prob-h2h-meta">${fechaH2H} · ${h2h.madridG}-${h2h.rivalG}</span>
+                <span class="prob-h2h-meta">${h2h.madridG}-${h2h.rivalG} el día ${fechaH2H}</span>
               </div>
             </div>`;
         }
@@ -2360,7 +2395,7 @@
       // CLASIFICACIÓN LALIGA
       // ===========================
       const tHTML = (data.tabla || [])
-        .slice(0, 5)
+        .slice(0, 20)
         .map(e => `
         <tr class="${(e.team.shortDisplayName || "").toUpperCase().includes("MAD") ? 'highlight-row' : ''}">
           <td style="padding-left:15px">${e.stats.find(s=>s.name==='rank')?.value ?? ""}</td>
@@ -2377,7 +2412,7 @@
         </tr>`).join('');
 
       document.getElementById("standings-box").innerHTML = `
-        <div class="box-title" style="margin-bottom:20px">Clasificación - LaLiga</div>
+        <div class="box-title" style="margin-bottom:20px; text-align: center;">Clasificación - LaLiga</div>
         <table class="standings-table">
           <caption class="visually-hidden">Posición del Real Madrid y rivales directos en LaLiga</caption>
           <thead>
