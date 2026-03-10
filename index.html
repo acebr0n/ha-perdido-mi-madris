@@ -553,8 +553,8 @@
     }
 
     .team-logo--small {
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
     }
 
     .match-row:hover .team-logo,
@@ -948,6 +948,22 @@
       }
     }
 
+    @keyframes palpitacion {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .titulometro-destacado {
+      color: #ff4d4d;
+      font-weight: bold;
+      font-size: 16px;
+      animation: palpitacion 2s ease-in-out infinite;
+    }
+
     /* ===========================
        EVENTOS EN DIRECTO
        =========================== */
@@ -987,6 +1003,92 @@
       font-size: 11px;
       color: #8b949e;
       text-align: center;
+    }
+
+    /* ===========================
+       ESTILOS PARA SECCIÓN DE FRASES (aplica a todas las pantallas)
+       =========================== */
+    .frase-contenido {
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 10px 0;
+      text-align: center;
+      font-style: italic;
+      color: #8b949e;
+    }
+    
+    .frase-contenido .nombre-propio {
+      font-weight: bold;
+      font-size: 16px;
+      color: #58a6ff;
+    }
+
+    /* ===========================
+       ESTILOS PARA TITULÓMETRO
+       =========================== */
+    .titulometro-contador {
+      text-align: center;
+      margin: 15px 0;
+    }
+    
+    .titulometro-texto {
+      font-size: 14px;
+      color: #e6edf3;
+      line-height: 1.4;
+    }
+    
+    .titulometro-destacado {
+      color: #ff4d4d;
+      font-weight: bold;
+      font-size: 15px;
+      animation: palpitacion 1.5s ease-in-out infinite;
+    }
+    
+    .titulometro-ficha {
+      border-top: 1px solid #30363d;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    
+    .ficha-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+    
+    .ficha-label {
+      color: #8b949e;
+      font-weight: 600;
+    }
+    
+    .ficha-valor {
+      color: #e6edf3;
+      font-weight: 500;
+    }
+    
+    .marcador {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .escudo-mini {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+    }
+    
+    .marcador-numero {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .separador {
+      color: #8b949e;
+      font-weight: bold;
+      margin: 0 4px;
     }
 
     /* ===========================
@@ -1287,9 +1389,70 @@
       <!-- Eventos último partido (pasadas 3 horas) -->
       <section class="info-section" aria-labelledby="events-latest-heading">
         <h2 id="events-latest-heading" class="section-heading visually-hidden">
-          Eventos último partido
+          Eventos destacados último partido
         </h2>
         <div class="info-box" id="events-latest-box" style="display:none;"></div>
+      </section>
+
+      <!-- Frases aleatorias según resultado -->
+      <section class="info-section" aria-labelledby="frases-heading" id="frases-section" style="display:none;">
+        <h2 id="frases-heading" class="section-heading visually-hidden">
+          Frases del partido
+        </h2>
+        <div class="info-box" id="frases-box">
+          <div class="box-title" id="frases-titulo"></div>
+          <div class="frase-contenido" id="frases-contenido"></div>
+        </div>
+      </section>
+
+      <!-- Titulómetro -->
+      <section class="info-section" aria-labelledby="titulometro-heading">
+        <h2 id="titulometro-heading" class="section-heading visually-hidden">
+          Titulómetro del Real Madrid
+        </h2>
+        <div class="info-box" id="titulometro-box">
+          <div class="box-title" style= "color: #c09711; text-align:center;">🏆 TITULÓMETRO 🏆</div>
+          <div class="titulometro-contador" id="titulometro-contenedor">
+            <div class="titulometro-texto">
+              Mi Madris ganó su último título hace <span class="titulometro-destacado" id="tiempo-transcurrido">calculando...</span>
+            </div>
+          </div>
+          <div class="titulometro-ficha" id="titulometro-ficha">
+            <div class="ficha-item">
+              <span class="ficha-label">Título:</span>
+              <span class="ficha-valor" id="torneo-nombre">Champions League</span>
+            </div>
+            <div class="ficha-item">
+              <span class="ficha-label">Lugar y Fecha:</span>
+              <span class="ficha-valor" id="lugar-fecha">Wembley | 01/06/2024</span>
+            </div>
+            <div class="ficha-item">
+              <span class="ficha-label">Marcador:</span>
+              <span class="ficha-valor marcador">
+                <img src="https://a.espncdn.com/i/teamlogos/soccer/500/124.png" 
+                     onerror="this.src='img/escudos/124.png'; this.onerror=null;" 
+                     class="escudo-mini" alt="Dortmund">
+                <span class="marcador-numero">0</span>
+                <span class="separador">-</span>
+                <img src="https://a.espncdn.com/i/teamlogos/soccer/500/86.png" 
+                     onerror="this.src='img/escudos/86.png'; this.onerror=null;" 
+                     class="escudo-mini" alt="Real Madrid">
+                <span class="marcador-numero">2</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Muro de la Vergüenza -->
+      <section class="info-section" aria-labelledby="verguenza-heading" id="verguenza-section" style="display:none;">
+        <h2 id="verguenza-heading" class="section-heading visually-hidden">
+          Muro de la Vergüenza
+        </h2>
+        <div class="info-box" id="verguenza-box">
+          <div class="box-title" style="color: #ff4d4d; text-align:center;">😭 MURO DE LA VERGÜENZA 😭</div>
+          <div id="verguenza-contenido"></div>
+        </div>
       </section>
 
       <!-- Clasificación de LaLiga -->
@@ -1303,7 +1466,7 @@
   </main>
 
   <footer class="site-footer">
-    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.2.0.1
+    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.2.1.0
   </footer>
 
   <!-- Particles.js desde CDN (efecto visual de fondo) -->
@@ -1319,191 +1482,397 @@
     }
 
     // ===========================
-    // INICIALIZACIÓN PARTICLE.JS
+    // REPOSITORIOS DE FRASES
     // ===========================
-    try {
-      particlesJS("particles-js", {
-        "particles": {
-          "number": { "value": 50, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": "#ffffff" },
-          "shape": { "type": "circle" },
-          "opacity": { "value": 0.3, "random": false },
-          "size": { "value": 2, "random": true },
-          "line_linked": {
-            "enable": true,
-            "distance": 150,
-            "color": "#ffffff",
-            "opacity": 0.2,
-            "width": 1
-          },
-          "move": {
-            "enable": true,
-            "speed": 1.5,
-            "direction": "none",
-            "random": false,
-            "straight": false,
-            "out_mode": "out",
-            "bounce": false
-          }
-        },
-        "interactivity": {
-          "detect_on": "window",
-          "events": {
-            "onhover": { "enable": true, "mode": "grab" },
-            "onclick": { "enable": true, "mode": "push" },
-            "resize": true
-          },
-          "modes": {
-            "grab": { "distance": 200, "line_linked": { "opacity": 0.5 } },
-            "push": { "particles_nb": 4 }
-          }
-        },
-        "retina_detect": true
-      });
-    } catch (e) {
-      console.warn("Particles.js no pudo cargar.");
+    const frasesDerrota = {
+  inicios: [
+    "Vinicius Jr. lidera un despropósito monumental porque ",
+    "Florentino Pérez ya busca culpables en el palco tras ver que ",
+    "Álvaro Arbeloa se echa las manos a la cabeza al confirmar que ",
+    "Vinicius Jr. personifica el ridículo absoluto ahora que ",
+    "El madridismo siente una vergüenza histórica al notar que ",
+    "Vinicius Jr. arrastra al equipo al abismo mientras ",
+    "Florentino Pérez empieza a cuestionar su proyecto millonario porque ",
+    "Álvaro Arbeloa observa con horror desde la banda cómo ",
+    "Es imposible defender lo indefendible sabiendo que ",
+    "La paciencia del Bernabéu ha estallado por completo ya que "
+  ],
+  nudos: [
+    "Vinicius Jr. ha preferido pelearse con el árbitro que buscar portería ",
+    "Vinicius Jr. ha contagiado su desidia a Kylian Mbappé y Jude Bellingham ",
+    "Vinicius Jr. ha ignorado por completo las subidas de Álvaro Carreras ",
+    "Vinicius Jr. y Rodrygo Goes han caminado por el césped con una apatía indigna ",
+    "Franco Mastantuono y Dean Huijsen han imitado la falta de sangre de sus capitanes ",
+    "Federico Valverde ha corrido sin sentido para tapar los huecos que dejaba Vinicius Jr. ",
+    "Kylian Mbappé ha estado más ausente que nunca por culpa de los humos de Vinicius Jr. ",
+    "Raúl Asencio y Gonzalo García han pagado la novatada ante la nula ayuda defensiva ",
+    "Arda Güler ha visto desde el banco cómo Vinicius Jr. regalaba balones sin parar ",
+    "la obsesión de Vinicius Jr. por lucirse ante la cámara ha arruinado el esquema táctico "
+  ],
+  desenlaces: [
+    "dejando claro que este equipo tiene menos alma que un zapato viejo",
+    "haciendo que incluso Thibaut Courtois se plantee pedir el traslado al filial",
+    "lo que condena al club a una semana de memes y humillación mundial",
+    "ensuciando la historia de este escudo de una forma imperdonable",
+    "confirmando que el nadaplete es la única realidad de este proyecto",
+    "permitiendo que cualquier rival se pasee por nuestro estadio como por su casa",
+    "convirtiendo la promesa de la Décimo Sexta en un chiste de mal gusto",
+    "demostrando que el dinero no compra el respeto en el terreno de juego",
+    "provocando que la envidia del mundo se transforme en la mofa de Europa",
+    "sentenciando al equipo a luchar por entrar en la Conference League"
+  ]
+};
+
+    const frasesVictoria = {
+      inicios: [
+        "¡Somos los dueños del planeta fútbol porque ",
+        "No busquen más, la perfección existe desde que ",
+        "¡Que nos den ya todos los trofeos! Es evidente que ",
+        "El Bernabéu es el centro del universo ahora que ",
+        "¡Cierren la liga y dennos la copa ya! Es obvio que "
+      ],
+      nudos: [
+        "Vinicius Jr. y Kylian Mbappé han humillado a toda la defensa rival con una clase que ",
+        "Vinicius Jr. ha dictado una cátedra de fútbol total junto a Jude Bellingham que ",
+        "Vinicius Jr. ha inventado un nuevo idioma con el balón para conectar con Arda Güler, logrando que ",
+        "Vinicius Jr. ha destrozado los GPS de la liga con una exhibición apoyada por Federico Valverde que ",
+        "Vinicius Jr. ha vuelto a demostrar por qué es el mejor del mundo bajo el mandato de Florentino Pérez, para que "
+      ],
+      desenlaces: [
+        "el Balón de Oro se queda pequeño para este equipo!",
+        "nos asegura el triplete antes de llegar a abril.",
+        "la envidia del resto del mundo nos alimente el alma.",
+        "deja claro que no hay rival digno para este escudo.",
+        "el madridismo viva en una fiesta eterna e imbatible."
+      ]
+    };
+
+    // ===========================
+    // FUNCIÓN PARA GENERAR FRASES ALEATORIAS
+    // ===========================
+    function generarFrase(resultado) {
+      const repositorio = resultado === "NO" ? frasesDerrota : frasesVictoria;
+      
+      // Seleccionar aleatoriamente una parte de cada sección
+      const inicio = repositorio.inicios[Math.floor(Math.random() * repositorio.inicios.length)];
+      const nudo = repositorio.nudos[Math.floor(Math.random() * repositorio.nudos.length)];
+      const desenlace = repositorio.desenlaces[Math.floor(Math.random() * repositorio.desenlaces.length)];
+      
+      // Combinar las partes
+      let fraseCompleta = inicio + " " + nudo + " " + desenlace;
+      
+      // Resaltar nombres propios en negrita y 2px más grandes
+      fraseCompleta = fraseCompleta
+        .replace(/Florentino Pérez/g, '<span class="nombre-propio">Florentino Pérez</span>')
+        .replace(/Álvaro Arbeloa/g, '<span class="nombre-propio">Álvaro Arbeloa</span>')
+        .replace(/Vinicius Jr\./g, '<span class="nombre-propio">Vinicius Jr.</span>')
+        .replace(/Kylian Mbappé/g, '<span class="nombre-propio">Kylian Mbappé</span>')
+        .replace(/Jude Bellingham/g, '<span class="nombre-propio">Jude Bellingham</span>')
+        .replace(/Rodrygo Goes/g, '<span class="nombre-propio">Rodrygo Goes</span>')
+        .replace(/Arda Güler/g, '<span class="nombre-propio">Arda Güler</span>')
+        .replace(/Franco Mastantuono/g, '<span class="nombre-propio">Franco Mastantuono</span>')
+        .replace(/Dean Huijsen/g, '<span class="nombre-propio">Dean Huijsen</span>')
+        .replace(/Álvaro Carreras/g, '<span class="nombre-propio">Álvaro Carreras</span>')
+        .replace(/Raúl Asencio/g, '<span class="nombre-propio">Raúl Asencio</span>')
+        .replace(/Gonzalo García/g, '<span class="nombre-propio">Gonzalo García</span>')
+        .replace(/Federico Valverde/g, '<span class="nombre-propio">Federico Valverde</span>')
+        .replace(/Thibaut Courtois/g, '<span class="nombre-propio">Thibaut Courtois</span>');
+      
+      return fraseCompleta;
     }
 
     // ===========================
-    // COMPROBACIÓN DE CONECTIVIDAD CON API
+    // MOSTRAR/OCULTAR SECCIÓN DE FRASES
     // ===========================
-    async function comprobarAPI() {
+    function actualizarSeccionFrases(resultado, hayDirecto) {
+      const frasesSection = document.getElementById("frases-section");
+      const frasesTitulo = document.getElementById("frases-titulo");
+      const frasesContenido = document.getElementById("frases-contenido");
+      
+      if (!frasesSection || !frasesTitulo || !frasesContenido) return;
+      
+      // Solo mostrar si no hay partido en directo y hay resultado definitivo
+      if (hayDirecto || !resultado || (resultado !== "NO" && resultado !== "SÍ" && resultado !== "CASI")) {
+        frasesSection.style.display = "none";
+        return;
+      }
+      
+      // Mostrar sección solo con la frase (sin título)
+      frasesSection.style.display = "block";
+      frasesTitulo.style.display = "none"; // Ocultar título
+      
+      // Usar frases de derrota para empates también
+      const usarDerrota = resultado === "SÍ" || resultado === "CASI";
+      const fraseCompleta = generarFrase(usarDerrota ? "NO" : "SÍ");
+      
+      frasesContenido.innerHTML = fraseCompleta;
+    }
+
+    // ===========================
+    // TITULÓMETRO - CONTROL DE TÍTULOS
+    // ===========================
+    
+    // Estado inicial del último título (Champions League 01/06/2024)
+    let ultimoTitulo = {
+      fecha: new Date('2024-06-01'),
+      torneo: 'Champions League',
+      lugar: 'Wembley',
+      marcador: {
+        local: 'Dortmund',
+        visitante: 'Real Madrid',
+        golesLocal: 0,
+        golesVisitante: 2,
+        escudoLocal: '124',
+        escudoVisitante: '86'
+      }
+    };
+
+    // Cargar último título desde localStorage si existe
+    function cargarUltimoTitulo() {
+      const guardado = localStorage.getItem('madrid_ultimo_titulo');
+      if (guardado) {
+        try {
+          ultimoTitulo = JSON.parse(guardado);
+        } catch (e) {
+          console.warn('Error cargando último título:', e);
+        }
+      }
+    }
+
+    // Guardar último título en localStorage
+    function guardarUltimoTitulo() {
+      localStorage.setItem('madrid_ultimo_titulo', JSON.stringify(ultimoTitulo));
+    }
+
+    // Calcular tiempo transcurrido desde el último título
+    function calcularTiempoTranscurrido() {
+      const ahora = new Date();
+      const diferencia = ahora - ultimoTitulo.fecha;
+      
+      const años = Math.floor(diferencia / (365.25 * 24 * 60 * 60 * 1000));
+      const meses = Math.floor((diferencia % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
+      const días = Math.floor((diferencia % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+      
+      let texto = '';
+      if (años > 0) texto += `<span style='color: #ffca28; font-weight: bold;'>${años} año${años !== 1 ? 's' : ''}</span>`;
+      if (meses > 0) texto += `${texto ? ', ' : ''}<span style='color: #ffca28; font-weight: bold;'>${meses} mes${meses !== 1 ? 'es' : ''}</span>`;
+      if (días > 0) texto += `${texto ? ', ' : ''}<span class='titulometro-destacado'>${días} día${días !== 1 ? 's' : ''}</span>`;
+      
+      return texto || '<span class="titulometro-destacado">0 días</span>';
+    }
+
+    // Actualizar visual del Titulómetro
+    function actualizarTitulometro() {
+      const tiempoElement = document.getElementById('tiempo-transcurrido');
+      const torneoElement = document.getElementById('torneo-nombre');
+      const lugarFechaElement = document.getElementById('lugar-fecha');
+      
+      if (tiempoElement) {
+        tiempoElement.innerHTML = calcularTiempoTranscurrido();
+      }
+      
+      if (torneoElement) {
+        torneoElement.innerHTML = ultimoTitulo.torneo;
+      }
+      
+      if (lugarFechaElement) {
+        const fecha = new Date(ultimoTitulo.fecha);
+        const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric' 
+        }).replace(/\//g, '/');
+        lugarFechaElement.innerHTML = `${ultimoTitulo.lugar} | ${fechaFormateada}`;
+      }
+    }
+
+    // Buscar nuevos títulos en la API
+    async function buscarNuevoTitulo() {
       try {
-        const timeout = 5000; // 5 segundos timeout
-        const response = await Promise.race([
-          fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86'),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), timeout)
-          )
-        ]);
+        // Buscar en schedule del Real Madrid
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        if (!response.ok) throw new Error('Error en API');
         
-        return response.ok;
-      } catch (e) {
-        console.warn("API no responde:", e.message);
+        const data = await response.json();
+        const eventos = data.events || [];
+        
+        // Buscar finales ganadas (estado 'post' y winner: true)
+        for (const evento of eventos) {
+          if (evento.status?.type?.completed === true && 
+              evento.competitions?.[0]?.name && 
+              (evento.competitions[0].name.includes('Final') || 
+               evento.competitions[0].name.includes('Champions') ||
+               evento.competitions[0].name.includes('Copa') ||
+               evento.competitions[0].name.includes('Supercopa') ||
+               evento.competitions[0].name.includes('LaLiga'))) {
+            
+            // Verificar si Madrid ganó
+            const esMadridLocal = evento.competitions[0]?.team?.displayName?.toLowerCase().includes('madrid');
+            const esMadridVisitante = evento.competitions[1]?.team?.displayName?.toLowerCase().includes('madrid');
+            
+            if ((esMadridLocal && evento.competitions[0].winner === true) ||
+                (esMadridVisitante && evento.competitions[1]?.winner === true)) {
+              
+              const fechaEvento = new Date(evento.date);
+              
+              // Si este título es más reciente que el guardado
+              if (fechaEvento > ultimoTitulo.fecha) {
+                const ganador = esMadridLocal ? evento.competitions[0] : evento.competitions[1];
+                const perdedor = esMadridLocal ? evento.competitions[1] : evento.competitions[0];
+                
+                ultimoTitulo = {
+                  fecha: fechaEvento,
+                  torneo: evento.competitions[0].name,
+                  lugar: evento.venue?.fullName || 'Estadio',
+                  marcador: {
+                    local: perdedor.team?.displayName || 'Rival',
+                    visitante: ganador.team?.displayName || 'Real Madrid',
+                    golesLocal: perdedor.score || 0,
+                    golesVisitante: ganador.score || 0,
+                    escudoLocal: perdedor.team?.id || '124',
+                    escudoVisitante: ganador.team?.id || '86'
+                  }
+                };
+                
+                guardarUltimoTitulo();
+                console.log('¡NUEVO TÍTULO DETECTADO!', ultimoTitulo);
+                return true; // Se encontró nuevo título
+              }
+            }
+          }
+        }
+        
+        return false; // No se encontraron títulos nuevos
+        
+      } catch (error) {
+        console.warn('Error buscando nuevo título:', error);
         return false;
       }
     }
 
-    // ===========================
-    // MODO ERROR: MOSTRAR ÁRBITRO Y PERSONAJES LLORANDO
-    // ===========================
-    function activarModoError() {
-      const errorBox = document.getElementById("error-failsafe");
-      const referee = document.getElementById("referee-figure");
-      const v1 = document.getElementById('vini-element-1');
-      const v2 = document.getElementById('vini-element-2');
+    // Inicializar Titulómetro
+    async function inicializarTitulometro() {
+      cargarUltimoTitulo();
       
-      // Mostrar árbitro
-      if (referee) {
-        referee.style.display = "block";
-        referee.classList.add("live-ref-anim");
-      }
+      // Buscar nuevos títulos
+      const hayNuevoTitulo = await buscarNuevoTitulo();
       
-      // Mostrar personajes llorando
-      if (v1 && v2) {
-        v1.style.display = "block";
-        v2.style.display = "block";
-        
-        // Forzar imágenes llorando
-        v1.querySelector('img').src = 'img/vini_llorando.png';
-        v1.querySelector('img').alt = 'Vinícius Jr. llorando';
-        v2.querySelector('img').src = 'img/arbeloa_llorando.png';
-        v2.querySelector('img').alt = 'Álvaro Arbeloa llorando';
-        
-        // Posicionar a los lados del mensaje de error
-        setTimeout(() => {
-          const errorRect = errorBox.getBoundingClientRect();
-          
-          // Vini a la izquierda
-          v1.style.left = (errorRect.left - 150) + 'px';
-          v1.style.top = errorRect.top + 'px';
-          v1.style.transform = 'translateY(0%) rotate(0deg)';
-          
-          // Arbeloa a la derecha
-          v2.style.left = (errorRect.right + 30) + 'px';
-          v2.style.top = errorRect.top + 'px';
-          v2.style.transform = 'translateY(0%) rotate(0deg)';
-        }, 100);
-      }
+      // Actualizar visual
+      actualizarTitulometro();
       
-      // Mostrar mensaje de error detallado
-      if (errorBox) {
-        errorBox.style.display = "block";
-        errorBox.innerHTML = `
-          <div class="box-title" style="color: #ff4d4d; font-size: 18px;">
-            ¡PROBLEMAS EN EL TERRENO DE JUEGO!
-          </div>
-          <div style="display: flex; align-items: center; justify-content: center; margin: 20px 0;">
-            <div style="text-align: center; font-size: 14px; line-height: 1.6;">
-              <p style="margin: 0 0 10px 0;">
-                <strong>No puedo conectar con ESPN</strong><br>
-                El servicio de datos está temporalmente caído
-              </p>
-              <p style="margin: 0; font-size: 12px; color: #8b949e;">
-                Reintentando conexión automáticamente...
-              </p>
-            </div>
-          </div>
-          <div style="text-align: center; margin-top: 15px;">
-            <button onclick="location.reload()" style="
-              background: #ff4d4d;
-              color: white;
-              border: none;
-              padding: 8px 16px;
-              border-radius: 6px;
-              cursor: pointer;
-              font-weight: 600;
-            ">
-              Recargar ahora
-            </button>
-          </div>
-        `;
-      }
+      // Buscar nuevos títulos cada hora
+      setInterval(async () => {
+        await buscarNuevoTitulo();
+        actualizarTitulometro();
+      }, 3600000);
     }
 
     // ===========================
-    // EFECTO HOLOGRAMA SEGÚN RESULTADO
+    // CÁLCULO DE ESTADÍSTICAS DESDE MURO DE LA VERGÜENZA
     // ===========================
-    function aplicarHologramaPorResultado(el, res) {
-      let holo = {
-        holo1: "rgba(88,166,255,.25)",
-        holo2: "rgba(255,77,77,.22)",
-        holo3: "rgba(255,159,67,.22)",
-        holo4: "rgba(0,229,153,.22)",
-        hologlow: "rgba(255,255,255,.18)"
-      };
-
-      if (res === "NO") {
-        holo = {
-          holo1: "rgba(0,229,153,.30)",
-          holo2: "rgba(88,166,255,.24)",
-          holo3: "rgba(0,229,153,.18)",
-          holo4: "rgba(88,166,255,.18)",
-          hologlow: "rgba(0,229,153,.22)"
+    async function calcularEstadisticasDesdeMuro() {
+      try {
+        console.log('🔍 Obteniendo partidos para calcular estadísticas...');
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        if (!response.ok) {
+          console.error('❌ Error en respuesta API:', response.status);
+          return { victorias: 0, empates: 0, derrotas: 0 };
+        }
+        
+        const data = await response.json();
+        const eventos = data.events || [];
+        
+        // Filtrar partidos donde Madrid perdió o empató (misma lógica que Muro de la Vergüenza)
+        const partidosVerguenza = eventos.filter(evento => {
+          const estaFinalizado = evento.status?.type?.completed === true || 
+                                evento.status?.type?.name === 'Final' ||
+                                evento.status?.type?.description === 'Final' ||
+                                (evento.competitions?.[0]?.status?.type?.completed === true);
+          
+          if (!estaFinalizado) return false;
+          
+          const competitions = evento.competitions?.[0];
+          if (!competitions) return false;
+          
+          const esMadridLocal = competitions.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
+          const esMadridVisitante = competitions.competitors?.[1]?.team?.displayName?.toLowerCase().includes('madrid');
+          
+          if (!esMadridLocal && !esMadridVisitante) return false;
+          
+          // Determinar goles
+          let golesMadrid, golesRival;
+          if (esMadridLocal) {
+            golesMadrid = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+            golesRival = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+          } else {
+            golesMadrid = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+            golesRival = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+          }
+          
+          // Incluir si perdió o empató
+          return golesMadrid < golesRival || golesMadrid === golesRival;
+        });
+        
+        console.log('📊 Partidos de vergüenza para estadísticas:', partidosVerguenza.length);
+        
+        // Contar empates y derrotas
+        let empates = 0;
+        let derrotas = 0;
+        
+        partidosVerguenza.forEach(evento => {
+          const competitions = evento.competitions?.[0];
+          const esMadridLocal = competitions.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
+          
+          let golesMadrid, golesRival;
+          if (esMadridLocal) {
+            golesMadrid = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+            golesRival = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+          } else {
+            golesMadrid = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+            golesRival = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+          }
+          
+          if (golesMadrid === golesRival) {
+            empates++;
+          } else if (golesMadrid < golesRival) {
+            derrotas++;
+          }
+        });
+        
+        // Obtener victorias restando del total de partidos jugados
+        // Para esto necesitamos el total de partidos finalizados de Madrid
+        const partidosTotales = eventos.filter(evento => {
+          const estaFinalizado = evento.status?.type?.completed === true || 
+                                evento.status?.type?.name === 'Final' ||
+                                evento.status?.type?.description === 'Final' ||
+                                (evento.competitions?.[0]?.status?.type?.completed === true);
+          
+          if (!estaFinalizado) return false;
+          
+          const competitions = evento.competitions?.[0];
+          if (!competitions) return false;
+          
+          const esMadridLocal = competitions.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
+          const esMadridVisitante = competitions.competitors?.[1]?.team?.displayName?.toLowerCase().includes('madrid');
+          
+          return esMadridLocal || esMadridVisitante;
+        });
+        
+        const victorias = partidosTotales.length - partidosVerguenza.length;
+        
+        const estadisticas = {
+          victorias: victorias,
+          empates: empates,
+          derrotas: derrotas
         };
-      } else if (res === "SÍ") {
-        holo = {
-          holo1: "rgba(255,77,77,.30)",
-          holo2: "rgba(255,120,180,.20)",
-          holo3: "rgba(255,77,77,.18)",
-          holo4: "rgba(255,159,67,.16)",
-          hologlow: "rgba(255,77,77,.22)"
-        };
-      } else if (res === "CASI") {
-        holo = {
-          holo1: "rgba(255,159,67,.30)",
-          holo2: "rgba(255,210,120,.20)",
-          holo3: "rgba(255,159,67,.18)",
-          holo4: "rgba(88,166,255,.14)",
-          hologlow: "rgba(255,159,67,.22)"
-        };
+        
+        console.log('📈 Estadísticas calculadas desde Muro:', estadisticas);
+        return estadisticas;
+        
+      } catch (error) {
+        console.error('❌ Error calculando estadísticas desde Muro:', error);
+        return { victorias: 0, empates: 0, derrotas: 0 };
       }
-
-      el.style.setProperty("--holo1", holo.holo1);
-      el.style.setProperty("--holo2", holo.holo2);
-      el.style.setProperty("--holo3", holo.holo3);
-      el.style.setProperty("--holo4", holo.holo4);
-      el.style.setProperty("--hologlow", holo.hologlow);
     }
 
     // ===========================
@@ -1531,7 +1900,7 @@
       };
     }
 
-    function calcularProbPalmar(prox, tabla, racha, headToHead) {
+    async function calcularProbPalmar(prox, tabla, racha, headToHead) {
       if (!prox) {
         return {
           porcentaje: 0,
@@ -1607,7 +1976,8 @@
       // Pulso si >= 80%
       const clasePulse = prob >= 80 ? "prob-pulse" : "";
 
-      const registro = calcularRegistroTemporada(madridEntry);
+      // Obtener estadísticas desde el Muro de la Vergüenza
+      const registro = await calcularEstadisticasDesdeMuro();
 
       return {
         porcentaje: prob,
@@ -1620,7 +1990,7 @@
     // ===========================
     // PINTAR TODA LA UI A PARTIR DE "data"
     // ===========================
-    function pintarUI(data) {
+    async function pintarUI(data) {
       const p = data.actual;
       const t = document.getElementById("main-title");
       const flash = document.getElementById("flash-overlay");
@@ -1669,7 +2039,7 @@
           const nombreEquipoGol = esGolLocal ? p.local : p.visitante;
           window.sucesosPartido.unshift({
             min: p.reloj || "Live",
-            txt: `¡GOL de ${nombreEquipoGol}!`,
+            txt: `¡Gol de ${nombreEquipoGol}!`,
             img: escudoGol
           });
         }
@@ -1722,6 +2092,48 @@
         dmCont.innerHTML = "";
       }
 
+      function aplicarHologramaPorResultado(el, res) {
+        let holo = {
+          holo1: "rgba(88,166,255,.25)",
+          holo2: "rgba(255,77,77,.22)",
+          holo3: "rgba(255,159,67,.22)",
+          holo4: "rgba(0,229,153,.22)",
+          hologlow: "rgba(255,255,255,.18)"
+        };
+
+        if (res === "NO") {
+          holo = {
+            holo1: "rgba(0,229,153,.30)",
+            holo2: "rgba(88,166,255,.24)",
+            holo3: "rgba(0,229,153,.18)",
+            holo4: "rgba(88,166,255,.18)",
+            hologlow: "rgba(0,229,153,.22)"
+          };
+        } else if (res === "SÍ") {
+          holo = {
+            holo1: "rgba(255,77,77,.30)",
+            holo2: "rgba(255,120,180,.20)",
+            holo3: "rgba(255,77,77,.18)",
+            holo4: "rgba(255,159,67,.16)",
+            hologlow: "rgba(255,77,77,.22)"
+          };
+        } else if (res === "CASI") {
+          holo = {
+            holo1: "rgba(255,159,67,.30)",
+            holo2: "rgba(255,210,120,.20)",
+            holo3: "rgba(255,159,67,.18)",
+            holo4: "rgba(88,166,255,.14)",
+            hologlow: "rgba(255,159,67,.22)"
+          };
+        }
+
+        el.style.setProperty("--holo1", holo.holo1);
+        el.style.setProperty("--holo2", holo.holo2);
+        el.style.setProperty("--holo3", holo.holo3);
+        el.style.setProperty("--holo4", holo.holo4);
+        el.style.setProperty("--hologlow", holo.hologlow);
+      }
+
       aplicarHologramaPorResultado(t, res);
       document.body.style.boxShadow =
         `inset 0 0 150px ${sh.replace('0.4', '0.15')}`;
@@ -1745,7 +2157,7 @@
               <span class="${c}">${item.res}</span>
               <img src="img/escudos/${item.id}.png"
                    onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${item.id}.png'; this.onerror=null;"
-                   style="width:18px; height:18px; object-fit:contain;">
+                   style="width:20px; height:20px; object-fit:contain;">
             </div>`;
         });
         rachaHTML += `</div></div>`;
@@ -1776,14 +2188,14 @@
           evBox.style.display = "block";
           let tit = p.esDirecto
             ? `<span class="live-dot"></span> En vivo · Eventos del partido`
-            : `Eventos último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small"> <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small">`;
+            : `Eventos destacados último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small"> <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small">`;
           evBox.innerHTML = `<div class="box-title" style="margin-bottom:15px">${tit}</div>${eventosListadoHTML}`;
         } else {
           evBox.style.display = "none";
           // Pasadas 3 horas, mostramos eventos en una caja nueva por encima de la clasificación
           if (evLatestBox && window.sucesosPartido.length) {
             const fechaUlt = new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric',year:'2-digit'});
-            const tituloUltimo = `Eventos último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small"> - <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small">`;
+            const tituloUltimo = `Eventos destacados último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small"> - <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small">`;
             evLatestBox.style.display = "block";
             evLatestBox.innerHTML = `
               <div class="box-title" style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
@@ -1795,7 +2207,7 @@
         }
 
         document.getElementById("last-match-box").innerHTML = `
-          <div class="box-title" style="margin-bottom:20px">
+          <div class="box-title" style="margin-bottom:20px; text-align:center;">
             ${p.esDirecto ? '<span class="live-dot"></span> EN JUEGO' : 'Último resultado de Mi Madris'}
           </div>
           <div class="match-container">
@@ -1807,7 +2219,7 @@
                 </div>
                 <div class="score ${marcadorClase}">${p.golesL}</div>
               </div>
-              <div class="match-row">
+              <div class="match-row" style="margin-bottom:0">
                 <div class="team-info">
                   <img src="img/escudos/${p.logoV_id}.png" class="team-logo">
                   ${p.visitante}
@@ -1817,7 +2229,7 @@
             </div>
             <div class="status-column">
               <div>${p.esDirecto ? p.reloj : p.estado}</div>
-              <div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric'})}</div>
+              <div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div>
             </div>
           </div>
           ${rachaHTML}`;
@@ -1829,7 +2241,7 @@
       if (data.proximo) {
         const prox = data.proximo;
         const h2h = data.headToHead;
-        const probData = calcularProbPalmar(prox, data.tabla, data.racha, h2h);
+        const probData = await calcularProbPalmar(prox, data.tabla, data.racha, h2h);
 
         let h2hHTML = "";
         if (h2h && h2h.existe) {
@@ -1839,7 +2251,7 @@
             <div class="prob-h2h">
               <div class="prob-h2h-left">
                 <span class="prob-h2h-title">Último partido de mi Madris contra</span>
-                <img src="img/escudos/${h2h.rivalId}.png" class="team-logo--small" style="width:18px;height:18px;object-fit:contain;">
+                <img src="img/escudos/${h2h.rivalId}.png" class="team-logo--small" style="width:22px;height:22px;object-fit:contain;">
               </div>
               <div class="prob-h2h-right">
                 <span class="prob-h2h-result prob-h2h-${resLower}">${h2h.resultado}</span>
@@ -1977,7 +2389,7 @@
             </tr>
           </thead>
           <tbody>${tHTML}</tbody>
-        </table>`;
+          </table>`;
 
       // Guardar en caché local para recarga rápida
       gestionarCache(data);
@@ -1985,11 +2397,32 @@
       // Actualizar imágenes de personajes según resultado del partido
       actualizarImagenesPersonajes(data.actual);
 
-      // ===========================
-      // MODOS VISUALES SEGÚN RESULTADO
-      // ===========================
-      document.body.classList.remove("modo-humo", "modo-victoria", "modo-empate");
-      t.style.animation = "softPulse 2.6s ease-in-out infinite";
+      // Actualizar el Muro de la Vergüenza con los partidos de la temporada
+      try {
+        console.log('🔍 Obteniendo partidos para Muro de la Vergüenza...');
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        if (response.ok) {
+          const data = await response.json();
+          console.log('📊 Datos recibidos de API:', data);
+          const eventos = data.events || [];
+          console.log('📅 Total de eventos recibidos:', eventos.length);
+          
+          // Mostrar primeros eventos para depurar
+          if (eventos.length > 0) {
+            console.log('🔍 Primer evento:', eventos[0]);
+            console.log('🔍 Estructura del primer evento:', JSON.stringify(eventos[0], null, 2));
+          }
+          
+          actualizarMuroDeLaVerguenza(eventos);
+        } else {
+          console.error('❌ Error en respuesta API:', response.status, response.statusText);
+        }
+      } catch (error) {
+        console.error('❌ Error obteniendo partidos para Muro de la Vergüenza:', error);
+      }
+
+      // Actualizar sección de frases según resultado y si hay directo
+      actualizarSeccionFrases(res, p && p.esDirecto);
 
       if (res === "SÍ") {
         document.body.classList.add("modo-humo");
@@ -2012,6 +2445,190 @@
       } else if (boxP) {
         boxP.classList.add("live-box-anim");
       }
+      
+      // Actualizar sección de frases según resultado y si hay directo
+      actualizarSeccionFrases(res, p && p.esDirecto);
+    }
+
+    // ===========================
+    // MURO DE LA VERGÜENZA
+    // ===========================
+    function actualizarMuroDeLaVerguenza(partidos) {
+      console.log('🎭 Iniciando actualizarMuroDeLaVerguenza con', partidos.length, 'partidos');
+      
+      const verguenzaSection = document.getElementById('verguenza-section');
+      const verguenzaContenido = document.getElementById('verguenza-contenido');
+      
+      if (!verguenzaSection || !verguenzaContenido || !Array.isArray(partidos)) {
+        console.log('❌ Elementos del DOM no encontrados o datos inválidos');
+        return;
+      }
+
+      console.log('✅ Elementos del DOM encontrados, procesando partidos...');
+
+      // Filtrar partidos donde Madrid perdió o empató
+      const partidosVerguenza = partidos.filter(evento => {
+        console.log('🔍 Analizando evento:', evento.name, 'Estado completo:', evento.status);
+        
+        // Verificar si el partido está finalizado - la API usa diferente estructura
+        const estaFinalizado = evento.status?.type?.completed === true || 
+                              evento.status?.type?.name === 'Final' ||
+                              evento.status?.type?.description === 'Final' ||
+                              (evento.competitions?.[0]?.status?.type?.completed === true);
+        
+        console.log('🏁 ¿Está finalizado?', estaFinalizado);
+        
+        if (!estaFinalizado) {
+          console.log('❌ Partido no finalizado, descartando');
+          return false;
+        }
+
+        // Verificar si Madrid es local o visitante
+        const competitions = evento.competitions?.[0];
+        if (!competitions) {
+          console.log('❌ Sin competitions, descartando');
+          return false;
+        }
+
+        const esMadridLocal = competitions.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
+        const esMadridVisitante = competitions.competitors?.[1]?.team?.displayName?.toLowerCase().includes('madrid');
+        
+        console.log('🏟️ Equipos:', {
+          local: competitions.competitors?.[0]?.team?.displayName,
+          visitante: competitions.competitors?.[1]?.team?.displayName,
+          esMadridLocal,
+          esMadridVisitante
+        });
+        
+        if (!esMadridLocal && !esMadridVisitante) {
+          console.log('❌ No es partido de Madrid, descartando');
+          return false; // No es partido de Madrid
+        }
+
+        // Determinar goles de Madrid y rival
+        let golesMadrid, golesRival;
+        if (esMadridLocal) {
+          golesMadrid = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+          golesRival = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+        } else {
+          golesMadrid = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+          golesRival = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+        }
+
+        console.log('⚽ Goles detallados:', { 
+          golesMadrid, 
+          golesRival,
+          scoreLocal: competitions.competitors?.[0]?.score,
+          scoreVisitante: competitions.competitors?.[1]?.score,
+          scoreLocalValue: competitions.competitors?.[0]?.score?.value || competitions.competitors?.[0]?.score?.displayValue,
+          scoreVisitanteValue: competitions.competitors?.[1]?.score?.value || competitions.competitors?.[1]?.score?.displayValue,
+          statsLocal: competitions.competitors?.[0]?.stats,
+          statsVisitante: competitions.competitors?.[1]?.stats
+        });
+
+        // Incluir si perdió o empató
+        const esVerguenza = golesMadrid < golesRival || golesMadrid === golesRival;
+        console.log('🎭 ¿Es vergüenza?', esVerguenza);
+        
+        return esVerguenza;
+      });
+
+      console.log('📊 Partidos de vergüenza encontrados:', partidosVerguenza.length);
+
+      // Ordenar por fecha (más recientes primero)
+      partidosVerguenza.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Si no hay partidos de vergüenza, ocultar la sección
+      if (partidosVerguenza.length === 0) {
+        console.log('🚫 No hay partidos de vergüenza, ocultando sección');
+        verguenzaSection.style.display = 'none';
+        return;
+      }
+
+      console.log('✅ Hay partidos de vergüenza, mostrando tabla');
+
+      // Generar HTML para la tabla
+      let tablaHTML = `
+        <table class="standings-table" style="margin-top:15px;">
+          <caption class="visually-hidden">Partidos donde Real Madrid no ganó</caption>
+          <thead>
+            <tr>
+              <th scope="col" style="padding-left:15px; text-align:left;">Fecha</th>
+              <th scope="col" style="text-align:center;">Partido</th>
+              <th scope="col" style="text-align:right;">Resultado</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+      partidosVerguenza.forEach(evento => {
+        const competitions = evento.competitions?.[0];
+        const fecha = new Date(evento.date).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        });
+
+        // Determinar resultado y color
+        const esMadridLocal = competitions.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
+        let resultadoHTML, resultadoClase;
+        
+        if (esMadridLocal) {
+          const golesL = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+          const golesV = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+          if (golesL < golesV) {
+            resultadoHTML = `<span style="color: #ff4d4d; font-weight: bold;">${golesL}-${golesV}</span>`;
+            resultadoClase = 'derrota';
+          } else {
+            resultadoHTML = `<span style="color: #ff8800; font-weight: bold;">${golesL}-${golesV}</span>`;
+            resultadoClase = 'empate';
+          }
+        } else {
+          const golesL = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
+          const golesV = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
+          if (golesV < golesL) {
+            resultadoHTML = `<span style="color: #ff4d4d; font-weight: bold;">${golesV}-${golesL}</span>`;
+            resultadoClase = 'derrota';
+          } else {
+            resultadoHTML = `<span style="color: #ff8800; font-weight: bold;">${golesV}-${golesL}</span>`;
+            resultadoClase = 'empate';
+          }
+        }
+
+        // Obtener nombres y escudos de equipos
+        const equipoLocal = competitions.competitors?.[0]?.team?.displayName || 'Equipo Local';
+        const equipoVisitante = competitions.competitors?.[1]?.team?.displayName || 'Equipo Visitante';
+        const escudoLocal = competitions.competitors?.[0]?.team?.id || 'default';
+        const escudoVisitante = competitions.competitors?.[1]?.team?.id || 'default';
+
+        tablaHTML += `
+          <tr class="verguenza-row ${resultadoClase}">
+            <td style="padding-left:15px; font-size:11px; text-align:left;">${fecha}</td>
+            <td style="text-align:center;">
+              <div style="display:flex;align-items:center;justify-content:center;gap:8px; font-size:11px;">
+                <img src="img/escudos/${escudoLocal}.png"
+                     onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${escudoLocal}.png'; this.onerror=null;"
+                     class="team-logo team-logo--small" style="width:20px;height:20px;">
+                <span>${equipoLocal}</span>
+                <span style="margin:0 4px;">-</span>
+                <img src="img/escudos/${escudoVisitante}.png"
+                     onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${escudoVisitante}.png'; this.onerror=null;"
+                     class="team-logo team-logo--small" style="width:20px;height:20px; animation: pulse 2s infinite;">
+                <span>${equipoVisitante}</span>
+              </div>
+            </td>
+            <td style="text-align:right; font-weight:bold;">${resultadoHTML}</td>
+          </tr>`;
+      });
+
+      tablaHTML += `
+          </tbody>
+        </table>
+        <div style="margin-top:12px; font-size:12px; color:#8b949e; text-align:center;">
+          😭 ${partidosVerguenza.length} partido${partidosVerguenza.length !== 1 ? 's' : ''} que Mi Madris no ha ganado 😭
+        </div>`;
+
+      verguenzaContenido.innerHTML = tablaHTML;
+      verguenzaSection.style.display = 'block';
     }
 
     // ===========================
@@ -2178,6 +2795,7 @@
 
     //Primera carga real (PROD)
     gestionarCache();
+    inicializarTitulometro(); // Inicializar el Titulómetro
     motorDeActualizacion();
     timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
 
