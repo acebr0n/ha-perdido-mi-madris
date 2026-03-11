@@ -1555,7 +1555,7 @@
   </main>
 
   <footer class="site-footer">
-    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.3.0.0
+    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.2.1.0
   </footer>
 
   <!-- Particles.js desde CDN (efecto visual de fondo) -->
@@ -2069,7 +2069,7 @@
     async function buscarNuevoTitulo() {
       try {
         // Buscar en schedule del Real Madrid
-        const response = await fetch('/api/espn?path=/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
         if (!response.ok) throw new Error('Error en API');
         
         const data = await response.json();
@@ -2178,7 +2178,7 @@
     async function calcularEstadisticasDesdeMuro() {
       try {
         console.log('🔍 Obteniendo partidos para calcular estadísticas...');
-        const response = await fetch('/api/espn?path=/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
         if (!response.ok) {
           console.error('❌ Error en respuesta API:', response.status);
           return { victorias: 0, empates: 0, derrotas: 0 };
@@ -2805,7 +2805,7 @@
       // Actualizar el Muro de la Vergüenza con los partidos de la temporada
       try {
         console.log('🔍 Obteniendo partidos para Muro de la Vergüenza...');
-        const response = await fetch('/api/espn?path=/apis/site/v2/sports/soccer/all/teams/86/schedule');
+        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
         if (response.ok) {
           const data = await response.json();
           console.log('📊 Datos recibidos de API:', data);
@@ -2991,10 +2991,10 @@
           const golesL = parseInt(competitions.competitors?.[0]?.score?.value) || parseInt(competitions.competitors?.[0]?.score?.displayValue) || 0;
           const golesV = parseInt(competitions.competitors?.[1]?.score?.value) || parseInt(competitions.competitors?.[1]?.score?.displayValue) || 0;
           if (golesV < golesL) {
-            resultadoHTML = `<span style="color: #ff4d4d; font-weight: bold;">${golesV}-${golesL}</span>`;
+            resultadoHTML = `<span style="color: #ff4d4d; font-weight: bold;">${golesL}-${golesV}</span>`;
             resultadoClase = 'derrota';
           } else {
-            resultadoHTML = `<span style="color: #ff8800; font-weight: bold;">${golesV}-${golesL}</span>`;
+            resultadoHTML = `<span style="color: #ff8800; font-weight: bold;">${golesL}-${golesV}</span>`;
             resultadoClase = 'empate';
           }
         }
@@ -3437,5 +3437,4 @@
     */ // FIN MANDO A DISTANCIA
   </script>
 </body>
-
 </html>
