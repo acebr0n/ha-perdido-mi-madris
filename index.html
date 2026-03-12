@@ -1277,8 +1277,12 @@
           if (estadoLower.includes("descanso") || estadoLower.includes("half")) {
             window.sucesosPartido.unshift({ min: p.reloj || "45'", txt: "Descanso", img: "img/escudos/campo.png" });
           }
-          if (p.estado === "Finalizado") {
-            window.sucesosPartido.unshift({ min:"FT", txt:`Fin del partido (${p.golesL}-${p.golesV})`, img:"img/escudos/campo.png" });
+          const esFin = p.estado === "Finalizado" ||
+                        estadoLower.includes("full time") ||
+                        estadoLower === "ft" ||
+                        estadoLower.includes("final");
+          if (esFin) {
+            window.sucesosPartido.unshift({ min:"FT", txt:`Fin del partido (${p.golesL}-${p.golesV})`, img:"campo" });
           }
           window.ultimoEstadoPartido = p.estado;
         }
@@ -1967,7 +1971,7 @@
             logoV:     tV.logos?.[0]?.href || '',
             logoV_id:  tV.id || 'default',
             fechaIso:  ev.date,
-            liga:      ev.league?.name || ev.competitions?.[0]?.league?.name || ev.name || ''
+            liga:      ev.season?.displayName || ev.league?.name || ev.competitions?.[0]?.league?.name || ev.name || ''
           };
         }
 
@@ -2031,6 +2035,20 @@
     let timerRefresco;
 
     async function motorDeActualizacion() {
+
+	        // TEST DIRECTO — quitar después
+      if (window.location.search.includes('test=live')) {
+        await pintarUI({
+          actual: {
+            local: 'Real Madrid', logoL: '', logoL_id: '86', golesL: 2,
+            visitante: 'Manchester City', logoV: '', logoV_id: '382', golesV: 1,
+            estado: "67'", esDirecto: true,
+            fechaIso: new Date().toISOString(), reloj: "67'"
+          },
+          proximo: null, tabla: [], racha: [], headToHead: { existe: false }
+        });
+        return;
+      }
       try {
         const apiDisponible = await comprobarAPI();
         if (!apiDisponible) { activarModoError(); return; }
