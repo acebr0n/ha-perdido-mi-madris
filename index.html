@@ -689,7 +689,7 @@
   </main>
 
   <footer class="site-footer">
-    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.4.0.1
+    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.2.1.0
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
@@ -1125,7 +1125,7 @@
           if (!esMadrid0 && !esMadrid1) continue;
           const madridComp = esMadrid0 ? c0 : c1;
           const rivalComp  = esMadrid0 ? c1 : c0;
-          if (!madridComp.score?.winner) continue;
+          if (!madridComp.winner) continue;
           const fechaEvento = new Date(evento.date);
           if (fechaEvento <= new Date(ultimoTitulo.fecha)) continue;
           const golesMadrid = parseInt(madridComp.score?.value ?? madridComp.score?.displayValue ?? 0);
@@ -1169,7 +1169,6 @@
     // ===========================
     // CÁLCULO ESTADÍSTICAS
     // ===========================
-
     async function calcularEstadisticasDesdeMuro() {
       try {
         const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
@@ -1185,10 +1184,6 @@
                  st?.type?.name === 'Final' ||
                  st?.type?.description === 'Final';
         };
-		
-		
-		
-		
         const esMadridEnPartido = e => {
           const c = e.competitions?.[0];
           return c?.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid') ||
@@ -1280,10 +1275,10 @@
         if (window.ultimoEstadoPartido !== p.estado) {
           const estadoLower = String(p.estado || "").toLowerCase();
           if (estadoLower.includes("descanso") || estadoLower.includes("half")) {
-            window.sucesosPartido.unshift({ min: p.reloj || "45'", txt: "Descanso", img: "campo" });
+            window.sucesosPartido.unshift({ min: p.reloj || "45'", txt: "Descanso", img: "img/escudos/campo.png" });
           }
           if (p.estado === "Finalizado") {
-            window.sucesosPartido.unshift({ min:"FT", txt:`Fin del partido (${p.golesL}-${p.golesV})`, img:"campo" });
+            window.sucesosPartido.unshift({ min:"FT", txt:`Fin del partido (${p.golesL}-${p.golesV})`, img:"img/escudos/campo.png" });
           }
           window.ultimoEstadoPartido = p.estado;
         }
@@ -1291,7 +1286,12 @@
 
       if (p && p.esDirecto) {
         const golesTotal = parseInt(p.golesL) + parseInt(p.golesV);
-        if (window.ultimoTotalGoles !== undefined && golesTotal > window.ultimoTotalGoles) {
+        // FIX DIRECTO: inicializar sin disparar flash en la primera carga
+        if (window.ultimoTotalGoles === undefined) {
+          window.ultimoTotalGoles = golesTotal;
+          window.golesL_prev = p.golesL;
+        }
+        if (golesTotal > window.ultimoTotalGoles) {
           flash.classList.add("ejecutar-flash");
           setTimeout(() => flash.classList.remove("ejecutar-flash"), 1200);
           window.marcadorCreciendo = true;
@@ -1304,7 +1304,7 @@
           });
         }
         if (!window.partidoIniciado) {
-          window.sucesosPartido.unshift({ min:"1'", txt:"Inicio del partido", img:"campo" });
+          window.sucesosPartido.unshift({ min:"1'", txt:"Inicio del partido", img:"img/escudos/campo.png" });
           window.partidoIniciado = true;
         }
         window.ultimoTotalGoles = golesTotal;
@@ -1370,9 +1370,11 @@
 
         let eventosListadoHTML = "";
         window.sucesosPartido.forEach(ev => {
+          // FIX DIRECTO: "campo" y emoji no son IDs de equipo, usar texto en su lugar
+		const iconHTML = `<img src="img/escudos/${ev.img}.png" onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${ev.img}.png';this.onerror=null;" class="team-logo--small" alt="Evento">`;
           eventosListadoHTML += `<div class="event-row">
             <span class="event-min">${ev.min}</span>
-            <img src="img/escudos/${ev.img}.png" class="team-logo--small" alt="Evento">
+            ${iconHTML}
             <span>${ev.txt}</span>
           </div>`;
         });
@@ -1878,10 +1880,10 @@
         const standingsData = await standingsResp.json();
         const eventos = scheduleData.events || [];
 
-// El estado puede estar en el evento o dentro de competitions[0]
+        // getStatus: el estado puede estar en el evento raíz O dentro de competitions[0]
         const getStatus = (e) => e.status || e.competitions?.[0]?.status;
 
-        const enJuego     = eventos.find(e => getStatus(e)?.type?.state === 'in');
+        const enJuego = eventos.find(e => getStatus(e)?.type?.state === 'in');
         const finalizados = eventos
           .filter(e => {
             const st = getStatus(e);
@@ -1891,33 +1893,60 @@
                    st?.type?.description === 'Final';
           })
           .sort((a,b) => new Date(b.date) - new Date(a.date));
-		const ahora = new Date();
-const proximos = eventos
+        const ahora = new Date();
+        const proximos = eventos
           .filter(e => {
             const st = getStatus(e);
             if (st?.type?.state === 'pre') return true;
             const fechaEvento = new Date(e.date);
-            return fechaEvento > ahora && st?.type?.completed !== true && st?.type?.state !== 'post';
+            return fechaEvento > ahora && st?.type?.completed !== true && st?.type?.state !== 'post' && st?.type?.state !== 'in';
           })
           .sort((a,b) => new Date(a.date) - new Date(b.date));
 
-// Si no hay próximos en el schedule, intentar con el endpoint de equipo
+        const eventoActual = enJuego || finalizados[0] || null;
+
+        // FIX DIRECTO: si no hay próximos en el schedule, usar team.nextEvent
+        // pero filtrando el partido actual si está en juego
         if (proximos.length === 0 && teamResp.ok) {
           const teamData = await teamResp.json();
-
-          
           const nextEvent = teamData.team?.nextEvent?.[0];
           if (nextEvent) {
-            proximos.push(nextEvent);
+            const nextId = String(nextEvent.id);
+            const liveId = enJuego ? String(enJuego.id) : null;
+            if (nextId !== liveId) proximos.push(nextEvent);
           }
         }
 
-if (proximos.length === 0 && teamResp.ok) {
-          const teamData = await teamResp.json();
-          const nextEvent = teamData.team?.nextEvent?.[0];
-          if (nextEvent) {
-            proximos.push(nextEvent);
-          }
+        let actual = null;
+        if (eventoActual) {
+          const comp  = eventoActual.competitions?.[0];
+          const c0    = comp?.competitors?.[0];
+          const c1    = comp?.competitors?.[1];
+          const local = (c0?.homeAway === 'home' ? c0 : c1) || c0;
+          const visit = (c0?.homeAway === 'away' ? c0 : c1) || c1;
+          const tL    = local?.team || {};
+          const tV    = visit?.team || {};
+          // FIX DIRECTO: usar getStatus para detectar correctamente el partido en juego
+          const esDir = getStatus(eventoActual)?.type?.state === 'in';
+          // El reloj puede estar en status.displayClock o en competitions[0].status.displayClock
+          const relojVal = eventoActual.status?.displayClock ||
+                           eventoActual.competitions?.[0]?.status?.displayClock ||
+                           getStatus(eventoActual)?.type?.shortDetail || '';
+          actual = {
+            local:     tL.displayName || tL.shortDisplayName || 'Local',
+            logoL:     tL.logos?.[0]?.href || '',
+            logoL_id:  tL.id || 'default',
+            golesL:    parseInt(local?.score?.value ?? local?.score?.displayValue ?? 0),
+            visitante: tV.displayName || tV.shortDisplayName || 'Visitante',
+            logoV:     tV.logos?.[0]?.href || '',
+            logoV_id:  tV.id || 'default',
+            golesV:    parseInt(visit?.score?.value ?? visit?.score?.displayValue ?? 0),
+            estado:    esDir ? (relojVal || 'En juego')
+                             : (getStatus(eventoActual)?.type?.shortDetail || 'Finalizado'),
+            esDirecto: esDir,
+            fechaIso:  eventoActual.date,
+            reloj:     relojVal
+          };
         }
 
         let proximo = null;
@@ -1938,55 +1967,9 @@ if (proximos.length === 0 && teamResp.ok) {
             logoV:     tV.logos?.[0]?.href || '',
             logoV_id:  tV.id || 'default',
             fechaIso:  ev.date,
-            liga:      ev.season?.displayName || ev.league?.name || ev.competitions?.[0]?.league?.name || ev.name || ''
+            liga:      ev.league?.name || ev.competitions?.[0]?.league?.name || ev.name || ''
           };
         }
-
-
-
-
-
-        const eventoActual = enJuego || finalizados[0] || null;
-		
-		
-		
-		
-		
-		
-		
-
-		
-		
-		
-
-        let actual = null;
-        if (eventoActual) {
-          const comp  = eventoActual.competitions?.[0];
-          const c0    = comp?.competitors?.[0];
-          const c1    = comp?.competitors?.[1];
-          const local = (c0?.homeAway === 'home' ? c0 : c1) || c0;
-          const visit = (c0?.homeAway === 'away' ? c0 : c1) || c1;
-          const tL    = local?.team || {};
-          const tV    = visit?.team || {};
-          const esDir = getStatus(eventoActual)?.type?.state === 'in';
-          actual = {
-            local:     tL.displayName || tL.shortDisplayName || 'Local',
-            logoL:     tL.logos?.[0]?.href || '',
-            logoL_id:  tL.id || 'default',
-            golesL:    parseInt(local?.score?.value ?? local?.score?.displayValue ?? 0),
-            visitante: tV.displayName || tV.shortDisplayName || 'Visitante',
-            logoV:     tV.logos?.[0]?.href || '',
-            logoV_id:  tV.id || 'default',
-            golesV:    parseInt(visit?.score?.value ?? visit?.score?.displayValue ?? 0),
-            estado:    esDir ? (eventoActual.status?.displayClock || eventoActual.status?.type?.shortDetail || 'En juego')
-                             : (eventoActual.status?.type?.shortDetail || 'Finalizado'),
-            esDirecto: esDir,
-            fechaIso:  eventoActual.date,
-            reloj:     eventoActual.status?.displayClock || eventoActual.status?.type?.shortDetail || ''
-          };
-        }
-
-
 
         const racha = finalizados.slice(0, 5).map(ev => {
           const comp = ev.competitions?.[0];
@@ -2031,24 +2014,8 @@ if (proximos.length === 0 && teamResp.ok) {
           stats: e.stats || []
         }));
 
-
-
         const dataFinal = { actual, proximo, tabla, racha, headToHead };
         gestionarCache(dataFinal);
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
         await pintarUI(dataFinal);
         const failsafe = document.getElementById('error-failsafe');
         if (failsafe) failsafe.style.display = 'none';
@@ -2064,6 +2031,20 @@ if (proximos.length === 0 && teamResp.ok) {
     let timerRefresco;
 
     async function motorDeActualizacion() {
+
+	        // TEST DIRECTO — quitar después
+      if (window.location.search.includes('test=live')) {
+        await pintarUI({
+          actual: {
+            local: 'Real Madrid', logoL: '', logoL_id: '86', golesL: 2,
+            visitante: 'Manchester City', logoV: '', logoV_id: '382', golesV: 1,
+            estado: "67'", esDirecto: true,
+            fechaIso: new Date().toISOString(), reloj: "67'"
+          },
+          proximo: null, tabla: [], racha: [], headToHead: { existe: false }
+        });
+        return;
+      }
       try {
         const apiDisponible = await comprobarAPI();
         if (!apiDisponible) { activarModoError(); return; }
