@@ -2031,20 +2031,6 @@
     let timerRefresco;
 
     async function motorDeActualizacion() {
-
-	        // TEST DIRECTO — quitar después
-      if (window.location.search.includes('test=live')) {
-        await pintarUI({
-          actual: {
-            local: 'Real Madrid', logoL: '', logoL_id: '86', golesL: 1,
-            visitante: 'Manchester City', logoV: '', logoV_id: '382', golesV: 6,
-            estado: "67'", esDirecto: true,
-            fechaIso: new Date().toISOString(), reloj: "88'"
-          },
-          proximo: null, tabla: [], racha: [], headToHead: { existe: false }
-        });
-        return;
-      }
       try {
         const apiDisponible = await comprobarAPI();
         if (!apiDisponible) { activarModoError(); return; }
