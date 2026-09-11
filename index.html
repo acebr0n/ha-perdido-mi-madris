@@ -11,9 +11,9 @@
   <meta http-equiv="Content-Security-Policy" content="
     default-src 'self' data: blob:;
     script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com;
-    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-    font-src 'self' https://fonts.gstatic.com data:;
-    img-src 'self' data: blob: https: http:;
+    style-src 'self' file: 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' file: https://fonts.gstatic.com data:;
+    img-src 'self' file: data: blob: https: http:;
     connect-src 'self' https: http:;
     media-src 'self' blob:;
     object-src 'none';
@@ -24,25 +24,65 @@
   ">
   <title>¿Ha perdido mi Madris? | Resultados y clasificación del Real Madrid</title>
   <meta name="description" content="Comprueba en tiempo real si el Real Madrid ha perdido ya, el resultado del último partido, el próximo encuentro y la clasificación de LaLiga.">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <link rel="canonical" href="https://ha-perdido-mi-madris.pages.dev/">
   <meta name="theme-color" content="#0d1117">
   <meta property="og:locale" content="es_ES">
   <meta property="og:type" content="website">
   <meta property="og:title" content="¿Ha perdido mi Madris?">
   <meta property="og:description" content="Estado en directo del Real Madrid: último partido, próximo encuentro y clasificación.">
   <meta property="og:url" content="https://ha-perdido-mi-madris.pages.dev/">
-  <meta property="og:image" content="img/icono.jpg">
+  <meta property="og:site_name" content="¿Ha perdido mi Madris?">
+  <meta property="og:image" content="https://ha-perdido-mi-madris.pages.dev/img/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="¿Ha perdido mi Madris? Resultados en directo del Real Madrid">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="¿Ha perdido mi Madris?">
   <meta name="twitter:description" content="Comprueba en segundos si el Real Madrid ha perdido ya.">
-  <meta name="twitter:image" content="img/share.jpg">
+  <meta name="twitter:image" content="https://ha-perdido-mi-madris.pages.dev/img/share.jpg">
+  <meta name="twitter:image:alt" content="¿Ha perdido mi Madris? Resultados en directo del Real Madrid">
   <link rel="icon" type="image/x-icon" href="img/icono.jpg">
   <link rel="icon" type="image/jpeg" href="img/icono.jpg">
   <link rel="shortcut icon" href="img/icono.jpg">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="img/icono.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://site.api.espn.com">
+  <link rel="dns-prefetch" href="https://a.espncdn.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://ha-perdido-mi-madris.pages.dev/#website",
+        "url": "https://ha-perdido-mi-madris.pages.dev/",
+        "name": "¿Ha perdido mi Madris?",
+        "description": "Comprueba en directo si el Real Madrid ha perdido: último resultado, próximo partido y clasificación de LaLiga.",
+        "inLanguage": "es-ES"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://ha-perdido-mi-madris.pages.dev/#webpage",
+        "url": "https://ha-perdido-mi-madris.pages.dev/",
+        "name": "¿Ha perdido mi Madris? | Resultados y clasificación del Real Madrid",
+        "isPartOf": { "@id": "https://ha-perdido-mi-madris.pages.dev/#website" },
+        "about": { "@id": "https://ha-perdido-mi-madris.pages.dev/#equipo" },
+        "inLanguage": "es-ES"
+      },
+      {
+        "@type": "SportsTeam",
+        "@id": "https://ha-perdido-mi-madris.pages.dev/#equipo",
+        "name": "Real Madrid CF",
+        "sport": "Fútbol",
+        "sameAs": "https://es.wikipedia.org/wiki/Real_Madrid_Club_de_F%C3%BAtbol"
+      }
+    ]
+  }
+  </script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
     /* ===========================
        RESET BÁSICO + LAYOUT GLOBAL
        =========================== */
@@ -439,6 +479,8 @@
       to   { opacity: 1; transform: translateX(0); }
     }
     .event-min { font-weight: 800; color: #58a6ff; min-width: 35px; }
+    .event-row--gol { font-weight: 700; }
+    .event-row--gol .event-min { color: #00e676; }
 
     /* ===========================
        FRASES
@@ -575,11 +617,17 @@
   <div class="humo-overlay" aria-hidden="true"></div>
   <div id="flash-overlay" class="gol-flash" aria-hidden="true"></div>
   <div id="particles-js" aria-hidden="true"></div>
-  <div class="vini-peekaboo" id="vini-element-1" aria-hidden="true">
+  <div class="vini-peekaboo" id="pj-arbeloa" aria-hidden="true">
+    <img src="img/arbeloa.png" alt="Álvaro Arbeloa">
+  </div>
+  <div class="vini-peekaboo" id="pj-vini" aria-hidden="true">
     <img src="img/vini.png" alt="Vinícius Jr. celebrando">
   </div>
-  <div class="vini-peekaboo" id="vini-element-2" aria-hidden="true">
-    <img src="img/arbeloa.png" alt="Álvaro Arbeloa">
+  <div class="vini-peekaboo" id="pj-mourinho" aria-hidden="true">
+    <img src="img/mourinho.png" onerror="this.onerror=null;this.src='img/arbeloa.png';" alt="José Mourinho">
+  </div>
+  <div class="vini-peekaboo" id="pj-florentino" aria-hidden="true">
+    <img src="img/florentino.png" onerror="this.onerror=null;this.src='img/arbeloa.png';" alt="Florentino Pérez">
   </div>
   <header class="site-header" aria-label="Decoración temática del estadio">
     <div class="referee-container" aria-hidden="true">
@@ -611,16 +659,34 @@
     <div id="surf-odometer">Distancia recorrida: 0.00 km</div>
   </div>
 
+  <noscript>
+    <div style="position:relative;z-index:20;max-width:640px;margin:100px auto 0;padding:24px;background:#161b22;border:1px solid #30363d;border-radius:12px;color:#e6edf3;font-family:sans-serif;">
+      <h2 style="margin-top:0;">¿Ha perdido mi Madris?</h2>
+      <p>Esta página consulta en directo los resultados del Real Madrid: el marcador
+         del último partido, el próximo encuentro, la racha de los últimos cinco
+         partidos y la clasificación de LaLiga.</p>
+      <p style="color:#8b949e;">Necesitas activar JavaScript para ver los datos en vivo.</p>
+    </div>
+  </noscript>
+
   <main class="content-wrapper" id="main-content" role="main">
     <section class="hero" aria-labelledby="main-title">
       <h1 id="main-title" class="title fx-holo" aria-live="polite">...</h1>
+      <p class="hero-subtitle">
+        ¿Ha perdido el Real Madrid? Resultado del último partido, próximo
+        encuentro, racha y clasificación de LaLiga, actualizado en directo.
+      </p>
       <div id="dm-box-container" class="dm-box-container" aria-live="polite" aria-atomic="true"></div>
     </section>
     <section class="info-container" aria-label="Información de partidos y clasificación del Real Madrid">
       <div id="error-failsafe" class="info-box" style="display:none;border-color:#ff4d4d;text-align:center;" role="alert">
         <div class="box-title" style="color:#ff4d4d;">¡PROBLEMAS EN EL TERRENO DE JUEGO!</div>
         <p style="font-size:14px;margin:15px 0;">Oye, que no puedo conectar con los datos... ¡mira tú por la tele o algo!</p>
-        <div style="font-size:11px;color:#8b949e;">(Error de conexión con API ESPN)</div>
+        <div style="font-size:11px;color:#8b949e;" data-motivo>(Error de conexión con API ESPN)</div>
+        <div style="font-size:11px;color:#8b949e;margin-top:8px;">
+          Si has abierto el archivo con doble clic (file://), sírvelo por HTTP:
+          <code style="color:#58a6ff;">python3 -m http.server 8000</code>
+        </div>
       </div>
       <section class="info-section" aria-labelledby="last-match-heading">
         <h2 id="last-match-heading" class="section-heading visually-hidden">Último partido del Real Madrid</h2>
@@ -689,7 +755,7 @@
   </main>
 
   <footer class="site-footer">
-    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.4.1.5
+    Resultados y clasificación proporcionados por ESPN. Este sitio no es oficial v.3.0.0
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
@@ -934,15 +1000,326 @@
   </script>
 
   <script>
-    // ===========================
-    // ESTADO GLOBAL BÁSICO
-    // ===========================
-    let countdownInterval;
-    if (!window.sucesosPartido) window.sucesosPartido = [];
+    // ===========================================================
+    // CONFIGURACIÓN Y ESTADO GLOBAL
+    // ===========================================================
+    const ESPN_BASE = 'https://site.api.espn.com/apis';
+    const TEAM_ID   = '86';      // Real Madrid
+    const LIGA_SLUG = 'esp.1';   // LaLiga (para la clasificación)
+    const ID_BARSA  = '83';
 
-    // ===========================
+    // Competiciones que NO cuentan para el balance ni para el Muro
+    const SLUGS_AMISTOSOS = [
+      'club.friendly', 'nonfifa', 'fifa.friendly',
+      'friendly.emirates_cup', 'global.champs_cup'
+    ];
+
+    let countdownInterval;
+    let timerRefresco;
+    let intervaloActual = 60000;
+    let fallosSeguidos  = 0;
+
+    if (!window.sucesosPartido) window.sucesosPartido = [];
+    if (window.idPartidoActual === undefined) window.idPartidoActual = null;
+    if (window.golesPrevios    === undefined) window.golesPrevios    = null;
+
+    // ===========================================================
+    // UTILIDADES DE RED
+    // ===========================================================
+    function conParam(url, clave, valor) {
+      return url + (url.includes('?') ? '&' : '?') + clave + '=' + valor;
+    }
+
+    async function fetchJSON(url, timeoutMs = 8000) {
+      const ctrl = new AbortController();
+      const t = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        const r = await fetch(conParam(url, '_', Date.now()), {
+          signal: ctrl.signal,
+          cache: 'no-store',
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return await r.json();
+      } finally {
+        clearTimeout(t);
+      }
+    }
+
+    // ESPN nombra la temporada por el año en que empieza (corte: 1 de junio).
+    function temporadaESPN(d = new Date()) {
+      return d.getUTCMonth() >= 5 ? d.getUTCFullYear() : d.getUTCFullYear() - 1;
+    }
+
+    // ===========================================================
+    // CALENDARIO: varios intentos porque /all/ se queda vacío
+    // al cambiar de temporada si no se pasa ?season=
+    // ===========================================================
+    async function obtenerCalendario() {
+      const y = temporadaESPN();
+      const urls = [
+        `${ESPN_BASE}/site/v2/sports/soccer/all/teams/${TEAM_ID}/schedule?season=${y}`,
+        `${ESPN_BASE}/site/v2/sports/soccer/all/teams/${TEAM_ID}/schedule`,
+        `${ESPN_BASE}/site/v2/sports/soccer/${LIGA_SLUG}/teams/${TEAM_ID}/schedule?season=${y}`,
+        `${ESPN_BASE}/site/v2/sports/soccer/all/teams/${TEAM_ID}/schedule?season=${y - 1}`
+      ];
+      for (const url of urls) {
+        try {
+          const d  = await fetchJSON(url);
+          const ev = Array.isArray(d?.events) ? d.events : [];
+          if (ev.length) {
+            console.info(`[ESPN] Calendario OK · ${ev.length} partidos · ${url}`);
+            return ev;
+          }
+          console.warn('[ESPN] Calendario vacío ·', url);
+        } catch (e) {
+          console.warn('[ESPN] Fallo calendario ·', url, e.message);
+        }
+      }
+      return [];
+    }
+
+    async function obtenerClasificacion() {
+      try {
+        const d = await fetchJSON(`${ESPN_BASE}/v2/sports/soccer/${LIGA_SLUG}/standings`);
+        const entries = d?.standings?.entries
+                     || d?.children?.[0]?.standings?.entries
+                     || [];
+        return entries.map(e => ({
+          team: {
+            id: e.team?.id,
+            shortDisplayName: e.team?.shortDisplayName || e.team?.displayName,
+            logos: e.team?.logos || []
+          },
+          stats: e.stats || []
+        }));
+      } catch (e) {
+        console.warn('[ESPN] Fallo clasificación:', e.message);
+        return [];
+      }
+    }
+
+    // ===========================================================
+    // NORMALIZADORES (aquí estaba el grueso de los fallos)
+    // ===========================================================
+
+    // El estado puede venir en event.status O en competitions[0].status
+    function statusCrudo(ev) {
+      return ev?.competitions?.[0]?.status || ev?.status || {};
+    }
+
+    function estadoDe(ev) {
+      const st = statusCrudo(ev);
+      const tp = st.type || {};
+      const txt = [tp.description, tp.detail, tp.shortDetail, tp.name]
+        .filter(Boolean).join(' ').toLowerCase();
+
+      let state = tp.state;
+      if (!state) {
+        if (tp.completed === true)                 state = 'post';
+        else if (/final|full ?time/.test(txt))     state = 'post';
+        else if (/half ?time|in progress/.test(txt)) state = 'in';
+        else                                       state = 'pre';
+      }
+      return {
+        state,
+        pre:      state === 'pre',
+        vivo:     state === 'in',
+        fin:      state === 'post' || tp.completed === true,
+        descanso: /half ?time|descanso/.test(txt),
+        reloj:    st.displayClock || tp.shortDetail || tp.detail || '',
+        detalle:  tp.shortDetail || tp.detail || tp.description || ''
+      };
+    }
+
+    // score llega como objeto {value,displayValue} en /schedule,
+    // como string "2" en /scoreboard y /summary, y como [] en nextEvent
+    function golesDe(c) {
+      const s = c?.score;
+      if (s === null || s === undefined) return 0;
+      if (typeof s === 'number') return s;
+      if (typeof s === 'string') return parseInt(s, 10) || 0;
+      if (Array.isArray(s))      return 0;
+      return parseInt(s.value ?? s.displayValue ?? 0, 10) || 0;
+    }
+
+    function logoDe(t) {
+      return t?.logos?.[0]?.href
+          || t?.logo
+          || (t?.id ? `https://a.espncdn.com/i/teamlogos/soccer/500/${t.id}.png` : '');
+    }
+
+    function slugLigaDe(ev) {
+      return ev?.league?.slug
+          || ev?.competitions?.[0]?.league?.slug
+          || ev?.season?.slug
+          || LIGA_SLUG;
+    }
+
+    function nombreLigaDe(ev) {
+      return ev?.league?.name
+          || ev?.competitions?.[0]?.league?.name
+          || ev?.season?.displayName
+          || ev?.name
+          || '';
+    }
+
+    function esCompetitivo(ev) {
+      return !SLUGS_AMISTOSOS.includes(slugLigaDe(ev));
+    }
+
+    // Identificar al Madrid SIEMPRE por id: "mad" también casa con Atlético Madrid
+    function competidorMadrid(competidores) {
+      return competidores.find(c => String(c.team?.id) === TEAM_ID)
+          || competidores.find(c => /^real madrid/i.test(c.team?.displayName || ''))
+          || null;
+    }
+
+    function normalizarPartido(ev) {
+      if (!ev) return null;
+      const comp = ev.competitions?.[0];
+      const cs   = comp?.competitors || [];
+      if (cs.length < 2) return null;
+
+      const cLocal = cs.find(c => c.homeAway === 'home') || cs[0];
+      const cVisit = cs.find(c => c.homeAway === 'away') || cs[1];
+      const cMad   = competidorMadrid(cs);
+      const cRiv   = cs.find(c => c !== cMad) || cVisit;
+
+      const est = estadoDe(ev);
+      const gL  = golesDe(cLocal);
+      const gV  = golesDe(cVisit);
+      const madridEsLocal = cMad ? cMad === cLocal : true;
+      const gM  = madridEsLocal ? gL : gV;
+      const gR  = madridEsLocal ? gV : gL;
+
+      return {
+        idEvento:    String(ev.id || comp?.id || ''),
+        fechaIso:    ev.date || comp?.date,
+        liga:        nombreLigaDe(ev),
+        ligaSlug:    slugLigaDe(ev),
+        competitivo: esCompetitivo(ev),
+
+        local:     cLocal.team?.displayName || cLocal.team?.shortDisplayName || 'Local',
+        logoL:     logoDe(cLocal.team),
+        logoL_id:  cLocal.team?.id || 'default',
+        golesL:    gL,
+
+        visitante: cVisit.team?.displayName || cVisit.team?.shortDisplayName || 'Visitante',
+        logoV:     logoDe(cVisit.team),
+        logoV_id:  cVisit.team?.id || 'default',
+        golesV:    gV,
+
+        madridEsLocal,
+        golesMadrid: gM,
+        golesRival:  gR,
+        rivalId:     String(cRiv?.team?.id || 'default'),
+        rivalNombre: cRiv?.team?.displayName || 'Rival',
+
+        esDirecto:  est.vivo,
+        esDescanso: est.descanso,
+        finalizado: est.fin,
+        resultado:  (est.fin || est.vivo) ? (gM > gR ? 'V' : gM < gR ? 'D' : 'E') : null,
+        estado:     est.vivo ? (est.reloj || 'En juego')
+                             : (est.fin ? (est.detalle || 'Final') : est.detalle),
+        reloj:      est.reloj
+      };
+    }
+
+    // ===========================================================
+    // RESUMEN DEL PARTIDO (summary): estado real + eventos reales
+    // Esta es la pieza que faltaba para que funcionase EN DIRECTO
+    // ===========================================================
+    async function obtenerResumen(p) {
+      if (!p?.idEvento) return null;
+      const slugs = [p.ligaSlug, LIGA_SLUG, 'uefa.champions', 'esp.copa_del_rey']
+        .filter((v, i, a) => v && a.indexOf(v) === i);
+      for (const s of slugs) {
+        try {
+          const d = await fetchJSON(
+            `${ESPN_BASE}/site/v2/sports/soccer/${s}/summary?event=${p.idEvento}`, 8000
+          );
+          if (d && (d.header || d.keyEvents)) return d;
+        } catch (e) { /* probamos con el siguiente slug */ }
+      }
+      return null;
+    }
+
+    function etiquetaEvento(tipoTexto) {
+      const t = String(tipoTexto || '').toLowerCase();
+      if (/own goal/.test(t))                      return '⚽ Gol en propia';
+      if (/penal/.test(t) && /miss|saved|fail/.test(t)) return '❌ Penalti fallado';
+      if (/goal|scored/.test(t))                   return '⚽ Gol';
+      if (/second yellow|yellow.*red/.test(t))     return '🟨🟥 Doble amarilla';
+      if (/yellow/.test(t))                        return '🟨 Amarilla';
+      if (/red/.test(t))                           return '🟥 Roja';
+      if (/substitut/.test(t))                     return '🔄 Cambio';
+      if (/var|review/.test(t))                    return '📺 VAR';
+      if (/penal/.test(t))                         return '🎯 Penalti';
+      return null;
+    }
+
+    function textoEventoClave(k) {
+      const nombres = (k.athletesInvolved || k.participants || [])
+        .map(a => a.displayName || a.athlete?.displayName)
+        .filter(Boolean);
+      const etiqueta = etiquetaEvento(k.type?.text);
+      if (etiqueta && nombres.length) {
+        return `${etiqueta} — ${nombres.slice(0, 2).join(' ↔ ')}`;
+      }
+      if (etiqueta) return etiqueta;
+      if (k.text) return k.text;
+      return (k.type?.text || 'Evento') + (nombres.length ? ' — ' + nombres[0] : '');
+    }
+
+    function eventosDesdeResumen(sum) {
+      let ke = Array.isArray(sum?.keyEvents) ? sum.keyEvents : [];
+      // Fuente secundaria si ESPN no rellena keyEvents en esa competición
+      if (!ke.length && Array.isArray(sum?.plays)) {
+        ke = sum.plays.filter(p => p.scoringPlay || etiquetaEvento(p.type?.text));
+      }
+      return ke.map(k => {
+        const seg = Number(k.clock?.value);
+        return {
+          min:    k.clock?.displayValue || (Number.isFinite(seg) ? Math.round(seg / 60) + "'" : ''),
+          txt:    textoEventoClave(k),
+          escudo: k.team?.id ? String(k.team.id) : null,
+          gol:    k.scoringPlay === true || /goal/i.test(k.type?.text || ''),
+          orden:  Number.isFinite(seg) ? seg : 0
+        };
+      }).sort((a, b) => b.orden - a.orden);
+    }
+
+    // El summary va más al día que el schedule durante el directo
+    function aplicarResumen(p, sum) {
+      const comp = sum?.header?.competitions?.[0];
+      if (!p || !comp) return p;
+      const cs = comp.competitors || [];
+      const cl = cs.find(c => c.homeAway === 'home') || cs[0];
+      const cv = cs.find(c => c.homeAway === 'away') || cs[1];
+      if (cl && cv) {
+        p.golesL = golesDe(cl);
+        p.golesV = golesDe(cv);
+        p.golesMadrid = p.madridEsLocal ? p.golesL : p.golesV;
+        p.golesRival  = p.madridEsLocal ? p.golesV : p.golesL;
+      }
+      const est = estadoDe({ competitions: [comp] });
+      p.esDirecto  = est.vivo;
+      p.finalizado = est.fin;
+      p.esDescanso = est.descanso;
+      p.reloj      = est.reloj || p.reloj;
+      p.estado     = est.vivo ? (est.reloj || 'En juego')
+                              : (est.fin ? (est.detalle || 'Final') : est.detalle);
+      if (est.fin || est.vivo) {
+        p.resultado = p.golesMadrid > p.golesRival ? 'V'
+                    : p.golesMadrid < p.golesRival ? 'D' : 'E';
+      }
+      return p;
+    }
+
+    // ===========================================================
     // REPOSITORIOS DE FRASES
-    // ===========================
+    // ===========================================================
     const frasesDerrota = {
       inicios: [
         "Vinicius Jr. lidera un despropósito monumental porque ",
@@ -1005,409 +1382,369 @@
       ]
     };
 
-    // FIX #13: generarFrase con mapeo correcto (SÍ = derrota, NO = victoria)
     function generarFrase(resultado) {
-      const repositorio = resultado === "SÍ" ? frasesDerrota : frasesVictoria;
-      const inicio   = repositorio.inicios[Math.floor(Math.random() * repositorio.inicios.length)];
-      const nudo     = repositorio.nudos[Math.floor(Math.random() * repositorio.nudos.length)];
-      const desenlace = repositorio.desenlaces[Math.floor(Math.random() * repositorio.desenlaces.length)];
-      let fraseCompleta = inicio + " " + nudo + " " + desenlace;
-      fraseCompleta = fraseCompleta
-        .replace(/Florentino Pérez/g,   '<span class="nombre-propio">Florentino Pérez</span>')
-        .replace(/Álvaro Arbeloa/g,     '<span class="nombre-propio">Álvaro Arbeloa</span>')
-        .replace(/Vinicius Jr\./g,      '<span class="nombre-propio">Vinicius Jr.</span>')
-        .replace(/Kylian Mbappé/g,      '<span class="nombre-propio">Kylian Mbappé</span>')
-        .replace(/Jude Bellingham/g,    '<span class="nombre-propio">Jude Bellingham</span>')
-        .replace(/Rodrygo Goes/g,       '<span class="nombre-propio">Rodrygo Goes</span>')
-        .replace(/Arda Güler/g,         '<span class="nombre-propio">Arda Güler</span>')
-        .replace(/Franco Mastantuono/g, '<span class="nombre-propio">Franco Mastantuono</span>')
-        .replace(/Dean Huijsen/g,       '<span class="nombre-propio">Dean Huijsen</span>')
-        .replace(/Álvaro Carreras/g,    '<span class="nombre-propio">Álvaro Carreras</span>')
-        .replace(/Raúl Asencio/g,       '<span class="nombre-propio">Raúl Asencio</span>')
-        .replace(/Gonzalo García/g,     '<span class="nombre-propio">Gonzalo García</span>')
-        .replace(/Federico Valverde/g,  '<span class="nombre-propio">Federico Valverde</span>')
-        .replace(/Thibaut Courtois/g,   '<span class="nombre-propio">Thibaut Courtois</span>');
-      return fraseCompleta;
+      const repo = resultado === "SÍ" ? frasesDerrota : frasesVictoria;
+      const azar = arr => arr[Math.floor(Math.random() * arr.length)];
+      let frase = azar(repo.inicios) + " " + azar(repo.nudos) + " " + azar(repo.desenlaces);
+      const nombres = [
+        'Florentino Pérez', 'Álvaro Arbeloa', 'Vinicius Jr\\.', 'Kylian Mbappé',
+        'Jude Bellingham', 'Rodrygo Goes', 'Arda Güler', 'Franco Mastantuono',
+        'Dean Huijsen', 'Álvaro Carreras', 'Raúl Asencio', 'Gonzalo García',
+        'Federico Valverde', 'Thibaut Courtois'
+      ];
+      nombres.forEach(n => {
+        frase = frase.replace(new RegExp(n, 'g'),
+          m => `<span class="nombre-propio">${m}</span>`);
+      });
+      return frase;
     }
 
     function actualizarSeccionFrases(resultado, hayDirecto) {
-      const frasesSection   = document.getElementById("frases-section");
-      const frasesTitulo    = document.getElementById("frases-titulo");
-      const frasesContenido = document.getElementById("frases-contenido");
-      if (!frasesSection || !frasesTitulo || !frasesContenido) return;
-      if (hayDirecto || !resultado || (resultado !== "NO" && resultado !== "SÍ" && resultado !== "CASI")) {
-        frasesSection.style.display = "none";
+      const sec = document.getElementById("frases-section");
+      const tit = document.getElementById("frases-titulo");
+      const con = document.getElementById("frases-contenido");
+      if (!sec || !tit || !con) return;
+      if (hayDirecto || !["NO", "SÍ", "CASI"].includes(resultado)) {
+        sec.style.display = "none";
         return;
       }
-      frasesSection.style.display = "block";
-      frasesTitulo.style.display  = "none";
-      // FIX #13: llamada simplificada sin doble inversión
-      const fraseCompleta = generarFrase(resultado === "NO" ? "NO" : "SÍ");
-      frasesContenido.innerHTML = fraseCompleta;
+      sec.style.display = "block";
+      tit.style.display = "none";
+      con.innerHTML = generarFrase(resultado === "NO" ? "NO" : "SÍ");
     }
 
-    // ===========================
+    // ===========================================================
     // TITULÓMETRO
-    // ===========================
+    // Sólo cuentan FINALES ganadas de competiciones con título.
+    // (antes cualquier victoria de liga se registraba como "título")
+    // ===========================================================
+    const COMPETICIONES_CON_TITULO = [
+      'uefa.champions', 'uefa.europa', 'uefa.super_cup', 'uefa.europa.conf',
+      'esp.copa_del_rey', 'esp.super_cup', 'fifa.cwc', 'fifa.intercontinental_cup'
+    ];
+
     let ultimoTitulo = {
-      fecha: new Date('2024-06-01'),
+      fecha: '2024-06-01T00:00:00Z',
       torneo: 'Champions League',
       lugar: 'Wembley',
-      marcador: { local:'Dortmund', visitante:'Real Madrid', golesLocal:0, golesVisitante:2, escudoLocal:'124', escudoVisitante:'86' }
+      marcador: {
+        local: 'Dortmund', visitante: 'Real Madrid',
+        golesLocal: 0, golesVisitante: 2,
+        escudoLocal: '124', escudoVisitante: '86'
+      }
     };
 
     function cargarUltimoTitulo() {
-      const guardado = localStorage.getItem('madrid_ultimo_titulo');
-      if (guardado) { try { ultimoTitulo = JSON.parse(guardado); } catch(e) { console.warn('Error cargando título:', e); } }
+      try {
+        const g = almacen.get('madrid_ultimo_titulo');
+        if (g) ultimoTitulo = JSON.parse(g);
+      } catch (e) { console.warn('Error cargando título:', e); }
     }
     function guardarUltimoTitulo() {
-      localStorage.setItem('madrid_ultimo_titulo', JSON.stringify(ultimoTitulo));
+      almacen.set('madrid_ultimo_titulo', JSON.stringify(ultimoTitulo));
     }
+
     function calcularTiempoTranscurrido() {
-      const ahora = new Date();
-      const diferencia = ahora - new Date(ultimoTitulo.fecha);
-      const años  = Math.floor(diferencia / (365.25 * 24 * 60 * 60 * 1000));
-      const meses = Math.floor((diferencia % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
-      const días  = Math.floor((diferencia % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
-      let texto = '';
-      if (años  > 0) texto += `<span style='color:#ffca28;font-weight:bold;'>${años} año${años!==1?'s':''}</span>`;
-      if (meses > 0) texto += `${texto?', ':''}<span style='color:#ffca28;font-weight:bold;'>${meses} mes${meses!==1?'es':''}</span>`;
-      if (días  > 0) texto += `${texto?', ':''}<span class='titulometro-destacado'>${días} día${días!==1?'s':''}</span>`;
-      return texto || '<span class="titulometro-destacado">0 días</span>';
+      const dif = Date.now() - new Date(ultimoTitulo.fecha).getTime();
+      if (!Number.isFinite(dif) || dif < 0) return '<span class="titulometro-destacado">0 días</span>';
+      const AÑO = 365.25 * 24 * 3600 * 1000, MES = 30.44 * 24 * 3600 * 1000, DIA = 24 * 3600 * 1000;
+      const años  = Math.floor(dif / AÑO);
+      const meses = Math.floor((dif % AÑO) / MES);
+      const días  = Math.floor((dif % MES) / DIA);
+      let t = '';
+      if (años)  t += `<span style='color:#ffca28;font-weight:bold;'>${años} año${años !== 1 ? 's' : ''}</span>`;
+      if (meses) t += `${t ? ', ' : ''}<span style='color:#ffca28;font-weight:bold;'>${meses} mes${meses !== 1 ? 'es' : ''}</span>`;
+      if (días)  t += `${t ? ', ' : ''}<span class='titulometro-destacado'>${días} día${días !== 1 ? 's' : ''}</span>`;
+      return t || '<span class="titulometro-destacado">0 días</span>';
     }
+
     function actualizarTitulometro() {
-      const tiempoEl   = document.getElementById('tiempo-transcurrido');
-      const torneoEl   = document.getElementById('torneo-nombre');
-      const lugarFechaEl = document.getElementById('lugar-fecha');
-      const marcadorEl = document.getElementById('marcador-titulo');
-      if (tiempoEl)    tiempoEl.innerHTML = calcularTiempoTranscurrido();
-      if (torneoEl)    torneoEl.innerHTML = ultimoTitulo.torneo;
-      if (lugarFechaEl) {
-        const fecha = new Date(ultimoTitulo.fecha);
-        const fechaF = fecha.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'}).replace(/\//g,'/');
-        lugarFechaEl.innerHTML = `${ultimoTitulo.lugar} | ${fechaF}`;
+      const tiempoEl = document.getElementById('tiempo-transcurrido');
+      const torneoEl = document.getElementById('torneo-nombre');
+      const lugarEl  = document.getElementById('lugar-fecha');
+      const marcEl   = document.getElementById('marcador-titulo');
+      if (tiempoEl) tiempoEl.innerHTML = calcularTiempoTranscurrido();
+      if (torneoEl) torneoEl.textContent = ultimoTitulo.torneo;
+      if (lugarEl) {
+        const f = new Date(ultimoTitulo.fecha)
+          .toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        lugarEl.textContent = `${ultimoTitulo.lugar} | ${f}`;
       }
-      if (marcadorEl) {
-        marcadorEl.innerHTML = `
-          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${ultimoTitulo.marcador.escudoLocal}.png"
-               onerror="this.src='img/escudos/${ultimoTitulo.marcador.escudoLocal}.png';this.onerror=null;"
-               class="escudo-mini" alt="${ultimoTitulo.marcador.local}">
-          <span class="marcador-numero">${ultimoTitulo.marcador.golesLocal}</span>
+      if (marcEl) {
+        const m = ultimoTitulo.marcador;
+        marcEl.innerHTML = `
+          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${m.escudoLocal}.png"
+               onerror="this.src='img/escudos/${m.escudoLocal}.png';this.onerror=null;"
+               class="escudo-mini" alt="${m.local}">
+          <span class="marcador-numero">${m.golesLocal}</span>
           <span class="separador">-</span>
-          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${ultimoTitulo.marcador.escudoVisitante}.png"
-               onerror="this.src='img/escudos/${ultimoTitulo.marcador.escudoVisitante}.png';this.onerror=null;"
-               class="escudo-mini" alt="${ultimoTitulo.marcador.visitante}">
-          <span class="marcador-numero">${ultimoTitulo.marcador.golesVisitante}</span>`;
+          <img src="https://a.espncdn.com/i/teamlogos/soccer/500/${m.escudoVisitante}.png"
+               onerror="this.src='img/escudos/${m.escudoVisitante}.png';this.onerror=null;"
+               class="escudo-mini" alt="${m.visitante}">
+          <span class="marcador-numero">${m.golesVisitante}</span>`;
       }
     }
 
-    // FIX #5: buscarNuevoTitulo con estructura correcta de ESPN (competitors[])
-    async function buscarNuevoTitulo() {
-      try {
-        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
-        if (!response.ok) throw new Error('Error en API');
-        const scheduleData = await response.json();
-        const eventos = scheduleData.events || [];
-        const esTituloCompeticion = (nombre = '') =>
-          ['final','champions','copa','supercopa','laliga','league'].some(k => nombre.toLowerCase().includes(k));
-        for (const evento of eventos) {
-          if (!evento.status?.type?.completed) continue;
-          const comp = evento.competitions?.[0];
-          if (!comp) continue;
-          const nombrePartido = comp.name || evento.name || '';
-          const nombreLiga    = evento.league?.name || comp.league?.name || '';
-          if (!esTituloCompeticion(nombrePartido) && !esTituloCompeticion(nombreLiga)) continue;
-          const c0 = comp.competitors?.[0];
-          const c1 = comp.competitors?.[1];
-          if (!c0 || !c1) continue;
-          const esMadrid0 = c0.team?.id === '86' || c0.team?.displayName?.toLowerCase().includes('madrid');
-          const esMadrid1 = c1.team?.id === '86' || c1.team?.displayName?.toLowerCase().includes('madrid');
-          if (!esMadrid0 && !esMadrid1) continue;
-          const madridComp = esMadrid0 ? c0 : c1;
-          const rivalComp  = esMadrid0 ? c1 : c0;
-          if (!madridComp.winner) continue;
-          const fechaEvento = new Date(evento.date);
-          if (fechaEvento <= new Date(ultimoTitulo.fecha)) continue;
-          const golesMadrid = parseInt(madridComp.score?.value ?? madridComp.score?.displayValue ?? 0);
-          const golesRival  = parseInt(rivalComp.score?.value  ?? rivalComp.score?.displayValue  ?? 0);
-          ultimoTitulo = {
-            fecha:   fechaEvento,
-            torneo:  nombreLiga || nombrePartido,
-            lugar:   comp.venue?.fullName || evento.venue?.fullName || 'Estadio',
-            marcador: {
-              local:          rivalComp.team?.displayName  || 'Rival',
-              visitante:      madridComp.team?.displayName || 'Real Madrid',
-              golesLocal:     golesRival,
-              golesVisitante: golesMadrid,
-              escudoLocal:    rivalComp.team?.id  || '124',
-              escudoVisitante:madridComp.team?.id || '86'
-            }
-          };
-          guardarUltimoTitulo();
-          console.log('🏆 ¡NUEVO TÍTULO DETECTADO!', ultimoTitulo);
-          const notif = document.createElement('div');
-          notif.style.cssText = `position:fixed;top:20px;right:20px;background:linear-gradient(135deg,#ffca28,#ff9f43);color:#000;padding:15px 20px;border-radius:12px;font-weight:bold;font-size:14px;z-index:10000;box-shadow:0 4px 20px rgba(255,202,40,0.4);`;
-          notif.textContent = `🏆 ¡NUEVO TÍTULO! ${ultimoTitulo.torneo}`;
-          document.body.appendChild(notif);
-          setTimeout(() => notif.remove(), 5000);
-          return true;
-        }
-        return false;
-      } catch (error) {
-        console.warn('Error buscando nuevo título:', error);
-        return false;
+    function esFinalDeTitulo(ev) {
+      const slug = slugLigaDe(ev);
+      if (!COMPETICIONES_CON_TITULO.includes(slug)) return false;
+      const comp = ev.competitions?.[0];
+      const textos = [
+        comp?.name, ev.name, ev.shortName,
+        comp?.notes?.[0]?.headline, comp?.notes?.[0]?.type,
+        ev.season?.slug
+      ].filter(Boolean).join(' ').toLowerCase();
+      // Supercopas y Mundial de Clubes: el propio partido decisivo ya es la final
+      const esCopaDeUnPartido = ['uefa.super_cup', 'fifa.intercontinental_cup'].includes(slug);
+      return esCopaDeUnPartido || /\bfinal\b/.test(textos);
+    }
+
+    function buscarNuevoTitulo(eventos) {
+      let cambio = false;
+      for (const ev of eventos) {
+        const est = estadoDe(ev);
+        if (!est.fin) continue;
+        if (!esFinalDeTitulo(ev)) continue;
+        const cs  = ev.competitions?.[0]?.competitors || [];
+        const cM  = competidorMadrid(cs);
+        const cR  = cs.find(c => c !== cM);
+        if (!cM || !cR) continue;
+        const gM = golesDe(cM), gR = golesDe(cR);
+        const ganó = cM.winner === true || (cM.winner !== false && gM > gR);
+        if (!ganó) continue;
+        const fecha = new Date(ev.date);
+        if (!(fecha > new Date(ultimoTitulo.fecha))) continue;
+
+        ultimoTitulo = {
+          fecha: fecha.toISOString(),
+          torneo: nombreLigaDe(ev) || 'Título',
+          lugar: ev.competitions?.[0]?.venue?.fullName || 'Estadio',
+          marcador: {
+            local: cR.team?.displayName || 'Rival',
+            visitante: cM.team?.displayName || 'Real Madrid',
+            golesLocal: gR,
+            golesVisitante: gM,
+            escudoLocal: cR.team?.id || 'default',
+            escudoVisitante: cM.team?.id || TEAM_ID
+          }
+        };
+        guardarUltimoTitulo();
+        cambio = true;
+        console.info('🏆 Nuevo título detectado:', ultimoTitulo);
+        const notif = document.createElement('div');
+        notif.style.cssText = 'position:fixed;top:20px;right:20px;background:linear-gradient(135deg,#ffca28,#ff9f43);color:#000;padding:15px 20px;border-radius:12px;font-weight:bold;font-size:14px;z-index:10000;box-shadow:0 4px 20px rgba(255,202,40,0.4);';
+        notif.textContent = `🏆 ¡NUEVO TÍTULO! ${ultimoTitulo.torneo}`;
+        document.body.appendChild(notif);
+        setTimeout(() => notif.remove(), 5000);
       }
+      return cambio;
     }
 
-    async function inicializarTitulometro() {
-      cargarUltimoTitulo();
-      await buscarNuevoTitulo();
-      actualizarTitulometro();
-      setInterval(async () => { await buscarNuevoTitulo(); actualizarTitulometro(); }, 3600000);
+    // ===========================================================
+    // BALANCE DE LA TEMPORADA (sin peticiones extra)
+    // ===========================================================
+    function calcularBalance(jugados) {
+      let victorias = 0, empates = 0, derrotas = 0;
+      jugados.forEach(p => {
+        if (p.resultado === 'V') victorias++;
+        else if (p.resultado === 'E') empates++;
+        else if (p.resultado === 'D') derrotas++;
+      });
+      return { victorias, empates, derrotas };
     }
 
-    // ===========================
-    // CÁLCULO ESTADÍSTICAS
-    // ===========================
-    async function calcularEstadisticasDesdeMuro() {
-      try {
-        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
-        if (!response.ok) return { victorias:0, empates:0, derrotas:0 };
-        const data = await response.json();
-        const eventos = data.events || [];
-        // FIX: el estado está en competitions[0].status, no en el raíz del evento
-        const getStatus = (e) => e.status || e.competitions?.[0]?.status;
-        const esFinalizado = e => {
-          const st = getStatus(e);
-          return st?.type?.completed === true ||
-                 st?.type?.state === 'post' ||
-                 st?.type?.name === 'Final' ||
-                 st?.type?.description === 'Final';
-        };
-        const esMadridEnPartido = e => {
-          const c = e.competitions?.[0];
-          return c?.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid') ||
-                 c?.competitors?.[1]?.team?.displayName?.toLowerCase().includes('madrid');
-        };
-        const getGoles = (evento) => {
-          const c = evento.competitions?.[0];
-          const esLocal = c?.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
-          const tM = esLocal ? c?.competitors?.[0] : c?.competitors?.[1];
-          const tR = esLocal ? c?.competitors?.[1] : c?.competitors?.[0];
-          return {
-            gM: parseInt(tM?.score?.value ?? tM?.score?.displayValue ?? 0),
-            gR: parseInt(tR?.score?.value ?? tR?.score?.displayValue ?? 0)
-          };
-        };
-        const jugados = eventos.filter(e => esFinalizado(e) && esMadridEnPartido(e));
-        let v=0, e=0, d=0;
-        jugados.forEach(ev => {
-          const {gM, gR} = getGoles(ev);
-          if (gM > gR) v++; else if (gM === gR) e++; else d++;
-        });
-        return { victorias:v, empates:e, derrotas:d };
-      } catch (error) {
-        console.error('Error calculando estadísticas:', error);
-        return { victorias:0, empates:0, derrotas:0 };
-      }
-    }
-
-    // ===========================
+    // ===========================================================
     // PROBABILIDAD DE PALMAR
-    // ===========================
-    function obtenerEntradaEquipo(tabla, teamId) {
+    // ===========================================================
+    function entradaEquipo(tabla, teamId) {
       if (!Array.isArray(tabla)) return null;
       return tabla.find(e => String(e.team.id) === String(teamId)) || null;
     }
-    function obtenerStatsValor(entry, nombre) {
-      if (!entry || !Array.isArray(entry.stats)) return null;
-      const s = entry.stats.find(st => st.name === nombre);
-      return s ? (s.value ?? s.displayValue ?? null) : null;
+    function statValor(entry, nombre) {
+      const s = entry?.stats?.find(st => st.name === nombre);
+      return s ? Number(s.value ?? s.displayValue ?? 0) : null;
     }
-    async function calcularProbPalmar(prox, tabla, racha, headToHead) {
-      if (!prox) return { porcentaje:0, claseColor:"prob-good", clasePulse:"", registro:{victorias:0,empates:0,derrotas:0} };
-      const idMadrid = "86";
-      const madridEntry = obtenerEntradaEquipo(tabla, idMadrid);
-      const rivalId     = String(prox.logoL_id) === idMadrid ? prox.logoV_id : prox.logoL_id;
-      const rivalEntry  = obtenerEntradaEquipo(tabla, rivalId);
+
+    function calcularProbPalmar(prox, tabla, racha, h2h, balance) {
+      balance = balance || { victorias: 0, empates: 0, derrotas: 0 };
+      const vacio = { porcentaje: 0, claseColor: "prob-good", clasePulse: "", registro: balance };
+      if (!prox) return vacio;
+
+      const madridEntry = entradaEquipo(tabla, TEAM_ID);
+      const rivalId     = prox.rivalId;
+      const rivalEntry  = entradaEquipo(tabla, rivalId);
+
       let prob = 30;
-      const madridEsLocal = String(prox.logoL_id) === idMadrid;
-      if (!madridEsLocal) prob += 25;
-      const rivalRank = rivalEntry ? Number(obtenerStatsValor(rivalEntry,"rank")) || 99 : 99;
+      if (!prox.madridEsLocal) prob += 25;
+
+      const rivalRank = rivalEntry ? (statValor(rivalEntry, "rank") || 99) : 99;
       if (rivalRank > 0 && rivalRank <= 5) prob += 15;
-      const madridPts = madridEntry ? Number(obtenerStatsValor(madridEntry,"points")) || 0 : 0;
-      const rivalPts  = rivalEntry  ? Number(obtenerStatsValor(rivalEntry,"points"))  || 0 : 0;
+
+      const madridPts = madridEntry ? (statValor(madridEntry, "points") || 0) : 0;
+      const rivalPts  = rivalEntry  ? (statValor(rivalEntry,  "points") || 0) : 0;
       if (rivalPts > madridPts) prob += 15;
-      const ligaStr = (prox.liga || "").toString().toLowerCase();
-      if (ligaStr.includes("champions") || ligaStr.includes("ucl")) prob += 15;
-      const rivalName = (rivalEntry?.team?.shortDisplayName || "").toLowerCase();
-      if (String(rivalId) === "83" || rivalName.includes("barc")) prob += 25;
-      if (headToHead?.existe) {
-        if (headToHead.resultado === "Perdió") prob += 15;
-        else if (headToHead.resultado === "Empató") prob += 10;
+
+      const liga = (prox.ligaSlug || '') + ' ' + (prox.liga || '').toLowerCase();
+      if (/champions|ucl/.test(liga)) prob += 15;
+
+      if (String(rivalId) === ID_BARSA) prob += 25;
+
+      if (h2h?.existe) {
+        if (h2h.resultado === "Perdió") prob += 15;
+        else if (h2h.resultado === "Empató") prob += 10;
       }
       if (Array.isArray(racha) && racha.length) {
         const tot = racha.length;
-        const v   = racha.filter(r => r.res === "V").length;
-        const d   = racha.filter(r => r.res === "D").length;
-        const e   = racha.filter(r => r.res === "E").length;
-        prob += (d/tot)*10 - (v/tot)*10 + (e/tot)*5;
+        const v = racha.filter(r => r.res === "V").length;
+        const d = racha.filter(r => r.res === "D").length;
+        const e = racha.filter(r => r.res === "E").length;
+        prob += (d / tot) * 10 - (v / tot) * 10 + (e / tot) * 5;
       }
       prob = Math.max(0, Math.min(99, Math.round(prob)));
       let claseColor = "prob-mid";
       if (prob <= 33) claseColor = "prob-good";
       else if (prob >= 67) claseColor = "prob-bad";
-      const clasePulse = prob >= 80 ? "prob-pulse" : "";
-      const registro = await calcularEstadisticasDesdeMuro();
-      return { porcentaje:prob, claseColor, clasePulse, registro };
+      return {
+        porcentaje: prob,
+        claseColor,
+        clasePulse: prob >= 80 ? "prob-pulse" : "",
+        registro: balance
+      };
     }
 
-    // ===========================
-    // PINTAR UI
-    // ===========================
-    async function pintarUI(data) {
-      const p     = data.actual;
-      const t     = document.getElementById("main-title");
-      const flash = document.getElementById("flash-overlay");
-      let marcadorClase = "";
+    // ===========================================================
+    // SUCESOS DEL PARTIDO (directo y post-partido)
+    // ===========================================================
+    function sincronizarSucesos(p, eventosClave) {
+      if (!p) return;
 
-      if (p) {
-        if (window.ultimoEstadoPartido !== p.estado) {
-          const estadoLower = String(p.estado || "").toLowerCase();
-          if (estadoLower.includes("descanso") || estadoLower.includes("half")) {
-            window.sucesosPartido.unshift({ min: p.reloj || "45'", txt: "Descanso", img: "img/escudos/campo.png" });
-          }
-          const esFin = p.estado === "Finalizado" ||
-                        estadoLower.includes("full time") ||
-                        estadoLower === "ft" ||
-                        estadoLower.includes("final");
-          if (esFin) {
-            window.sucesosPartido.unshift({ min:"FT", txt:`Fin del partido (${p.golesL}-${p.golesV})`, img:"campo" });
-          }
-          window.ultimoEstadoPartido = p.estado;
-        }
+      // Partido nuevo → limpiamos el histórico del anterior
+      if (window.idPartidoActual !== p.idEvento) {
+        window.idPartidoActual   = p.idEvento;
+        window.sucesosPartido    = [];
+        window.golesPrevios      = null;
+        window.partidoIniciado   = false;
+        window.marcadorCreciendo = false;
       }
 
-      if (p && p.esDirecto) {
-        const golesTotal = parseInt(p.golesL) + parseInt(p.golesV);
-        // FIX DIRECTO: inicializar sin disparar flash en la primera carga
-        if (window.ultimoTotalGoles === undefined) {
-          window.ultimoTotalGoles = golesTotal;
-          window.golesL_prev = p.golesL;
-        }
-        if (golesTotal > window.ultimoTotalGoles) {
-          flash.classList.add("ejecutar-flash");
-          setTimeout(() => flash.classList.remove("ejecutar-flash"), 1200);
-          window.marcadorCreciendo = true;
-          setTimeout(() => { window.marcadorCreciendo = false; }, 60000);
-          const esGolLocal = parseInt(p.golesL) > (window.golesL_prev || 0);
+      const total    = (p.golesL | 0) + (p.golesV | 0);
+      const primera  = window.golesPrevios === null;
+      const prevL    = primera ? p.golesL : window.golesPrevios.L;
+      const prevTot  = primera ? total    : window.golesPrevios.L + window.golesPrevios.V;
+
+      if (Array.isArray(eventosClave) && eventosClave.length) {
+        // Fuente real de ESPN (goles, tarjetas, cambios, VAR…)
+        window.sucesosPartido = eventosClave.slice();
+        if (p.finalizado) {
           window.sucesosPartido.unshift({
-            min: p.reloj || "Live",
-            txt: `¡Gol de ${esGolLocal ? p.local : p.visitante}!`,
-            img: esGolLocal ? p.logoL_id : p.logoV_id
+            min: 'FT', txt: `Fin del partido (${p.golesL}-${p.golesV})`, escudo: null, gol: false
           });
         }
-        if (!window.partidoIniciado) {
-          window.sucesosPartido.unshift({ min:"1'", txt:"Inicio del partido", img:"img/escudos/campo.png" });
+      } else {
+        // Sin resumen disponible: reconstrucción mínima
+        if (!window.partidoIniciado && (p.esDirecto || p.finalizado)) {
+          window.sucesosPartido.push({ min: "1'", txt: "Inicio del partido", escudo: null });
           window.partidoIniciado = true;
         }
-        window.ultimoTotalGoles = golesTotal;
-        window.golesL_prev = p.golesL;
-        if (window.marcadorCreciendo) marcadorClase = "score-highlight";
+        if (!primera && total > prevTot) {
+          const golLocal = p.golesL > prevL;
+          window.sucesosPartido.unshift({
+            min: p.reloj || "Live",
+            txt: `¡Gol de ${golLocal ? p.local : p.visitante}!`,
+            escudo: golLocal ? p.logoL_id : p.logoV_id
+          });
+        }
+        if (p.esDescanso && !window.sucesosPartido.some(s => s.txt === 'Descanso')) {
+          window.sucesosPartido.unshift({ min: "45'", txt: "Descanso", escudo: null });
+        }
+        if (p.finalizado && !window.sucesosPartido.some(s => s.min === 'FT')) {
+          window.sucesosPartido.unshift({
+            min: "FT", txt: `Fin del partido (${p.golesL}-${p.golesV})`, escudo: null
+          });
+        }
       }
 
-      // TÍTULO PRINCIPAL
-      let res = "...", col = "#e6edf3", sh = "rgba(230,237,243,0.25)";
+      // Flash de gol sólo si de verdad ha subido el marcador en directo
+      if (!primera && p.esDirecto && total > prevTot) {
+        const flash = document.getElementById("flash-overlay");
+        if (flash) {
+          flash.classList.add("ejecutar-flash");
+          setTimeout(() => flash.classList.remove("ejecutar-flash"), 1200);
+        }
+        window.marcadorCreciendo = true;
+        clearTimeout(window.timerMarcador);
+        window.timerMarcador = setTimeout(() => { window.marcadorCreciendo = false; }, 60000);
+      }
+
+      window.golesPrevios = { L: p.golesL, V: p.golesV };
+    }
+
+    function pintarIconoEvento(escudoId) {
+      if (!escudoId) return '<span class="event-min" style="color:#8b949e;">•</span>';
+      return `<img src="img/escudos/${escudoId}.png"
+                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${escudoId}.png';this.onerror=null;"
+                   class="team-logo--small" alt="Escudo">`;
+    }
+
+    // ===========================================================
+    // PINTAR UI
+    // ===========================================================
+    function pintarUI(data) {
+      const p = data.actual;
+      const t = document.getElementById("main-title");
+
+      sincronizarSucesos(p, data.eventosClave);
+
+      // --- TÍTULO PRINCIPAL -------------------------------------
+      let res = "NO", col = "#00e599", sh = "rgba(0,229,153,0.4)";
       if (p) {
-        res = "NO"; col = "#00e599"; sh = "rgba(0,229,153,0.4)";
-        const esM = (n) => n.toLowerCase().includes("mad");
-        const mG = esM(p.local) ? p.golesL : p.golesV;
-        const rG = esM(p.local) ? p.golesV : p.golesL;
-        if (mG < rG)      { res = "SÍ";   col = "#ff4d4d"; sh = "rgba(255,77,77,0.4)"; }
-        else if (mG === rG) { res = "CASI"; col = "#ff9f43"; sh = "rgba(255,159,67,0.4)"; }
+        if (p.resultado === 'D')      { res = "SÍ";   col = "#ff4d4d"; sh = "rgba(255,77,77,0.4)"; }
+        else if (p.resultado === 'E') { res = "CASI"; col = "#ff9f43"; sh = "rgba(255,159,67,0.4)"; }
       }
       t.textContent = res;
       t.style.color = col;
       t.style.textShadow = `0 0 50px ${sh}`;
 
-      updateBannerWeather(res, p && p.esDirecto);
+      updateBannerWeather(res, !!(p && p.esDirecto));
 
       const dmCont = document.getElementById("dm-box-container");
-      if (p && p.esDirecto && res !== "CASI") {
-        dmCont.innerHTML = `<div class="mini-live-box"><span class="live-dot"></span><span class="de-momento-text">DE MOMENTO...</span></div>`;
+      if (p && p.esDirecto) {
+        dmCont.innerHTML = `<div class="mini-live-box"><span class="live-dot"></span><span class="de-momento-text">${p.esDescanso ? 'DESCANSO…' : 'DE MOMENTO…'}</span></div>`;
+      } else if (!p) {
+        dmCont.innerHTML = `<div class="mini-live-box"><span class="de-momento-text">AÚN NO HA JUGADO</span></div>`;
       } else {
         dmCont.innerHTML = "";
       }
 
       // Hologramas
       const holoMap = {
-        "NO":   { holo1:"rgba(0,229,153,.30)",  holo2:"rgba(88,166,255,.24)",  holo3:"rgba(0,229,153,.18)",  holo4:"rgba(88,166,255,.18)",  hologlow:"rgba(0,229,153,.22)" },
-        "SÍ":   { holo1:"rgba(255,77,77,.30)",   holo2:"rgba(255,120,180,.20)", holo3:"rgba(255,77,77,.18)",  holo4:"rgba(255,159,67,.16)",  hologlow:"rgba(255,77,77,.22)" },
-        "CASI": { holo1:"rgba(255,159,67,.30)",  holo2:"rgba(255,210,120,.20)", holo3:"rgba(255,159,67,.18)", holo4:"rgba(88,166,255,.14)",  hologlow:"rgba(255,159,67,.22)" }
+        "NO":   { holo1: "rgba(0,229,153,.30)", holo2: "rgba(88,166,255,.24)", holo3: "rgba(0,229,153,.18)", holo4: "rgba(88,166,255,.18)", hologlow: "rgba(0,229,153,.22)" },
+        "SÍ":   { holo1: "rgba(255,77,77,.30)", holo2: "rgba(255,120,180,.20)", holo3: "rgba(255,77,77,.18)", holo4: "rgba(255,159,67,.16)", hologlow: "rgba(255,77,77,.22)" },
+        "CASI": { holo1: "rgba(255,159,67,.30)", holo2: "rgba(255,210,120,.20)", holo3: "rgba(255,159,67,.18)", holo4: "rgba(88,166,255,.14)", hologlow: "rgba(255,159,67,.22)" }
       };
-      const holo = holoMap[res] || { holo1:"rgba(88,166,255,.25)", holo2:"rgba(255,77,77,.22)", holo3:"rgba(255,159,67,.22)", holo4:"rgba(0,229,153,.22)", hologlow:"rgba(255,255,255,.18)" };
-      Object.entries(holo).forEach(([k,v]) => t.style.setProperty(`--${k}`, v));
-      document.body.style.boxShadow = `inset 0 0 150px ${sh.replace('0.4','0.15')}`;
+      const holo = holoMap[res];
+      Object.entries(holo).forEach(([k, v]) => t.style.setProperty(`--${k}`, v));
+      document.body.style.boxShadow = `inset 0 0 150px ${sh.replace('0.4', '0.15')}`;
 
-      // CAJA ÚLTIMO RESULTADO
+      // --- CAJA ÚLTIMO RESULTADO --------------------------------
+      const marcadorClase = window.marcadorCreciendo ? "score-highlight" : "";
+      const lastBox = document.getElementById("last-match-box");
       if (p) {
-        const rachaDatos = data.racha || [];
         let rachaHTML = `<div class="racha-interna" style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-          <div class="racha-title-min">Ultimos 5 partidos de mi Madris</div>
+          <div class="racha-title-min">Últimos 5 partidos de mi Madris</div>
           <div class="racha-stats-min">`;
-        rachaDatos.forEach(item => {
-          const c = item.res==='V' ? 'racha-v' : (item.res==='D' ? 'racha-d' : 'racha-e');
+        (data.racha || []).forEach(item => {
+          const c = item.res === 'V' ? 'racha-v' : (item.res === 'D' ? 'racha-d' : 'racha-e');
           rachaHTML += `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
             <span class="${c}">${item.res}</span>
             <img src="img/escudos/${item.id}.png"
                  onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${item.id}.png';this.onerror=null;"
-                 style="width:20px;height:20px;object-fit:contain;"
-                 alt="Rival">
+                 style="width:20px;height:20px;object-fit:contain;" alt="Rival">
           </div>`;
         });
         rachaHTML += `</div></div>`;
 
-        const evBox       = document.getElementById("events-box");
-        const evLatestBox = document.getElementById("events-latest-box");
-        const ahora = new Date();
-        const finP  = p.estado === "Finalizado" ? new Date(p.fechaIso) : null;
-
-        let eventosListadoHTML = "";
-        window.sucesosPartido.forEach(ev => {
-          // FIX DIRECTO: "campo" y emoji no son IDs de equipo, usar texto en su lugar
-		const iconHTML = `<img src="img/escudos/${ev.img}.png" onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${ev.img}.png';this.onerror=null;" class="team-logo--small" alt="Evento">`;
-          eventosListadoHTML += `<div class="event-row">
-            <span class="event-min">${ev.min}</span>
-            ${iconHTML}
-            <span>${ev.txt}</span>
-          </div>`;
-        });
-
-        if (evLatestBox) { evLatestBox.style.display = "none"; evLatestBox.innerHTML = ""; }
-
-        if (p.esDirecto || (finP && (ahora - finP) < 10800000)) {
-          evBox.style.display = "block";
-          const tit = p.esDirecto
-            ? `<span class="live-dot"></span> En vivo · Eventos del partido`
-            : `Eventos destacados último partido <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small" alt="Escudo local"> <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small" alt="Escudo visitante">`;
-          evBox.innerHTML = `<div class="box-title" style="margin-bottom:15px">${tit}</div>${eventosListadoHTML}`;
-        } else {
-          evBox.style.display = "none";
-          if (evLatestBox && window.sucesosPartido.length) {
-            const fechaUlt = new Date(p.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric',year:'2-digit'});
-            evLatestBox.style.display = "block";
-            evLatestBox.innerHTML = `
-              <div class="box-title" style="margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;">
-                <span>Eventos destacados último partido
-                  <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small" alt="Escudo local"> -
-                  <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small" alt="Escudo visitante">
-                </span>
-                <span style="font-size:11px;opacity:0.8;">${fechaUlt}</span>
-              </div>${eventosListadoHTML}`;
-          }
-        }
-
-        document.getElementById("last-match-box").innerHTML = `
+        lastBox.innerHTML = `
           <div class="box-title" style="margin-bottom:20px;text-align:center;">
             ${p.esDirecto ? '<span class="live-dot"></span> EN JUEGO' : 'Último resultado de Mi Madris'}
           </div>
@@ -1415,48 +1752,98 @@
             <div class="teams-column">
               <div class="match-row">
                 <div class="team-info">
-                  <img src="img/escudos/${p.logoL_id}.png" class="team-logo" alt="Escudo de ${p.local}">
+                  <img src="img/escudos/${p.logoL_id}.png"
+                       onerror="this.src='${p.logoL}';this.onerror=null;"
+                       class="team-logo" alt="Escudo de ${p.local}">
                   ${p.local}
                 </div>
                 <div class="score ${marcadorClase}">${p.golesL}</div>
               </div>
               <div class="match-row" style="margin-bottom:0">
                 <div class="team-info">
-                  <img src="img/escudos/${p.logoV_id}.png" class="team-logo" alt="Escudo de ${p.visitante}">
+                  <img src="img/escudos/${p.logoV_id}.png"
+                       onerror="this.src='${p.logoV}';this.onerror=null;"
+                       class="team-logo" alt="Escudo de ${p.visitante}">
                   ${p.visitante}
                 </div>
                 <div class="score ${marcadorClase}">${p.golesV}</div>
               </div>
             </div>
             <div class="status-column">
-              <div>${p.esDirecto ? p.reloj : p.estado}</div>
-              <div>${new Date(p.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div>
+              <div>${p.esDirecto ? (p.esDescanso ? 'Descanso' : (p.reloj || 'En juego')) : p.estado}</div>
+              <div>${new Date(p.fechaIso).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'numeric' })}</div>
             </div>
           </div>
           ${rachaHTML}`;
+      } else {
+        lastBox.innerHTML = `<div class="box-title" style="text-align:center;">Mi Madris todavía no ha jugado esta temporada</div>`;
       }
 
-      // CAJA PRÓXIMO PARTIDO
+      // --- EVENTOS DEL PARTIDO ----------------------------------
+      const evBox       = document.getElementById("events-box");
+      const evLatestBox = document.getElementById("events-latest-box");
+      evBox.style.display = "none";
+      if (evLatestBox) { evLatestBox.style.display = "none"; evLatestBox.innerHTML = ""; }
+
+      if (p && window.sucesosPartido.length) {
+        const listado = window.sucesosPartido.map(ev => `
+          <div class="event-row${ev.gol ? ' event-row--gol' : ''}">
+            <span class="event-min">${ev.min || ''}</span>
+            ${pintarIconoEvento(ev.escudo)}
+            <span>${ev.txt}</span>
+          </div>`).join('');
+
+        // Ventana "reciente": desde el saque inicial hasta 3 h después del final estimado
+        const inicio = new Date(p.fechaIso).getTime();
+        const reciente = p.finalizado && (Date.now() - (inicio + 2 * 3600000)) < 3 * 3600000;
+
+        if (p.esDirecto || reciente) {
+          evBox.style.display = "block";
+          const tit = p.esDirecto
+            ? `<span class="live-dot"></span> En vivo · Eventos del partido`
+            : `Eventos destacados último partido
+               <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small" alt="Escudo local">
+               <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small" alt="Escudo visitante">`;
+          evBox.innerHTML = `<div class="box-title" style="margin-bottom:15px">${tit}</div>${listado}`;
+        } else if (evLatestBox) {
+          const fechaUlt = new Date(p.fechaIso).toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric', year: '2-digit' });
+          evLatestBox.style.display = "block";
+          evLatestBox.innerHTML = `
+            <div class="box-title" style="margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;">
+              <span>Eventos destacados último partido
+                <img src="img/escudos/${p.logoL_id}.png" class="team-logo--small" alt="Escudo local"> -
+                <img src="img/escudos/${p.logoV_id}.png" class="team-logo--small" alt="Escudo visitante">
+              </span>
+              <span style="font-size:11px;opacity:0.8;">${fechaUlt}</span>
+            </div>${listado}`;
+        }
+      }
+
+      // --- CAJA PRÓXIMO PARTIDO ---------------------------------
+      const nextBox = document.getElementById("next-match-box");
       if (data.proximo) {
-        const prox    = data.proximo;
-        const h2h     = data.headToHead;
-        const probData = await calcularProbPalmar(prox, data.tabla, data.racha, h2h);
+        const prox = data.proximo;
+        const h2h  = data.headToHead;
+        const probData = calcularProbPalmar(prox, data.tabla, data.racha, h2h, data.balance);
+
         let h2hHTML = "";
         if (h2h && h2h.existe) {
-          const fechaH2H = new Date(h2h.fechaIso).toLocaleDateString('es-ES',{day:'numeric',month:'numeric',year:'2-digit'});
-          const resLower = h2h.resultado.toLowerCase();
+          const fechaH2H = new Date(h2h.fechaIso).toLocaleDateString('es-ES', { day: 'numeric', month: 'numeric', year: '2-digit' });
           h2hHTML = `<div class="prob-h2h">
             <div class="prob-h2h-left">
               <span class="prob-h2h-title">Último partido de mi Madris contra</span>
-              <img src="img/escudos/${h2h.rivalId}.png" class="team-logo--small" style="width:22px;height:22px;object-fit:contain;" alt="Rival">
+              <img src="img/escudos/${h2h.rivalId}.png"
+                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${h2h.rivalId}.png';this.onerror=null;"
+                   class="team-logo--small" style="width:22px;height:22px;object-fit:contain;" alt="Rival">
             </div>
             <div class="prob-h2h-right">
-              <span class="prob-h2h-result prob-h2h-${resLower}">${h2h.resultado}</span>
+              <span class="prob-h2h-result prob-h2h-${h2h.resultado.toLowerCase()}">${h2h.resultado}</span>
               <span class="prob-h2h-meta">${h2h.madridG}-${h2h.rivalG} el día ${fechaH2H}</span>
             </div>
           </div>`;
         }
-        document.getElementById("next-match-box").innerHTML = `
+
+        nextBox.innerHTML = `
           <div class="box-header">
             <div class="box-title">¿Perderá Mi Madris el siguiente?</div>
             <div id="timer" class="countdown" aria-live="polite"></div>
@@ -1481,8 +1868,8 @@
               </div>
             </div>
             <div class="status-column">
-              <div>${new Date(prox.fechaIso).toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'numeric'})}</div>
-              <div style="font-weight:bold">${new Date(prox.fechaIso).toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}</div>
+              <div>${new Date(prox.fechaIso).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'numeric' })}</div>
+              <div style="font-weight:bold">${new Date(prox.fechaIso).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</div>
             </div>
           </div>
           <div class="prob-container">
@@ -1506,7 +1893,7 @@
                 <div class="season-label"><span class="season-letter">E</span><span>MPATES</span></div>
                 <div class="season-value">${probData.registro.empates}</div>
               </div>
-              <div class="season-card season-card-d live-box-anim">
+              <div class="season-card season-card-d">
                 <div class="season-label"><span class="season-letter">D</span><span>ERROTAS</span></div>
                 <div class="season-value">${probData.registro.derrotas}</div>
               </div>
@@ -1516,69 +1903,61 @@
         const probEl = document.getElementById('prob-percent-number');
         if (probEl) {
           const pct = probData.porcentaje;
-          probEl.classList.remove('low','medium','high','pulse');
-          if (pct < 40) probEl.classList.add('low');
-          else if (pct < 70) probEl.classList.add('medium');
-          else probEl.classList.add('high');
-          let fontSize = 10;
-          if (pct >= 60) fontSize = 10 + Math.floor((pct - 60) / 10) * 2;
-          probEl.style.fontSize = fontSize + 'px';
+          probEl.classList.remove('low', 'medium', 'high', 'pulse');
+          probEl.classList.add(pct < 40 ? 'low' : pct < 70 ? 'medium' : 'high');
+          probEl.style.fontSize = (pct >= 60 ? 10 + Math.floor((pct - 60) / 10) * 2 : 10) + 'px';
           if (pct >= 70) probEl.classList.add('pulse');
         }
         iniciarCuenta(prox.fechaIso);
+      } else {
+        clearInterval(countdownInterval);
+        nextBox.innerHTML = `<div class="box-title" style="text-align:center;">No hay próximo partido confirmado</div>`;
       }
 
-      // CLASIFICACIÓN LALIGA
-      // FIX #15: alt descriptivo en escudos de la tabla
-      const tHTML = (data.tabla || []).slice(0, 20).map(e => `
-        <tr class="${(e.team.shortDisplayName||"").toUpperCase().includes("MAD") ? 'highlight-row' : ''}">
-          <td style="padding-left:15px">${e.stats.find(s=>s.name==='rank')?.value??""}</td>
-          <td>
-            <div style="display:flex;align-items:center;gap:8px">
-              <img src="img/escudos/${e.team.id}.png"
-                   onerror="this.src='${e.team.logos?.[0]?.href??""}';this.onerror=null;"
-                   class="team-logo team-logo--small"
-                   alt="Escudo de ${e.team.shortDisplayName}">
-              ${e.team.shortDisplayName}
-            </div>
-          </td>
-          <td>${e.stats.find(s=>s.name==='gamesPlayed')?.value??""}</td>
-          <td style="font-weight:800">${e.stats.find(s=>s.name==='points')?.value??""}</td>
-        </tr>`).join('');
-      document.getElementById("standings-box").innerHTML = `
-        <div class="box-title" style="margin-bottom:20px;text-align:center;">Clasificación - LaLiga</div>
-        <table class="standings-table">
-          <caption class="visually-hidden">Posición del Real Madrid y rivales directos en LaLiga</caption>
-          <thead>
-            <tr>
-              <th scope="col" style="padding-left:15px">Pos</th>
-              <th scope="col">Club</th>
-              <th scope="col">PJ</th>
-              <th scope="col">Pts</th>
-            </tr>
-          </thead>
-          <tbody>${tHTML}</tbody>
-        </table>`;
-
-      gestionarCache(data);
-      actualizarImagenesPersonajes(data.actual);
-
-      // Muro de la Vergüenza
-      try {
-        const response = await fetch('https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule');
-        if (response.ok) {
-          // FIX #3: variable renombrada a muroData para evitar shadowing del parámetro data
-          const muroData = await response.json();
-          actualizarMuroDeLaVerguenza(muroData.events || []);
-        }
-      } catch (error) {
-        console.error('Error obteniendo partidos para Muro de la Vergüenza:', error);
+      // --- CLASIFICACIÓN ----------------------------------------
+      const tabla = data.tabla || [];
+      const stdBox = document.getElementById("standings-box");
+      if (tabla.length) {
+        const tHTML = tabla.slice(0, 20).map(e => `
+          <tr class="${String(e.team.id) === TEAM_ID ? 'highlight-row' : ''}">
+            <td style="padding-left:15px">${e.stats.find(s => s.name === 'rank')?.value ?? ""}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                <img src="img/escudos/${e.team.id}.png"
+                     onerror="this.src='${e.team.logos?.[0]?.href ?? ""}';this.onerror=null;"
+                     class="team-logo team-logo--small"
+                     alt="Escudo de ${e.team.shortDisplayName}">
+                ${e.team.shortDisplayName}
+              </div>
+            </td>
+            <td>${e.stats.find(s => s.name === 'gamesPlayed')?.value ?? ""}</td>
+            <td style="font-weight:800">${e.stats.find(s => s.name === 'points')?.value ?? ""}</td>
+          </tr>`).join('');
+        stdBox.innerHTML = `
+          <div class="box-title" style="margin-bottom:20px;text-align:center;">Clasificación - LaLiga</div>
+          <table class="standings-table">
+            <caption class="visually-hidden">Posición del Real Madrid y rivales directos en LaLiga</caption>
+            <thead>
+              <tr>
+                <th scope="col" style="padding-left:15px">Pos</th>
+                <th scope="col">Club</th>
+                <th scope="col">PJ</th>
+                <th scope="col">Pts</th>
+              </tr>
+            </thead>
+            <tbody>${tHTML}</tbody>
+          </table>`;
+      } else {
+        stdBox.innerHTML = `<div class="box-title" style="text-align:center;">Clasificación no disponible</div>`;
       }
 
-      // FIX #12: actualizarSeccionFrases llamada UNA SOLA VEZ (al final)
-      actualizarSeccionFrases(res, p && p.esDirecto);
+      // --- MURO DE LA VERGÜENZA ---------------------------------
+      actualizarMuroDeLaVerguenza(data.muro || []);
 
-      // FIX #4: limpiar modos ANTES de añadir el nuevo
+      // --- FRASES -----------------------------------------------
+      actualizarSeccionFrases(p ? res : null, !!(p && p.esDirecto));
+
+      // --- MODOS VISUALES ---------------------------------------
       document.body.classList.remove("modo-humo", "modo-victoria", "modo-empate");
       t.style.animation = "";
       if (res === "SÍ") {
@@ -1586,64 +1965,38 @@
         t.style.animation = "softPulse 0.5s ease-in-out infinite alternate";
       } else if (res === "CASI") {
         document.body.classList.add("modo-empate");
-      } else if (res === "NO") {
+      } else {
         document.body.classList.add("modo-victoria");
       }
 
       const ref  = document.getElementById("referee-figure");
       const boxA = document.getElementById("last-match-box");
       const boxP = document.getElementById("next-match-box");
-      [ref, boxA, boxP].forEach(el => el?.classList.remove("live-ref-anim","live-box-anim"));
+      [ref, boxA, boxP].forEach(el => el?.classList.remove("live-ref-anim", "live-box-anim"));
       if (p && p.esDirecto) {
-        if (ref)  ref.classList.add("live-ref-anim");
-        if (boxA) boxA.classList.add("live-box-anim");
-      } else if (boxP) {
-        boxP.classList.add("live-box-anim");
+        ref?.classList.add("live-ref-anim");
+        boxA?.classList.add("live-box-anim");
+      } else {
+        boxP?.classList.add("live-box-anim");
       }
+
+      actualizarImagenesPersonajes(p);
     }
 
-    // ===========================
+    // ===========================================================
     // MURO DE LA VERGÜENZA
-    // ===========================
+    // ===========================================================
     function actualizarMuroDeLaVerguenza(partidos) {
-      const verguenzaSection  = document.getElementById('verguenza-section');
-      const verguenzaContenido = document.getElementById('verguenza-contenido');
-      if (!verguenzaSection || !verguenzaContenido || !Array.isArray(partidos)) return;
+      const sec = document.getElementById('verguenza-section');
+      const con = document.getElementById('verguenza-contenido');
+      if (!sec || !con) return;
+      if (!Array.isArray(partidos) || partidos.length === 0) {
+        sec.style.display = 'none';
+        return;
+      }
 
-      const esFinalizado = e =>
-        e.status?.type?.completed === true ||
-        e.status?.type?.name === 'Final' ||
-        e.status?.type?.description === 'Final' ||
-        e.competitions?.[0]?.status?.type?.completed === true;
-
-      const getGolesMadrid = (evento) => {
-        const c = evento.competitions?.[0];
-        const esLocal = c?.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
-        const tM = esLocal ? c?.competitors?.[0] : c?.competitors?.[1];
-        const tR = esLocal ? c?.competitors?.[1] : c?.competitors?.[0];
-        return {
-          gM: parseInt(tM?.score?.value ?? tM?.score?.displayValue ?? 0),
-          gR: parseInt(tR?.score?.value ?? tR?.score?.displayValue ?? 0)
-        };
-      };
-
-      const partidosVerguenza = partidos.filter(evento => {
-        if (!esFinalizado(evento)) return false;
-        const c = evento.competitions?.[0];
-        if (!c) return false;
-        const esML = c.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
-        const esMV = c.competitors?.[1]?.team?.displayName?.toLowerCase().includes('madrid');
-        if (!esML && !esMV) return false;
-        const {gM, gR} = getGolesMadrid(evento);
-        return gM <= gR;
-      });
-
-      partidosVerguenza.sort((a,b) => new Date(b.date) - new Date(a.date));
-
-      if (partidosVerguenza.length === 0) { verguenzaSection.style.display = 'none'; return; }
-
-      let tablaHTML = `<table class="standings-table" style="margin-top:15px;">
-        <caption class="visually-hidden">Partidos donde Real Madrid no ganó</caption>
+      let html = `<table class="standings-table" style="margin-top:15px;">
+        <caption class="visually-hidden">Partidos donde el Real Madrid no ganó</caption>
         <thead>
           <tr>
             <th scope="col" style="padding-left:15px;text-align:left;">Fecha</th>
@@ -1653,60 +2006,43 @@
         </thead>
         <tbody>`;
 
-      partidosVerguenza.forEach(evento => {
-        const c      = evento.competitions?.[0];
-        const fecha  = new Date(evento.date).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
-        const esML   = c?.competitors?.[0]?.team?.displayName?.toLowerCase().includes('madrid');
-        const golesL = parseInt(c?.competitors?.[0]?.score?.value ?? c?.competitors?.[0]?.score?.displayValue ?? 0);
-        const golesV = parseInt(c?.competitors?.[1]?.score?.value ?? c?.competitors?.[1]?.score?.displayValue ?? 0);
-        const golesMadrid = esML ? golesL : golesV;
-        const golesRival  = esML ? golesV : golesL;
-        let resultadoHTML, resultadoClase;
-        if (golesMadrid < golesRival) {
-          resultadoHTML = `<span style="color:#ff4d4d;font-weight:bold;">${golesL}-${golesV}</span>`;
-          resultadoClase = 'derrota';
-        } else {
-          resultadoHTML = `<span style="color:#ff8800;font-weight:bold;">${golesL}-${golesV}</span>`;
-          resultadoClase = 'empate';
-        }
-        const equipoLocal     = c?.competitors?.[0]?.team?.displayName || 'Equipo Local';
-        const equipoVisitante = c?.competitors?.[1]?.team?.displayName || 'Equipo Visitante';
-        const escudoLocal     = c?.competitors?.[0]?.team?.id || 'default';
-        const escudoVisitante = c?.competitors?.[1]?.team?.id || 'default';
-
-        // FIX #15: alt descriptivo en escudos del muro
-        tablaHTML += `<tr class="verguenza-row ${resultadoClase}">
+      partidos.forEach(p => {
+        const fecha = new Date(p.fechaIso).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const color = p.resultado === 'D' ? '#ff4d4d' : '#ff8800';
+        html += `<tr class="verguenza-row ${p.resultado === 'D' ? 'derrota' : 'empate'}">
           <td style="padding-left:15px;font-size:11px;text-align:left;">${fecha}</td>
           <td style="text-align:center;">
             <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;">
-              <img src="img/escudos/${escudoLocal}.png"
-                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${escudoLocal}.png';this.onerror=null;"
+              <img src="img/escudos/${p.logoL_id}.png"
+                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${p.logoL_id}.png';this.onerror=null;"
                    class="team-logo team-logo--small" style="width:20px;height:20px;"
-                   alt="Escudo de ${equipoLocal}">
-              <span>${equipoLocal}</span>
+                   alt="Escudo de ${p.local}">
+              <span>${p.local}</span>
               <span style="margin:0 4px;">-</span>
-              <img src="img/escudos/${escudoVisitante}.png"
-                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${escudoVisitante}.png';this.onerror=null;"
+              <img src="img/escudos/${p.logoV_id}.png"
+                   onerror="this.src='https://a.espncdn.com/i/teamlogos/soccer/500/${p.logoV_id}.png';this.onerror=null;"
                    class="team-logo team-logo--small" style="width:20px;height:20px;"
-                   alt="Escudo de ${equipoVisitante}">
-              <span>${equipoVisitante}</span>
+                   alt="Escudo de ${p.visitante}">
+              <span>${p.visitante}</span>
             </div>
           </td>
-          <td style="text-align:right;font-weight:bold;">${resultadoHTML}</td>
+          <td style="text-align:right;font-weight:bold;">
+            <span style="color:${color};font-weight:bold;">${p.golesL}-${p.golesV}</span>
+          </td>
         </tr>`;
       });
 
-      tablaHTML += `</tbody></table>
+      html += `</tbody></table>
         <div style="margin-top:12px;font-size:12px;color:#8b949e;text-align:center;">
-          😭 ${partidosVerguenza.length} partido${partidosVerguenza.length!==1?'s':''} que Mi Madris no ha ganado 😭
+          😭 ${partidos.length} partido${partidos.length !== 1 ? 's' : ''} que Mi Madris no ha ganado 😭
         </div>`;
-      verguenzaContenido.innerHTML = tablaHTML;
-      verguenzaSection.style.display = 'block';
+      con.innerHTML = html;
+      sec.style.display = 'block';
     }
 
-    // ===========================
+    // ===========================================================
     // CUENTA ATRÁS
-    // ===========================
+    // ===========================================================
     function iniciarCuenta(f) {
       clearInterval(countdownInterval);
       const el = document.getElementById("timer");
@@ -1725,366 +2061,409 @@
       countdownInterval = setInterval(up, 1000);
     }
 
-    // ===========================
-    // POSICIONAR VINI / ARBELOA
-    // ===========================
+    // ===========================================================
+    // VINI / ARBELOA EN EL PERÍMETRO
+    // ===========================================================
+    // Trío (Arbeloa · Vinicius · Mourinho) en un lateral;
+    // Florentino, solo, en el lateral opuesto.
+    function anchoContenido(winW) {
+      if (winW <= 360) return 320;
+      if (winW <= 768) return 400;
+      if (winW <= 1024) return 420;
+      return 460;
+    }
+
     function posicionarViniPerimetro() {
-      const v1 = document.getElementById('vini-element-1');
-      const v2 = document.getElementById('vini-element-2');
-      if (!v1 || !v2) return;
+      const trio = ['pj-arbeloa', 'pj-vini', 'pj-mourinho'].map(id => document.getElementById(id));
+      const solo = document.getElementById('pj-florentino');
+      if (trio.some(el => !el) || !solo) return;
+
       const winW = window.innerWidth;
       const winH = window.innerHeight;
-      let viniW = 280;
-      if (winW <= 360) viniW = 140;
-      else if (winW <= 480) viniW = 180;
-      else if (winW <= 768) viniW = 220;
-      const totalW = viniW * 2 - 120;
-      const exclW  = winW > 480 ? 460 + totalW : winW;
-      let fX, fY, hT, sT, rot = 0, found = false;
-      while (!found) {
-        const side = Math.floor(Math.random() * 2);
-        fX = Math.random() * (winW - totalW);
-        if (fX > (winW/2) - (exclW/2) && fX < (winW/2) + (exclW/2)) continue;
-        if (side === 0) { fY = winH - viniW; hT = 'translateY(67%)'; sT = 'translateY(0%)'; rot = 0; }
-        else            { fY = 0;            hT = 'translateY(-67%)'; sT = 'translateY(0%)'; rot = 180; }
-        found = true;
-      }
 
-      // FIX #7: setup con touch handlers correctos (sin !important en CSS)
-      const setup = (el, off) => {
-        el.style.left   = (fX + off) + 'px';
-        el.style.top    = fY + 'px';
+      let base = 280;
+      if (winW <= 360) base = 140;
+      else if (winW <= 480) base = 180;
+      else if (winW <= 768) base = 220;
+
+      // Espacio libre a cada lado de la columna de tarjetas
+      const centro     = winW / 2;
+      const disponible = Math.max(0, centro - anchoContenido(winW) / 2 - 10);
+
+      // Con un 50% de solape, el trío ocupa exactamente 2 anchos
+      const anchoTrio = Math.max(96, Math.min(base, Math.floor(disponible / 2)));
+      const grupoW    = anchoTrio * 2;
+      const paso      = anchoTrio / 2;
+      // Florentino no debe verse desproporcionado frente al trío
+      const anchoSolo = Math.max(120, Math.min(base, Math.floor(disponible), Math.round(anchoTrio * 1.4)));
+
+      const trioIzquierda = Math.random() < 0.5;
+      const xTrio = trioIzquierda ? 0 : Math.max(0, winW - grupoW);
+      const xSolo = trioIzquierda ? Math.max(0, winW - anchoSolo) : 0;
+
+      const colocar = (el, x, ancho, arriba) => {
+        const rot     = arriba ? 180 : 0;
+        const oculto  = `translateY(${arriba ? '-67%' : '67%'}) rotate(${rot}deg)`;
+        const visible = `translateY(0%) rotate(${rot}deg)`;
+        el.style.width  = ancho + 'px';
+        el.style.height = ancho + 'px';
+        el.style.left   = Math.round(x) + 'px';
+        el.style.top    = (arriba ? 0 : winH - ancho) + 'px';
         el.style.bottom = el.style.right = 'auto';
-        const h = `${hT} rotate(${rot}deg)`;
-        const s = `${sT} rotate(${rot}deg)`;
-        el.style.transform = h;
-        // Mouse (escritorio)
-        el.onmouseenter = () => el.style.transform = s;
-        el.onmouseleave = () => el.style.transform = h;
-        // Touch (móvil)
-        el.ontouchstart = (e) => {
-          e.preventDefault();
-          el.style.transform = s;
-        };
-        el.ontouchend = () => {
-          setTimeout(() => el.style.transform = h, 600);
-        };
+        el.style.transform = oculto;
+        el.onmouseenter = () => el.style.transform = visible;
+        el.onmouseleave = () => el.style.transform = oculto;
+        el.ontouchstart = (e) => { e.preventDefault(); el.style.transform = visible; };
+        el.ontouchend   = () => { setTimeout(() => el.style.transform = oculto, 600); };
       };
-      setup(v1, 0);
-      setup(v2, viniW - 120);
+
+      // El trío comparte borde para que se lea como un grupo
+      const bordeTrio = Math.random() < 0.5;
+      trio.forEach((el, i) => colocar(el, xTrio + i * paso, anchoTrio, bordeTrio));
+      colocar(solo, xSolo, anchoSolo, Math.random() < 0.5);
     }
 
-    // ===========================
-    // IMÁGENES PERSONAJES
-    // ===========================
-    function actualizarImagenesPersonajes(ultimoPartido) {
-      const v1 = document.getElementById('vini-element-1');
-      const v2 = document.getElementById('vini-element-2');
-      if (!v1 || !v2 || !ultimoPartido) return;
-      const esM = (n) => n.toLowerCase().includes("mad");
-      const mG = esM(ultimoPartido.local) ? ultimoPartido.golesL : ultimoPartido.golesV;
-      const rG = esM(ultimoPartido.local) ? ultimoPartido.golesV : ultimoPartido.golesL;
-      if (mG <= rG) {
-        v1.querySelector('img').src = 'img/vini_llorando.png';
-        v1.querySelector('img').alt = 'Vinícius Jr. llorando';
-        v2.querySelector('img').src = 'img/arbeloa_llorando.png';
-        v2.querySelector('img').alt = 'Álvaro Arbeloa llorando';
-      } else {
-        v1.querySelector('img').src = 'img/vini.png';
-        v1.querySelector('img').alt = 'Vinícius Jr. celebrando';
-        v2.querySelector('img').src = 'img/arbeloa.png';
-        v2.querySelector('img').alt = 'Álvaro Arbeloa';
-      }
+    // Mientras no existan los memes de Mourinho y Florentino se usa Arbeloa:
+    // deja img/mourinho.png, img/mourinho_llorando.png, img/florentino.png
+    // e img/florentino_llorando.png en su sitio y aparecen solos.
+    const PERSONAJES = [
+      { id: 'pj-arbeloa',    bien: 'img/arbeloa.png',    mal: 'img/arbeloa_llorando.png',    alt: 'Álvaro Arbeloa' },
+      { id: 'pj-vini',       bien: 'img/vini.png',       mal: 'img/vini_llorando.png',       alt: 'Vinícius Jr.' },
+      { id: 'pj-mourinho',   bien: 'img/mourinho.png',   mal: 'img/mourinho_llorando.png',   alt: 'José Mourinho' },
+      { id: 'pj-florentino', bien: 'img/florentino.png', mal: 'img/florentino_llorando.png', alt: 'Florentino Pérez' }
+    ];
+    const RESPALDO = { bien: 'img/arbeloa.png', mal: 'img/arbeloa_llorando.png' };
+
+    function ponerImagen(contenedor, ruta, respaldo, alt) {
+      const img = contenedor.querySelector('img');
+      if (!img) return;
+      img.onerror = () => { img.onerror = null; img.src = respaldo; };
+      if (img.getAttribute('src') !== ruta) img.src = ruta;
+      img.alt = alt;
     }
 
-    posicionarViniPerimetro();
-    // NOTA: el listener de resize está consolidado en el bloque del banner (FIX #6)
+    function actualizarImagenesPersonajes(p) {
+      const mal = !!(p && (p.resultado === 'D' || p.resultado === 'E'));
+      PERSONAJES.forEach(pj => {
+        const el = document.getElementById(pj.id);
+        if (!el) return;
+        ponerImagen(el,
+          mal ? pj.mal : pj.bien,
+          mal ? RESPALDO.mal : RESPALDO.bien,
+          mal ? pj.alt + ' llorando' : pj.alt);
+      });
+    }
 
-    // ===========================
-    // FIX #2: CACHÉ LOCAL CON TTL
-    // ===========================
-    const CACHE_TTL = {
-      directo:  15_000,
-      preparti: 60_000,
-      reposo:   300_000
-    };
+    // ===========================================================
+    // CACHÉ LOCAL CON TTL (sólo se escribe con datos de red)
+    // ===========================================================
+    const CACHE_TTL = { directo: 15000, preparti: 60000, reposo: 300000 };
+
     function obtenerTTL(content) {
       if (!content) return CACHE_TTL.reposo;
-      const p    = content.actual;
+      if (content.actual?.esDirecto) return CACHE_TTL.directo;
       const prox = content.proximo;
-      if (p && p.esDirecto) return CACHE_TTL.directo;
-      if (prox && (new Date(prox.fechaIso) - Date.now()) < 7_200_000) return CACHE_TTL.preparti;
+      if (prox && (new Date(prox.fechaIso) - Date.now()) < 7200000) return CACHE_TTL.preparti;
       return CACHE_TTL.reposo;
     }
-    function gestionarCache(data = null) {
-      if (data) {
-        localStorage.setItem('madrid_data', JSON.stringify({ timestamp: Date.now(), content: data }));
-      } else {
-        try {
-          const raw = localStorage.getItem('madrid_data');
-          if (!raw) return false;
-          const cached = JSON.parse(raw);
-          const edad   = Date.now() - (cached.timestamp || 0);
-          const ttl    = obtenerTTL(cached.content);
-          if (edad > ttl) {
-            localStorage.removeItem('madrid_data');
-            console.info(`[Caché] Expirada (${Math.round(edad/1000)}s > TTL ${ttl/1000}s)`);
-            return false;
-          }
-          console.info(`[Caché] Válida (${Math.round(edad/1000)}s de ${ttl/1000}s)`);
-          pintarUI(cached.content);
-          return true;
-        } catch(e) {
-          console.warn('[Caché] Error al leer, limpiando:', e);
-          localStorage.removeItem('madrid_data');
-          return false;
+
+    const CACHE_VERSION = 3;
+
+    // localStorage lanza SecurityError en file://, ventana privada o con
+    // cookies bloqueadas. Nunca debe poder abortar el arranque.
+    const almacen = {
+      get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+      del(k) { try { localStorage.removeItem(k); } catch (e) { /* nada */ } }
+    };
+
+    function guardarCache(data) {
+      almacen.set('madrid_data', JSON.stringify({ v: CACHE_VERSION, timestamp: Date.now(), content: data }));
+    }
+
+    function leerCache() {
+      try {
+        const raw = almacen.get('madrid_data');
+        if (!raw) return null;
+        const cached = JSON.parse(raw);
+        if (cached.v !== CACHE_VERSION) {
+          almacen.del('madrid_data');
+          console.info('[Caché] Formato antiguo descartado');
+          return null;
         }
+        const edad = Date.now() - (cached.timestamp || 0);
+        const ttl  = obtenerTTL(cached.content);
+        if (edad > ttl) {
+          console.info(`[Caché] Expirada (${Math.round(edad / 1000)}s > ${ttl / 1000}s)`);
+          return null;
+        }
+        console.info(`[Caché] Válida (${Math.round(edad / 1000)}s de ${ttl / 1000}s)`);
+        return cached.content;
+      } catch (e) {
+        almacen.del('madrid_data');
+        return null;
       }
     }
 
-    // ===========================
-    // FIX #1: FUNCIONES DE API
-    // ===========================
-    async function comprobarAPI() {
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000);
-        const resp = await fetch(
-          'https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/86/schedule',
-          { signal: controller.signal }
-        );
-        clearTimeout(timeout);
-        return resp.ok;
-      } catch { return false; }
+    // ===========================================================
+    // MODO ERROR
+    // ===========================================================
+    function mostrarCargando() {
+      const t = document.getElementById('main-title');
+      if (t && t.textContent === '...') {
+        t.style.color = '#8b949e';
+        t.style.textShadow = 'none';
+      }
+      const box = document.getElementById('last-match-box');
+      if (box && !box.innerHTML.trim()) {
+        box.innerHTML = '<div class="box-title" style="text-align:center;">Conectando con ESPN…</div>';
+      }
     }
 
-    function activarModoError() {
+    function activarModoError(motivo) {
       const failsafe = document.getElementById('error-failsafe');
-      if (failsafe) failsafe.style.display = 'block';
-      ['last-match-box','next-match-box','standings-box'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = '';
-      });
+      if (failsafe) {
+        failsafe.style.display = 'block';
+        const det = failsafe.querySelector('[data-motivo]');
+        if (det) {
+          det.textContent = motivo
+            ? `(${motivo})`
+            : '(Error de conexión con la API de ESPN)';
+        }
+      }
       const t = document.getElementById('main-title');
       if (t) { t.textContent = '...'; t.style.color = '#e6edf3'; t.style.textShadow = 'none'; }
+      const box = document.getElementById('last-match-box');
+      if (box) box.innerHTML = '';
+    }
+    function desactivarModoError() {
+      const failsafe = document.getElementById('error-failsafe');
+      if (failsafe) failsafe.style.display = 'none';
     }
 
+    // ===========================================================
+    // OBTENER Y COMPONER TODOS LOS DATOS
+    // ===========================================================
     async function obtenerDatosReales() {
-      try {
-        const ts = Date.now();
-        const id = '86';
-        const [scheduleResp, standingsResp, teamResp] = await Promise.all([
-          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}/schedule?_=${ts}`),
-          fetch(`https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?_=${ts}`),
-          fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/all/teams/${id}?_=${ts}`)
-        ]);
-        if (!scheduleResp.ok || !standingsResp.ok) throw new Error('API no disponible');
+      const [calRes, tablaRes] = await Promise.allSettled([
+        obtenerCalendario(),
+        obtenerClasificacion()
+      ]);
 
-        const scheduleData  = await scheduleResp.json();
-        const standingsData = await standingsResp.json();
-        const eventos = scheduleData.events || [];
+      const eventos = calRes.status === 'fulfilled' ? calRes.value : [];
+      const tabla   = tablaRes.status === 'fulfilled' ? tablaRes.value : [];
 
-        // getStatus: el estado puede estar en el evento raíz O dentro de competitions[0]
-        const getStatus = (e) => e.status || e.competitions?.[0]?.status;
+      if (!eventos.length && !tabla.length) throw new Error('ESPN no devuelve datos');
 
-        const enJuego = eventos.find(e => getStatus(e)?.type?.state === 'in');
-        const finalizados = eventos
-          .filter(e => {
-            const st = getStatus(e);
-            return st?.type?.state === 'post' ||
-                   st?.type?.completed === true ||
-                   st?.type?.name === 'Final' ||
-                   st?.type?.description === 'Final';
-          })
-          .sort((a,b) => new Date(b.date) - new Date(a.date));
-        const ahora = new Date();
-        const proximos = eventos
-          .filter(e => {
-            const st = getStatus(e);
-            if (st?.type?.state === 'pre') return true;
-            const fechaEvento = new Date(e.date);
-            return fechaEvento > ahora && st?.type?.completed !== true && st?.type?.state !== 'post' && st?.type?.state !== 'in';
-          })
-          .sort((a,b) => new Date(a.date) - new Date(b.date));
+      // Clasificación por estado
+      const enJuego = eventos.filter(e => estadoDe(e).vivo);
+      const jugados = eventos.filter(e => estadoDe(e).fin)
+                             .sort((a, b) => new Date(b.date) - new Date(a.date));
+      const ahora = Date.now();
+      const futuros = eventos
+        .filter(e => {
+          const est = estadoDe(e);
+          if (est.vivo || est.fin) return false;
+          return new Date(e.date).getTime() > ahora - 15 * 60000; // margen de 15'
+        })
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-        const eventoActual = enJuego || finalizados[0] || null;
+      // ---- PARTIDO ACTUAL (en juego, o el último jugado) --------
+      const evActual = enJuego[0] || jugados[0] || null;
+      let actual = normalizarPartido(evActual);
 
-        // FIX DIRECTO: si no hay próximos en el schedule, usar team.nextEvent
-        // pero filtrando el partido actual si está en juego
-        if (proximos.length === 0 && teamResp.ok) {
-          const teamData = await teamResp.json();
-          const nextEvent = teamData.team?.nextEvent?.[0];
-          if (nextEvent) {
-            const nextId = String(nextEvent.id);
-            const liveId = enJuego ? String(enJuego.id) : null;
-            if (nextId !== liveId) proximos.push(nextEvent);
-          }
+      // ---- RESUMEN (estado real + eventos reales) ---------------
+      let eventosClave = null;
+      if (actual) {
+        // Siempre: los goles y tarjetas del último partido son parte del contenido,
+        // no solo del directo. El summary es la única fuente real de esos eventos.
+        const sum = await obtenerResumen(actual);
+        if (sum) {
+          if (actual.esDirecto) actual = aplicarResumen(actual, sum);
+          const evs = eventosDesdeResumen(sum);
+          if (evs.length) eventosClave = evs;
         }
-
-        let actual = null;
-        if (eventoActual) {
-          const comp  = eventoActual.competitions?.[0];
-          const c0    = comp?.competitors?.[0];
-          const c1    = comp?.competitors?.[1];
-          const local = (c0?.homeAway === 'home' ? c0 : c1) || c0;
-          const visit = (c0?.homeAway === 'away' ? c0 : c1) || c1;
-          const tL    = local?.team || {};
-          const tV    = visit?.team || {};
-          // FIX DIRECTO: usar getStatus para detectar correctamente el partido en juego
-          const esDir = getStatus(eventoActual)?.type?.state === 'in';
-          // El reloj puede estar en status.displayClock o en competitions[0].status.displayClock
-          const relojVal = eventoActual.status?.displayClock ||
-                           eventoActual.competitions?.[0]?.status?.displayClock ||
-                           getStatus(eventoActual)?.type?.shortDetail || '';
-          actual = {
-            local:     tL.displayName || tL.shortDisplayName || 'Local',
-            logoL:     tL.logos?.[0]?.href || '',
-            logoL_id:  tL.id || 'default',
-            golesL:    parseInt(local?.score?.value ?? local?.score?.displayValue ?? 0),
-            visitante: tV.displayName || tV.shortDisplayName || 'Visitante',
-            logoV:     tV.logos?.[0]?.href || '',
-            logoV_id:  tV.id || 'default',
-            golesV:    parseInt(visit?.score?.value ?? visit?.score?.displayValue ?? 0),
-            estado:    esDir ? (relojVal || 'En juego')
-                             : (getStatus(eventoActual)?.type?.shortDetail || 'Finalizado'),
-            esDirecto: esDir,
-            fechaIso:  eventoActual.date,
-            reloj:     relojVal
-          };
-        }
-
-        let proximo = null;
-        if (proximos[0]) {
-          const ev   = proximos[0];
-          const comp = ev.competitions?.[0];
-          const c0   = comp?.competitors?.[0];
-          const c1   = comp?.competitors?.[1];
-          const loc  = (c0?.homeAway === 'home' ? c0 : c1) || c0;
-          const vis  = (c0?.homeAway === 'away' ? c0 : c1) || c1;
-          const tL   = loc?.team || {};
-          const tV   = vis?.team || {};
-          proximo = {
-            local:     tL.displayName || tL.shortDisplayName || 'Local',
-            logoL:     tL.logos?.[0]?.href || '',
-            logoL_id:  tL.id || 'default',
-            visitante: tV.displayName || tV.shortDisplayName || 'Visitante',
-            logoV:     tV.logos?.[0]?.href || '',
-            logoV_id:  tV.id || 'default',
-            fechaIso:  ev.date,
-            liga:      ev.season?.displayName || ev.league?.name || ev.competitions?.[0]?.league?.name || ev.name || ''
-          };
-        }
-
-        const racha = finalizados.slice(0, 5).map(ev => {
-          const comp = ev.competitions?.[0];
-          const c0   = comp?.competitors?.[0];
-          const c1   = comp?.competitors?.[1];
-          const esM0 = c0?.team?.id === '86' || c0?.team?.displayName?.toLowerCase().includes('madrid');
-          const tM   = esM0 ? c0 : c1;
-          const tR   = esM0 ? c1 : c0;
-          const gM   = parseInt(tM?.score?.value ?? tM?.score?.displayValue ?? 0);
-          const gR   = parseInt(tR?.score?.value ?? tR?.score?.displayValue ?? 0);
-          return { res: gM > gR ? 'V' : gM < gR ? 'D' : 'E', id: tR?.team?.id || 'default' };
-        });
-
-        let headToHead = { existe: false };
-        if (proximo) {
-          const rivalId = String(proximo.logoL_id) === '86' ? proximo.logoV_id : proximo.logoL_id;
-          const h2hEv   = finalizados.find(ev => {
-            const c = ev.competitions?.[0];
-            return String(c?.competitors?.[0]?.team?.id) === String(rivalId) ||
-                   String(c?.competitors?.[1]?.team?.id) === String(rivalId);
-          });
-          if (h2hEv) {
-            const comp = h2hEv.competitions?.[0];
-            const c0   = comp?.competitors?.[0];
-            const c1   = comp?.competitors?.[1];
-            const esM0 = c0?.team?.id === '86' || c0?.team?.displayName?.toLowerCase().includes('madrid');
-            const tM   = esM0 ? c0 : c1;
-            const tR   = esM0 ? c1 : c0;
-            const gM   = parseInt(tM?.score?.value ?? tM?.score?.displayValue ?? 0);
-            const gR   = parseInt(tR?.score?.value ?? tR?.score?.displayValue ?? 0);
-            headToHead = {
-              existe:    true,
-              resultado: gM > gR ? 'Ganó' : gM < gR ? 'Perdió' : 'Empató',
-              rivalId, madridG: gM, rivalG: gR, fechaIso: h2hEv.date
-            };
-          }
-        }
-
-        const entries = standingsData.standings?.entries || standingsData.children?.[0]?.standings?.entries || [];
-        const tabla = entries.map(e => ({
-          team:  { id: e.team?.id, shortDisplayName: e.team?.shortDisplayName || e.team?.displayName, logos: e.team?.logos || [] },
-          stats: e.stats || []
-        }));
-
-        const dataFinal = { actual, proximo, tabla, racha, headToHead };
-        gestionarCache(dataFinal);
-        await pintarUI(dataFinal);
-        const failsafe = document.getElementById('error-failsafe');
-        if (failsafe) failsafe.style.display = 'none';
-
-      } catch(err) {
-        console.error('Error en obtenerDatosReales:', err);
-        activarModoError();
       }
+
+      // Si el "en juego" ya ha terminado según el summary, recolocamos
+      if (actual && !actual.esDirecto && !actual.finalizado && enJuego[0]) {
+        actual.finalizado = true;
+      }
+
+      // ---- PRÓXIMO PARTIDO --------------------------------------
+      let proximo = normalizarPartido(futuros[0]);
+      if (proximo && actual && proximo.idEvento === actual.idEvento) {
+        proximo = normalizarPartido(futuros[1]);
+      }
+      if (!proximo) {
+        // Fallback: /teams/86 trae nextEvent aunque el schedule venga corto
+        try {
+          const td = await fetchJSON(`${ESPN_BASE}/site/v2/sports/soccer/all/teams/${TEAM_ID}`);
+          const ne = td?.team?.nextEvent?.[0];
+          if (ne && String(ne.id) !== String(actual?.idEvento)) proximo = normalizarPartido(ne);
+        } catch (e) { console.warn('[ESPN] nextEvent no disponible:', e.message); }
+      }
+
+      // ---- PARTIDOS JUGADOS NORMALIZADOS ------------------------
+      const jugadosNorm = jugados
+        .map(normalizarPartido)
+        .filter(p => p && p.competitivo && p.resultado);
+
+      // El partido en directo no cuenta hasta que acabe
+      const balance = calcularBalance(jugadosNorm);
+
+      // ---- RACHA (últimos 5) ------------------------------------
+      const racha = jugadosNorm.slice(0, 5).map(p => ({ res: p.resultado, id: p.rivalId }));
+
+      // ---- CARA A CARA CON EL PRÓXIMO RIVAL ---------------------
+      let headToHead = { existe: false };
+      if (proximo) {
+        const h = jugadosNorm.find(p => p.rivalId === proximo.rivalId);
+        if (h) {
+          headToHead = {
+            existe: true,
+            resultado: h.resultado === 'V' ? 'Ganó' : h.resultado === 'D' ? 'Perdió' : 'Empató',
+            rivalId: h.rivalId,
+            madridG: h.golesMadrid,
+            rivalG:  h.golesRival,
+            fechaIso: h.fechaIso
+          };
+        }
+      }
+
+      // ---- MURO DE LA VERGÜENZA ---------------------------------
+      const muro = jugadosNorm.filter(p => p.resultado !== 'V');
+
+      // ---- TITULÓMETRO ------------------------------------------
+      if (buscarNuevoTitulo(eventos)) actualizarTitulometro();
+
+      const dataFinal = {
+        actual, proximo, tabla, racha, headToHead, balance, muro, eventosClave
+      };
+      guardarCache(dataFinal);
+      pintarUI(dataFinal);
+      desactivarModoError();
+      return dataFinal;
     }
 
-    // FIX #14: motorDeActualizacion con try/catch completo
-    let intervaloActual = 60000;
-    let timerRefresco;
+    // ===========================================================
+    // MOTOR DE ACTUALIZACIÓN
+    // ===========================================================
+    function calcularIntervalo(data) {
+      if (!data) return 60000;
+      if (data.actual?.esDirecto) return 15000;
+      if (data.proximo && (new Date(data.proximo.fechaIso) - Date.now()) < 7200000) return 60000;
+      // Justo después del pitido final seguimos refrescando un rato
+      if (data.actual?.finalizado) {
+        const fin = new Date(data.actual.fechaIso).getTime() + 2 * 3600000;
+        if (Date.now() - fin < 3600000) return 60000;
+      }
+      return 900000;
+    }
+
+    function reprogramar(ms) {
+      if (ms === intervaloActual) return;
+      intervaloActual = ms;
+      clearInterval(timerRefresco);
+      timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
+      console.info(`[Motor] Intervalo ajustado a ${ms / 1000}s`);
+    }
 
     async function motorDeActualizacion() {
+      // Modo de prueba: ?test=live  /  ?test=fin  /  ?test=empate
+      const test = new URLSearchParams(location.search).get('test');
+      if (test) { pintarPrueba(test); return; }
 
-	        // TEST DIRECTO — quitar después
-      if (window.location.search.includes('test=live')) {
-        await pintarUI({
-          actual: {
-            local: 'Real Madrid', logoL: '', logoL_id: '86', golesL: 2,
-            visitante: 'Manchester City', logoV: '', logoV_id: '382', golesV: 1,
-            estado: "67'", esDirecto: true,
-            fechaIso: new Date().toISOString(), reloj: "67'"
-          },
-          proximo: null, tabla: [], racha: [], headToHead: { existe: false }
-        });
-        return;
-      }
       try {
-        const apiDisponible = await comprobarAPI();
-        if (!apiDisponible) { activarModoError(); return; }
-        await obtenerDatosReales();
-        try {
-          const raw = localStorage.getItem('madrid_data');
-          if (!raw) return;
-          const parsed = JSON.parse(raw).content;
-          const p    = parsed.actual;
-          const prox = parsed.proximo;
-          let nuevoIntervalo = 900_000;
-          if (p && p.esDirecto) nuevoIntervalo = 10_000;
-          else if (prox && (new Date(prox.fechaIso) - Date.now() < 7_200_000)) nuevoIntervalo = 60_000;
-          if (nuevoIntervalo !== intervaloActual) {
-            intervaloActual = nuevoIntervalo;
-            clearInterval(timerRefresco);
-            timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
-            console.info(`[Motor] Intervalo ajustado a ${nuevoIntervalo/1000}s`);
-          }
-        } catch(cacheErr) {
-          console.warn('[Motor] Error leyendo caché para ajustar intervalo:', cacheErr);
-        }
-      } catch(err) {
-        console.error('[Motor] Error inesperado, el ciclo continúa:', err);
+        const data = await obtenerDatosReales();
+        fallosSeguidos = 0;
+        reprogramar(calcularIntervalo(data));
+      } catch (err) {
+        fallosSeguidos++;
+        console.error('[Motor] Error:', err);
+        if (fallosSeguidos >= 3) activarModoError(err && err.message);
+        // Backoff: 30s, 60s, 120s… hasta 5 min
+        reprogramar(Math.min(30000 * Math.pow(2, fallosSeguidos - 1), 300000));
       }
     }
 
-    // FIX #2: arranque con TTL — caché válida da 800ms antes de ir a la API
-    const hayCacheValida = gestionarCache();
-    inicializarTitulometro();
-    if (hayCacheValida) {
-      setTimeout(motorDeActualizacion, 800);
-    } else {
+    // ===========================================================
+    // MODO DE PRUEBA (para verificar directo / final sin esperar)
+    // ===========================================================
+    function pintarPrueba(tipo) {
+      const base = {
+        idEvento: 'test-1', fechaIso: new Date().toISOString(), liga: 'UEFA Champions League',
+        ligaSlug: 'uefa.champions', competitivo: true,
+        local: 'Real Madrid', logoL: '', logoL_id: '86',
+        visitante: 'Manchester City', logoV: '', logoV_id: '382',
+        madridEsLocal: true, rivalId: '382', rivalNombre: 'Manchester City'
+      };
+      let p;
+      if (tipo === 'fin') {
+        p = { ...base, golesL: 1, golesV: 3, golesMadrid: 1, golesRival: 3,
+              esDirecto: false, esDescanso: false, finalizado: true,
+              resultado: 'D', estado: 'FT', reloj: "90'" };
+      } else if (tipo === 'empate') {
+        p = { ...base, golesL: 2, golesV: 2, golesMadrid: 2, golesRival: 2,
+              esDirecto: true, esDescanso: false, finalizado: false,
+              resultado: 'E', estado: "78'", reloj: "78'" };
+      } else {
+        p = { ...base, golesL: 2, golesV: 1, golesMadrid: 2, golesRival: 1,
+              esDirecto: true, esDescanso: false, finalizado: false,
+              resultado: 'V', estado: "67'", reloj: "67'" };
+      }
+      pintarUI({
+        actual: p,
+        proximo: null,
+        tabla: [],
+        racha: [{ res: 'V', id: '83' }, { res: 'D', id: '244' }],
+        headToHead: { existe: false },
+        balance: { victorias: 3, empates: 1, derrotas: 1 },
+        muro: [],
+        eventosClave: [
+          { min: "67'", txt: 'Gol — Kylian Mbappé', escudo: '86', gol: true, orden: 4020 },
+          { min: "45'", txt: 'Tarjeta amarilla — Vinicius Jr.', escudo: '86', gol: false, orden: 2700 },
+          { min: "12'", txt: 'Gol — Erling Haaland', escudo: '382', gol: true, orden: 720 }
+        ]
+      });
+    }
+
+    // ===========================================================
+    // ARRANQUE
+    // ===========================================================
+    posicionarViniPerimetro();
+    cargarUltimoTitulo();
+    actualizarTitulometro();
+    setInterval(actualizarTitulometro, 3600000);
+
+    try {
+      mostrarCargando();
+      const cacheInicial = leerCache();
+      if (cacheInicial) {
+        try { pintarUI(cacheInicial); } catch (e) { console.warn('[Caché] No se pudo pintar:', e); }
+        setTimeout(motorDeActualizacion, 800);
+      } else {
+        motorDeActualizacion();
+      }
+    } catch (e) {
+      console.error('[Arranque] Fallo inesperado, seguimos con el motor:', e);
       motorDeActualizacion();
     }
     timerRefresco = setInterval(motorDeActualizacion, intervaloActual);
+
+    if (location.protocol === 'file:') {
+      console.warn(
+        '[Aviso] Estás abriendo la página como file://. La CSP y el CORS se comportan ' +
+        'de forma distinta y las imágenes locales pueden bloquearse. Sírvela por HTTP:\n' +
+        '   cd carpeta-del-proyecto && python3 -m http.server 8000\n' +
+        '   → http://localhost:8000'
+      );
+    }
+
+    // Al volver a la pestaña, refrescamos de inmediato
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) motorDeActualizacion();
+    });
   </script>
 </body>
 </html>
